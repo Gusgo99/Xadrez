@@ -1,7 +1,12 @@
 #include <iostream>
 
+#include "GUI.hpp"
+#include "IA.hpp"
+#include "pecas.hpp"
+#include "tabuleiro.hpp"
+
 int main() {
-	std::cout << "Hello World!" << std::endl;
+	testar_posicao();
 
 	return 0;
 }
