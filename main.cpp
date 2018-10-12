@@ -5,6 +5,8 @@
 #include "pecas.hpp"
 #include "tabuleiro.hpp"
 
+#include "testes.hpp"
+
 int main() {
 	testar_posicao();
 
