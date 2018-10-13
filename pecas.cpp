@@ -5,18 +5,45 @@
 #include "tabuleiro.hpp"
 
 c_posicao::c_posicao(short int _x, short int _y) {
-	if((_x > 0) && (_x <= 8) && (_y > 0) && (_y <= 8)) {
-		x = _x;
-		y = _y;
-		valido = true;
+	x = _x;
+	y = _y;
+	
+	return;
+}
+
+// Construtor para criar posicoes relativas(Nao validas)
+c_posicao::c_posicao(e_dir _Direcao, short int _Distancia) {
+	x = 0;
+	y = 0;
+	
+	if((_Direcao & N) != 0) {
+		y = _Distancia;
 		
 	}
-	else {
-		x = 0;
-		y = 0;
-		valido = false;
+	else if((_Direcao & S) != 0) {
+		y = -_Distancia;
 		
 	}
+	
+	if((_Direcao & E) != 0) {
+		x = _Distancia;
+		
+	}
+	else if((_Direcao & O) != 0) {
+		x = -_Distancia;
+		
+	}
+	
+	return;
+}
+
+void c_posicao::set_x(short int _x) {
+	x = _x;
+	
+	return;
+}
+void c_posicao::set_y(short int _y) {
+	y = _y;
 	
 	return;
 }
@@ -31,7 +58,17 @@ short int c_posicao::get_y() {
 
 // Verifica se a posicao e valida (Dentro da grade 8x8)
 bool c_posicao::validar() {
-	return valido;
+	return ((x > 0) && (x <= 8) && (y > 0) && (y <= 8));
+}
+
+c_posicao c_posicao::operator+(c_posicao &_temp) {
+	return c_posicao(_temp.get_x() + x, _temp.get_y() + y);
+}
+
+void c_posicao::operator+=(c_posicao &_temp) {
+	x += _temp.get_x();
+	y += _temp.get_y();
+	
 }
 
 // Retorna a distancia entre duas posicoes(Retorna 0 se nao houver alinhamento vertical, horizontal ou diagonal entre as posicoes)
@@ -57,9 +94,14 @@ bool c_posicao::operator==(c_posicao &_temp) {
 	return ((x == _temp.get_x()) && (y == _temp.get_y()));
 }
 
+// Verifica se duas posicoes nao sao iguais
+bool c_posicao::operator!=(c_posicao &_temp) {
+	return ((x != _temp.get_x()) || (y != _temp.get_y()));
+}
+
 // Retorna uma chave para mapear o tabuleiro
 short int c_posicao::operator!() {
-	if(valido) {
+	if(validar()) {
 		return (10 * x) + y;
 		
 	}
@@ -100,8 +142,9 @@ c_posicao c_movimento::get_fim() {
 	return PosFinal;
 }
 
-c_peca::c_peca(e_cor _Cor) {
+c_peca::c_peca(e_cor _Cor, c_posicao _Posicao) {
 	Cor = _Cor;
+	Posicao = _Posicao;
 	
 	return;
 }
@@ -110,11 +153,6 @@ c_peca::~c_peca() {
 	
 	
 	return;
-}
-
-std::list<c_movimento> c_peca::encontrar_movimentos() {
-	
-	
 }
 
 e_cor c_peca::get_cor() {
@@ -129,3 +167,15 @@ void c_peca::atualizar_posicao(c_posicao _Posicao) {
 	
 	return;
 }
+
+std::list<c_movimento> c_peca::encontrar_movimentos() {
+	std::list<c_movimento> _Movimentos;
+	
+	return _Movimentos;
+}
+
+/*std::list<c_movimento> encontrar_capturas();
+bool ameacando_rei();
+e_cor get_cor();
+c_posicao get_posicao();
+void atualizar_posicao(c_posicao _Posicao);*/

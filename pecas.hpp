@@ -16,7 +16,7 @@ class c_torre;
 
 #include "tabuleiro.hpp"
 
-enum e_dir {NO, N, NE, E, SE, S, SO, O};
+enum e_dir {N = 0x01, S = 0x02, E = 0x04, O = 0x08, NE = 0x05, SE = 0x06, NO = 0x09, SO = 0x0A};
 enum e_pontuacao {PEAO = 1, CAVALO = 3, BISPO = 3, TORRE = 5, RAINHA = 9, REI = 1000};
 enum e_cor {SEMCOR, BRANCO, PRETO};
 
@@ -25,17 +25,22 @@ class c_posicao {
 	private:
 		short int x;
 		short int y;
-		bool valido;
 		
 	public:
 		c_posicao(short int _x = 0, short int _y = 0);
-		short int get_x();
-		short int get_y();
+		c_posicao(e_dir _Direcao, short int _Distancia);
+		c_posicao operator+(c_posicao &_temp);
+		void operator+=(c_posicao &_temp);
 		short int operator-(c_posicao &_temp);
 		bool operator==(c_posicao &_temp);
+		bool operator!=(c_posicao &_temp);
 		short int operator!();
 		c_movimento operator>>(c_posicao &_temp);
 		c_movimento operator<<(c_posicao &_temp);
+		void set_x(short int _x);
+		void set_y(short int _y);
+		short int get_x();
+		short int get_y();
 		bool validar();
 		
 };
@@ -65,7 +70,7 @@ class c_peca {
 		e_cor Cor;
 	
 	public:
-		c_peca(e_cor _cor);
+		c_peca(e_cor _Cor = SEMCOR, c_posicao _Posicao = c_posicao(0, 0));
 		~c_peca();
 		std::list<c_movimento> encontrar_movimentos();
 		std::list<c_movimento> encontrar_capturas();
@@ -82,6 +87,7 @@ class c_bispo : public c_peca {
 	private:
 	
 	public:
+		c_bispo(e_cor _Cor, c_posicao _Posicao);
 		std::list<c_movimento> encontrar_especiais();
 	
 	
