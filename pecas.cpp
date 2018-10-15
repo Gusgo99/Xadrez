@@ -7,7 +7,7 @@
 c_posicao::c_posicao(short int _x, short int _y) {
 	x = _x;
 	y = _y;
-	
+
 	return;
 }
 
@@ -15,36 +15,36 @@ c_posicao::c_posicao(short int _x, short int _y) {
 c_posicao::c_posicao(e_dir _Direcao, short int _Distancia) {
 	x = 0;
 	y = 0;
-	
+
 	if((_Direcao & N) != 0) {
 		y = _Distancia;
-		
+
 	}
 	else if((_Direcao & S) != 0) {
 		y = -_Distancia;
-		
+
 	}
-	
+
 	if((_Direcao & E) != 0) {
 		x = _Distancia;
-		
+
 	}
 	else if((_Direcao & O) != 0) {
 		x = -_Distancia;
-		
+
 	}
-	
+
 	return;
 }
 
 void c_posicao::set_x(short int _x) {
 	x = _x;
-	
+
 	return;
 }
 void c_posicao::set_y(short int _y) {
 	y = _y;
-	
+
 	return;
 }
 
@@ -68,24 +68,24 @@ c_posicao c_posicao::operator+(c_posicao &_temp) {
 void c_posicao::operator+=(c_posicao &_temp) {
 	x += _temp.get_x();
 	y += _temp.get_y();
-	
+
 }
 
 // Retorna a distancia entre duas posicoes(Retorna 0 se nao houver alinhamento vertical, horizontal ou diagonal entre as posicoes)
 short int c_posicao::operator-(c_posicao &_temp) {
 	if(_temp.get_x() == x) {
 		return abs(_temp.get_y() - y);
-		
+
 	}
 	else if(_temp.get_y() == y) {
 		return abs(_temp.get_x() - x);
-		
+
 	}
 	else if(abs(_temp.get_x() - x) == abs(_temp.get_y() - y)) {
 		return abs(_temp.get_x() - x);
-		
+
 	}
-	
+
 	return 0;
 }
 
@@ -103,11 +103,11 @@ bool c_posicao::operator!=(c_posicao &_temp) {
 short int c_posicao::operator!() {
 	if(validar()) {
 		return (10 * x) + y;
-		
+
 	}
 	else {
 		return 0;
-		
+
 	}
 }
 
@@ -124,13 +124,13 @@ c_movimento::c_movimento(c_posicao _PosInicial, c_posicao _PosFinal) {
 	if(_PosInicial.validar() && _PosFinal.validar()) {
 		PosInicial = _PosInicial;
 		PosFinal = _PosFinal;
-		
+
 	}
 	else {
 		//Verificar o que fazer em caso de movimento invalido
-		
+
 	}
-	
+
 	return;
 }
 
@@ -145,13 +145,13 @@ c_posicao c_movimento::get_fim() {
 c_peca::c_peca(e_cor _Cor, c_posicao _Posicao) {
 	Cor = _Cor;
 	Posicao = _Posicao;
-	
+
 	return;
 }
 
 c_peca::~c_peca() {
-	
-	
+
+
 	return;
 }
 
@@ -162,15 +162,15 @@ e_cor c_peca::get_cor() {
 void c_peca::atualizar_posicao(c_posicao _Posicao) {
 	if(_Posicao.validar()) {
 		Posicao = _Posicao;
-		
+
 	}
-	
+
 	return;
 }
 
 std::list<c_movimento> c_peca::encontrar_movimentos() {
 	std::list<c_movimento> _Movimentos;
-	
+
 	return _Movimentos;
 }
 
@@ -179,3 +179,12 @@ bool ameacando_rei();
 e_cor get_cor();
 c_posicao get_posicao();
 void atualizar_posicao(c_posicao _Posicao);*/
+
+c_bispo::c_bispo(e_cor _Cor, c_posicao _Posicao){
+    DistMov[N] = 0;
+
+    //(...)
+    DistCome = DistMov;
+    Pontuacao = BISPO;//BISPO eh um enum
+    return;
+}

@@ -25,7 +25,7 @@ class c_posicao {
 	private:
 		short int x;
 		short int y;
-		
+
 	public:
 		c_posicao(short int _x = 0, short int _y = 0);
 		c_posicao(e_dir _Direcao, short int _Distancia);
@@ -42,7 +42,7 @@ class c_posicao {
 		short int get_x();
 		short int get_y();
 		bool validar();
-		
+
 };
 
 class c_jogo;
@@ -52,23 +52,23 @@ class c_movimento {
 	private:
 		c_posicao PosInicial;
 		c_posicao PosFinal;
-		
+
 	public:
 		c_movimento(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0));
 		c_posicao get_inicio();
 		c_posicao get_fim();
-		
+
 };
 
 // Classe base para todas as pecas
 class c_peca {
 	private:
-		std::array<unsigned short int, 8> DistMov;
+		std::array<unsigned short int, 8> DistMov;//cada indice representa uma direcao, e o valor a quantidade de movimento
 		std::array<unsigned short int, 8> DistCome;
 		e_pontuacao Pontuacao;
 		c_posicao Posicao;
 		e_cor Cor;
-	
+
 	public:
 		c_peca(e_cor _Cor = SEMCOR, c_posicao _Posicao = c_posicao(0, 0));
 		~c_peca();
@@ -79,61 +79,60 @@ class c_peca {
 		e_cor get_cor();
 		c_posicao get_posicao();
 		void atualizar_posicao(c_posicao _Posicao);
-		
-	
+
+
 };
 
 class c_bispo : public c_peca {
 	private:
-	
+
 	public:
-		c_bispo(e_cor _Cor, c_posicao _Posicao);
+		c_bispo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao);
 		std::list<c_movimento> encontrar_especiais();
-	
-	
+
+
 };
 
 class c_rei : public c_peca {
 	private:
 		unsigned NumJogadas;
 		void jogar(std::array<unsigned short int, 2> _Posicao);
-	
+
 	public:
 		std::list<c_movimento> encontrar_especiais();
-		
+
 };
 
 class c_peao : public c_peca {
 	private:
 		unsigned NumJogadas;
-		
+
 	public:
 		void jogar(std::array<unsigned short int, 2> Posicao);
 		void promocao();
 		std::list<c_movimento> encontrar_especiais();
-		
-	
+
+
 };
 
 class c_torre : public c_peca {
 	private:
 		unsigned NumJogadas;
-	
+
 	public:
 		unsigned short int get_num_jogadas();
 		std::list<c_movimento> encontrar_especiais();
-	
+
 };
 
 class c_cavalo : public c_peca {
 	private:
-		
-		
+
+
 	public:
 		std::list<c_movimento> encontrar_especiais();
-		
-		
-	
+
+
 };
 
 #endif
