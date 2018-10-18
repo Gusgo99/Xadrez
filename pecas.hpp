@@ -60,9 +60,13 @@ class c_movimento {
 
 };
 
-// Classe base para todas as pecas
+
+//#####################################################
+            //classe peca
+//#####################################################
+
 class c_peca {
-	private:
+	protected:
 		std::array<unsigned short int, 8> DistMov;//cada indice representa uma direcao, e o valor a quantidade de movimento
 		std::array<unsigned short int, 8> DistCome;
 		e_pontuacao Pontuacao;
@@ -83,12 +87,26 @@ class c_peca {
 
 };
 
+//#####################################################
+            //sub classe peca
+//#####################################################
+
 class c_bispo : public c_peca {
 	private:
 
 	public:
-		c_bispo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao);
-		std::list<c_movimento> encontrar_especiais();
+		c_bispo(e_cor _Cor, c_posicao _Posicao);
+		std::list<c_movimento> encontrar_especiais(){return std::list<c_movimento>();};
+
+
+};
+
+class c_rainha : public c_peca {
+	private:
+
+	public:
+		c_rainha(e_cor _Cor, c_posicao _Posicao);
+		std::list<c_movimento> encontrar_especiais(){return std::list<c_movimento>();};
 
 
 };
@@ -99,6 +117,7 @@ class c_rei : public c_peca {
 		void jogar(std::array<unsigned short int, 2> _Posicao);
 
 	public:
+	    c_rei(e_cor _Cor, c_posicao _Posicao);
 		std::list<c_movimento> encontrar_especiais();
 
 };
@@ -108,6 +127,7 @@ class c_peao : public c_peca {
 		unsigned NumJogadas;
 
 	public:
+	    c_peao(e_cor _Cor, c_posicao _Posicao);
 		void jogar(std::array<unsigned short int, 2> Posicao);
 		void promocao();
 		std::list<c_movimento> encontrar_especiais();
@@ -120,6 +140,7 @@ class c_torre : public c_peca {
 		unsigned NumJogadas;
 
 	public:
+	    c_torre(e_cor _Cor, c_posicao _Posicao);
 		unsigned short int get_num_jogadas();
 		std::list<c_movimento> encontrar_especiais();
 
@@ -131,7 +152,6 @@ class c_cavalo : public c_peca {
 
 	public:
 		std::list<c_movimento> encontrar_especiais();
-
 
 };
 
