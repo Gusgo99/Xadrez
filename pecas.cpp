@@ -316,7 +316,7 @@ c_peao::c_peao(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     return;
 }
 
-std::list<c_movimento> c_torre::encontrar_especiais() {
+std::list<c_movimento> c_peao::encontrar_especiais() {
 
     //implementar
 

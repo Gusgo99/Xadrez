@@ -151,6 +151,7 @@ class c_cavalo : public c_peca {
 
 
 	public:
+	    c_cavalo(e_cor _Cor, c_posicao _Posicao);
 		std::list<c_movimento> encontrar_especiais();
 
 };
