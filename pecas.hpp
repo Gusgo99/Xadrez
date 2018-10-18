@@ -39,6 +39,7 @@ class c_posicao {
 		c_movimento operator<<(c_posicao &_temp);
 		void set_x(short int _x);
 		void set_y(short int _y);
+		void set_xy(short int _x, short int _y);
 		short int get_x();
 		short int get_y();
 		bool validar();

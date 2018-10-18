@@ -48,6 +48,12 @@ void c_posicao::set_y(short int _y) {
 	return;
 }
 
+void c_posicao::set_xy(short int _x, short int _y){
+    x = _x;
+    y = _y;
+    return;
+}
+
 short int c_posicao::get_x() {
 	return x;
 }
