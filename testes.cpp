@@ -89,7 +89,7 @@ void testar_posicao() {
 	
 	a = c_posicao(4, 4);
 	
-	b = a;
+	b = c_posicao(N, 1);
 	
 	std::cout << "Posicao a: (" << a.get_x() << ", " << a.get_y() << ")" << std::endl;
 	

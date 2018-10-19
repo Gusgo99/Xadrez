@@ -13,3 +13,16 @@ c_jogo::c_jogo() {
 	}
 	
 }
+
+/*std::map<short int, e_peca> c_tabuleiro::get_estado() {
+	std::map<short int, e_peca> _Estado;
+	
+	for(auto i: Tabuleiro) {
+		if(i != nullptr) {
+			i.marcar_posicao(&_Estado);
+			
+		}
+	}
+	
+	return _Estado;
+}*/
