@@ -14,8 +14,8 @@ c_jogo::c_jogo() {
 	
 }
 
-/*std::map<short int, e_peca> c_tabuleiro::get_estado() {
-	std::map<short int, e_peca> _Estado;
+/*std::map<short int, s_idpeca> get_estado() {
+	std::map<short int, s_idpeca> _Estado;
 	
 	for(auto i: Tabuleiro) {
 		if(i != nullptr) {

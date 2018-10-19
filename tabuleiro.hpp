@@ -21,8 +21,7 @@ class c_jogo {
 		salvar_jogo();
 		carregar_jogo();
 		void operator+(c_movimento &_movimento);
-		std::map<short int, e_peca> get_estado();
-		
+		std::map<short int, s_idpeca> get_estado();
 		
 };
 

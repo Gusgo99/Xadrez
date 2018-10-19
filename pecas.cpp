@@ -107,17 +107,33 @@ short int c_posicao::operator!() {
 }
 
 c_movimento c_posicao::operator>>(c_posicao &_temp) {
-	return c_movimento(c_posicao(x, y), _temp);
+	return c_movimento(c_posicao(x, y), _temp, SIMPLES);
 }
 
 c_movimento c_posicao::operator<<(c_posicao &_temp) {
-	return c_movimento(_temp, c_posicao(x, y));
+	return c_movimento(_temp, c_posicao(x, y), SIMPLES);
 }
 
 c_movimento::c_movimento(c_posicao _PosInicial, c_posicao _PosFinal) {
 	if(_PosInicial.validar() && _PosFinal.validar()) {
 		PosInicial = _PosInicial;
 		PosFinal = _PosFinal;
+		TipoMovimento = SIMPLES;
+
+	}
+	else {
+		//Verificar o que fazer em caso de movimento invalido
+
+	}
+
+	return;
+}
+
+c_movimento::c_movimento(c_posicao _PosInicial, c_posicao _PosFinal, e_movimento _TipoMovimento) {
+	if(_PosInicial.validar() && _PosFinal.validar()) {
+		PosInicial = _PosInicial;
+		PosFinal = _PosFinal;
+		TipoMovimento = _TipoMovimento;
 
 	}
 	else {
@@ -136,9 +152,18 @@ c_posicao c_movimento::get_fim() {
 	return PosFinal;
 }
 
+void c_movimento::set_tipo(e_movimento _TipoMovimento) {
+	TipoMovimento = _TipoMovimento;
+	
+	return;
+}
+
+e_movimento c_movimento::get_tipo() {
+	return TipoMovimento;
+}
 
 c_peca::c_peca(e_cor _Cor, c_posicao _Posicao) {
-	Cor = _Cor;
+	IDPeca.Cor = _Cor;
 	Posicao = _Posicao;
 
 	return;
@@ -151,10 +176,10 @@ c_peca::~c_peca() {
 }
 
 e_cor c_peca::get_cor() {
-	return Cor;
+	return IDPeca.Cor;
 }
 
-void c_peca::marcar_posicao(std::map<short int, e_peca> *_Estado) {
+void c_peca::marcar_posicao(std::map<short int, s_idpeca> *_Estado) {
 	if(_Estado != nullptr) {
 		(*_Estado)[!Posicao] = IDPeca;
 		
@@ -172,7 +197,7 @@ void c_peca::atualizar_posicao(c_posicao _Posicao) {
 	return;
 }
 
-std::list<c_movimento> c_peca::listar_movimentos(std::map<short int, e_peca> _Estado) {
+std::list<c_movimento> c_peca::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
 	std::list<c_movimento> _Movimentos = encontrar_movimentos(_Estado);
 	std::list<c_movimento> _Capturas = encontrar_capturas(_Estado);
 	std::list<c_movimento> _Especiais = encontrar_especiais(_Estado);
@@ -183,7 +208,7 @@ std::list<c_movimento> c_peca::listar_movimentos(std::map<short int, e_peca> _Es
 	return _Movimentos;
 }
 
-std::list<c_movimento> c_peca::encontrar_movimentos(std::map<short int, e_peca> _Estado) {
+std::list<c_movimento> c_peca::encontrar_movimentos(std::map<short int, s_idpeca> _Estado) {
 	std::list<c_movimento> _Movimentos;
 	
 	for(auto i: Direcoes) {
@@ -191,7 +216,7 @@ std::list<c_movimento> c_peca::encontrar_movimentos(std::map<short int, e_peca> 
 			c_posicao _NovaPosicao(i, j);
 			_NovaPosicao += Posicao;
 			if(!_NovaPosicao.validar()) break;
-			if(_Estado[!_NovaPosicao] != VAZIO) break;
+			if(_Estado[!_NovaPosicao].Peca != VAZIO) break;
 			
 			_Movimentos.push_back(Posicao >> _NovaPosicao);
 			
@@ -201,7 +226,7 @@ std::list<c_movimento> c_peca::encontrar_movimentos(std::map<short int, e_peca> 
 	return _Movimentos;
 }
 
-std::list<c_movimento> c_peca::encontrar_capturas(std::map<short int, e_peca> _Estado) {
+std::list<c_movimento> c_peca::encontrar_capturas(std::map<short int, s_idpeca> _Estado) {
 	std::list<c_movimento> _Movimentos;
 	
 	for(auto i: Direcoes) {
@@ -210,11 +235,10 @@ std::list<c_movimento> c_peca::encontrar_capturas(std::map<short int, e_peca> _E
 			_NovaPosicao += Posicao;
 			if(!_NovaPosicao.validar()) break;
 			
-			if(_Estado[!_NovaPosicao] != VAZIO) {
-				if((_Estado[!_NovaPosicao] >> 4) != Cor) {
-					_Movimentos.push_back(Posicao >> _NovaPosicao);
-					
-				}
+			if(_Estado[!_NovaPosicao].Peca != VAZIO) {
+				if(_Estado[!_NovaPosicao].Cor == IDPeca.Cor) break;
+				_Movimentos.push_back(Posicao >> _NovaPosicao);
+				
 			}
 		}
 	}
@@ -223,18 +247,14 @@ std::list<c_movimento> c_peca::encontrar_capturas(std::map<short int, e_peca> _E
 }
 
 
-bool c_peca::ameacando_rei(std::map<short int, e_peca> _Estado) {
+bool c_peca::ameacando_rei(std::map<short int, s_idpeca> _Estado) {
 	std::list<c_movimento> _Capturas = encontrar_capturas(_Estado);
-	c_posicao _PosRei;
-	
-	// Calcular posicao do rei
 	
 	for(auto i: _Capturas) {
-		if(i.get_fim() == _PosRei) {
+		if((_Estado[!(i.get_fim())].Peca == REI) && (_Estado[!(i.get_fim())].Cor == IDPeca.Cor)) {
 			return true;
 			
 		}
-		
 	}
 	
 	return false;

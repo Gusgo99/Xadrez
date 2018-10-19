@@ -1,6 +1,9 @@
 #ifndef PECAS_HPP
 #define PECAS_HPP
 
+#include <array>
+#include <list>
+
 class c_movimento;
 class c_posicao;
 
@@ -13,11 +16,16 @@ class c_torre;
 
 enum e_dir {N = 0x01, S = 0x02, E = 0x04, O = 0x08, NE = N | E, SE = S | E, NO = N | O, SO = S | O};
 enum e_cor {SEMCOR, BRANCO, PRETO};
-enum e_peca {VAZIO, PEAOBRANCO = (BRANCO << 4) | 1,	CAVALOBRANCO,	BISPOBRANCO,	TORREBRANCA,	RAINHABRANCA,	REIBRANCO,
-					PEAOPRETO = (PRETO << 4) | 1, 	CAVALOPRETO,	BISPOPRETO,		TORREPRETA,		RAINHAPRETA,	REIPRETO};
+enum e_peca {VAZIO, PEAO, CAVALO, BISPO, TORRE, RAINHA, REI};
+enum e_movimento {SIMPLES, CAPTURA, ESPECIAL};
 
-#include <array>
-#include <list>
+// Armazena cor e tipo da peca
+struct s_idpeca {
+	s_idpeca() {Cor = SEMCOR; Peca = VAZIO;}
+	e_cor Cor;
+	e_peca Peca;
+	
+};
 
 #include "tabuleiro.hpp"
 
@@ -55,11 +63,15 @@ class c_movimento {
 	private:
 		c_posicao PosInicial;
 		c_posicao PosFinal;
+		e_movimento TipoMovimento;
 
 	public:
 		c_movimento(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0));
+		c_movimento(c_posicao _PosInicial, c_posicao _PosFinal, e_movimento _TipoMovimento);
 		c_posicao get_inicio();
 		c_posicao get_fim();
+		void set_tipo(e_movimento _TipoMovimento);
+		e_movimento get_tipo();
 
 };
 
@@ -68,20 +80,19 @@ class c_peca {
 	protected:
 		std::map<e_dir, short int> DistMov;																// Distancia maxima que a peca pode se mover em cada direcao
 		std::map<e_dir, short int> DistCome;															// Distancia maxima que a peca pode comer em cada direcao
-		e_peca IDPeca;																					// Identificacao da peca (Tipo e cor)
+		s_idpeca IDPeca;																				// Identificacao da peca (Tipo e cor)
 		c_posicao Posicao;																				// Posicao da peca no tabuleiro
-		e_cor Cor;																						// Cor da peca
-		std::list<c_movimento> encontrar_movimentos(std::map<short int, e_peca> _Estado);				// Calcula possiveis movimentos
-		std::list<c_movimento> encontrar_capturas(std::map<short int, e_peca> _Estado);					// Calcula possiveis capturas
-		virtual std::list<c_movimento> encontrar_especiais(std::map<short int, e_peca> _Estado) = 0;	// Calcula movimentos especiais
+		std::list<c_movimento> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis movimentos
+		std::list<c_movimento> encontrar_capturas(std::map<short int, s_idpeca> _Estado);					// Calcula possiveis capturas
+		virtual std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado) = 0;	// Calcula movimentos especiais
 
 	public:
 		c_peca(e_cor _Cor = SEMCOR, c_posicao _Posicao = c_posicao(0, 0));
 		~c_peca();
-		std::list<c_movimento> listar_movimentos(std::map<short int, e_peca> _Estado);					// Lista movimentos possiveis
-		bool ameacando_rei(std::map<short int, e_peca> _Estado);										// Verifica se a peca esta ameacando o rei inimigo
+		std::list<c_movimento> listar_movimentos(std::map<short int, s_idpeca> _Estado);					// Lista movimentos possiveis
+		bool ameacando_rei(std::map<short int, s_idpeca> _Estado);										// Verifica se a peca esta ameacando o rei inimigo
 		void atualizar_posicao(c_posicao _Posicao);														// Realiza a atualizacao da posicao apos realizar o movimento
-		void marcar_posicao(std::map<short int, e_peca> *_Estado);										// Faz com que cada peca marque sua posicao no tabuleiro
+		void marcar_posicao(std::map<short int, s_idpeca> *_Estado);										// Faz com que cada peca marque sua posicao no tabuleiro
 		e_cor get_cor();
 		c_posicao get_posicao();
 
