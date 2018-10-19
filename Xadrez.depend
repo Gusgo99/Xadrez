@@ -19,19 +19,19 @@
 	"tabuleiro.hpp"
 	"testes.hpp"
 
-1539902112 c:\users\fonso\dropbox\prog 2\xadrez\pecas.hpp
+1539983947 c:\users\fonso\dropbox\prog 2\xadrez\pecas.hpp
 	<array>
 	<list>
 	"tabuleiro.hpp"
 
-1539628893 c:\users\fonso\dropbox\prog 2\xadrez\tabuleiro.hpp
+1539983663 c:\users\fonso\dropbox\prog 2\xadrez\tabuleiro.hpp
 	<array>
 	<map>
 	"pecas.hpp"
 
 1539628893 c:\users\fonso\dropbox\prog 2\xadrez\testes.hpp
 
-1539628893 source:c:\users\fonso\dropbox\prog 2\xadrez\tabuleiro.cpp
+1539983663 source:c:\users\fonso\dropbox\prog 2\xadrez\tabuleiro.cpp
 	<iostream>
 	"tabuleiro.hpp"
 	"utilidades.hpp"
@@ -39,7 +39,7 @@
 
 1539628893 c:\users\fonso\dropbox\prog 2\xadrez\utilidades.hpp
 
-1539629565 source:c:\users\fonso\dropbox\prog 2\xadrez\testes.cpp
+1539983663 source:c:\users\fonso\dropbox\prog 2\xadrez\testes.cpp
 	<iostream>
 	"testes.hpp"
 	"GUI.hpp"
