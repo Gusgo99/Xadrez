@@ -21,9 +21,10 @@ enum e_movimento {SIMPLES, CAPTURA, ESPECIAL};
 
 // Armazena cor e tipo da peca
 struct s_idpeca {
-	s_idpeca() {Cor = SEMCOR; Peca = VAZIO;}
+	s_idpeca() {Cor = SEMCOR; Peca = VAZIO; NumJogadas = 0;}
 	e_cor Cor;
 	e_peca Peca;
+    unsigned NumJogadas;
 
 };
 
@@ -61,11 +62,10 @@ class c_jogo;
 
 // Classe responsavel por guardar posicao inicial e final de um movimento e executar o movimento
 class c_movimento {
-	private:
+	protected:
 		c_posicao PosInicial;
 		c_posicao PosFinal;
 		e_movimento TipoMovimento;
-
 	public:
 		c_movimento(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0));
 		c_movimento(c_posicao _PosInicial, c_posicao _PosFinal, e_movimento _TipoMovimento);
@@ -73,6 +73,18 @@ class c_movimento {
 		c_posicao get_fim();
 		void set_tipo(e_movimento _TipoMovimento);
 		e_movimento get_tipo();
+
+};
+
+class c_roque : public c_movimento{
+    private:
+        c_posicao PosInicial2;
+        c_posicao PosFinal2;
+    public:
+        c_roque(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0),c_posicao _PosInicial2 = c_posicao(0, 0), c_posicao _PosFinal2 = c_posicao(0, 0));
+        c_posicao get_inicio2(){return PosInicial2;};   //tirar daqui depois
+		c_posicao get_fim2(){return PosFinal2;};          //tirar daqui depois
+
 
 };
 
@@ -99,8 +111,9 @@ class c_peca {
 		void atualizar_posicao(c_posicao _Posicao);														// Realiza a atualizacao da posicao apos realizar o movimento
 		void marcar_posicao(std::map<short int, s_idpeca> *_Estado);										// Faz com que cada peca marque sua posicao no tabuleiro
 		e_cor get_cor();
+		e_peca get_peca();
 		c_posicao get_posicao();
-
+		unsigned get_NumJogadas(){return IDPeca.NumJogadas;} //tirar daqui depois
 
 };
 
@@ -129,17 +142,15 @@ class c_rainha : public c_peca {
 
 class c_rei : public c_peca {
 	private:
-		unsigned NumJogadas;
-
+        bool Ameacado;
 	public:
 	    c_rei(e_cor _Cor, c_posicao _Posicao);
 		std::list<c_movimento> encontrar_especiais();
-
+        bool get_ameacado(){return Ameacado;};;
 };
 
 class c_peao : public c_peca {
 	private:
-		unsigned NumJogadas;
 
 	public:
 	    c_peao(e_cor _Cor, c_posicao _Posicao);
@@ -152,12 +163,10 @@ class c_peao : public c_peca {
 
 class c_torre : public c_peca {
 	private:
-		unsigned NumJogadas;
 
 	public:
 	    c_torre(e_cor _Cor, c_posicao _Posicao);
-		unsigned short int get_num_jogadas();
-		std::list<c_movimento> encontrar_especiais();
+		std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
 
 };
 

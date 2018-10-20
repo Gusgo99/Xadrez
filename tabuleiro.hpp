@@ -14,7 +14,7 @@ class c_jogo {
 		std::map<short int, c_peca*> Tabuleiro;
 		unsigned Turno;
 		unsigned JogadasRestantes;
-		
+
 	public:
 		c_jogo();
 		c_jogo(c_jogo *_original);
@@ -22,7 +22,7 @@ class c_jogo {
 		carregar_jogo();
 		void operator+(c_movimento &_movimento);
 		std::map<short int, s_idpeca> get_estado();
-		
+
 };
 
 #endif

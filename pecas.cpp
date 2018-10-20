@@ -150,6 +150,16 @@ c_movimento::c_movimento(c_posicao _PosInicial, c_posicao _PosFinal, e_movimento
 	return;
 }
 
+
+c_roque::c_roque(c_posicao _PosInicial, c_posicao _PosFinal, c_posicao _PosInicial2, c_posicao _PosFinal2){
+    TipoMovimento = ESPECIAL;
+    PosInicial=_PosInicial;
+    PosFinal=_PosFinal;
+    PosInicial2=PosInicial2;
+    PosFinal2=PosFinal2;
+    return;
+}
+
 c_posicao c_movimento::get_inicio() {
 	return PosInicial;
 }
@@ -183,6 +193,10 @@ c_peca::~c_peca() {
 
 e_cor c_peca::get_cor() {
 	return IDPeca.Cor;
+}
+
+e_peca c_peca::get_peca(){
+    return IDPeca.Peca;
 }
 
 void c_peca::marcar_posicao(std::map<short int, s_idpeca> *_Estado) {
@@ -316,7 +330,8 @@ c_rei::c_rei(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     IDPeca.Peca = REI;//eh um enum
     Posicao = _Posicao;
     IDPeca.Cor = _Cor;
-    NumJogadas=0;
+    IDPeca.NumJogadas=0;
+    Ameacado=false;
 
     return;
 }
@@ -362,17 +377,68 @@ c_torre::c_torre(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     IDPeca.Peca = TORRE;//eh um enum
     Posicao = _Posicao;
     IDPeca.Cor = _Cor;
-    NumJogadas=0;
+    IDPeca.NumJogadas=0;
 
     return;
 }
+//###############################################################
+//###############################################################
+//###############################################################
 
-std::list<c_movimento> c_torre::encontrar_especiais() {
+std::list<c_movimento> c_torre::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {//##########
+    //roquei
+    std::list<c_movimento> _Movimentos;
+    c_movimento *_aux;
+    bool _zero_movimento=false;
 
-    //implementar
 
-    return std::list<c_movimento>();
+    if(get_NumJogadas() == 0){//ja moveu a torre?
+        if(IDPeca.Cor == BRANCO){//a peca e branca?
+            if(_Estado[51].Peca == REI && _Estado[51].NumJogadas == 0){//o rei  branco esta na posicao e nao foi movido?
+                _zero_movimento = true;
+            }else return _Movimentos; //o rei branco moveu e nao retona nada
+        }else// preta?
+            if(_Estado[58].Peca == REI && _Estado[58].NumJogadas == 0){//o rei preto esta na posicao e nao foi movido?
+                _zero_movimento = true;
+            }else return _Movimentos; //o rei preto moveu e nao retona nada
+    }else{
+        return _Movimentos;//a torre moveu e nao retoena dana
+    }
+
+    if(_zero_movimento){
+    //verifica se não tem nada no caminho
+        if(get_posicao().get_x() == 1){ //roque grande?
+            if(IDPeca.Cor == BRANCO){//branco
+                if(_Estado[21].Peca == VAZIO && _Estado[31].Peca == VAZIO && _Estado[41].Peca == VAZIO){
+                    _aux = new c_roque(Posicao,c_posicao(4,1),c_posicao(5,1),c_posicao(2,1));
+                }else return _Movimentos;//tem coisa no meio do rei e da torre banco
+            }else{//preto?
+                if(_Estado[28].Peca == VAZIO && _Estado[38].Peca == VAZIO && _Estado[48].Peca == VAZIO){
+                    _aux = new c_roque(Posicao,c_posicao(4,8),c_posicao(5,8),c_posicao(2,8));
+                }else return _Movimentos;// tem coisa no meio do rei e da torre  preto
+            }
+        }else{//roque pqqueno
+            if(IDPeca.Cor == BRANCO){//branco
+                if(_Estado[61].Peca == VAZIO && _Estado[71].Peca == VAZIO){//meio vazio?
+                    _aux = new c_roque(Posicao,c_posicao(6,1),c_posicao(5,1),c_posicao(7,1));
+                }else return _Movimentos;
+            }else{//preto
+                if(_Estado[68].Peca == VAZIO && _Estado[78].Peca == VAZIO){
+                    _aux = new c_roque(Posicao,c_posicao(6,8),c_posicao(5,8),c_posicao(7,8));
+                }else return _Movimentos;
+            }
+        }// verificou se o meio esta vazio
+
+        _Movimentos.push_back (*_aux);
+    }
+    return _Movimentos;
 }
+
+
+
+//###############################################################
+//###############################################################
+//###############################################################
 
 //peao
 
@@ -392,7 +458,7 @@ c_peao::c_peao(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     IDPeca.Peca = PEAO;//eh um enum
     Posicao = _Posicao;
     IDPeca.Cor = _Cor;
-    NumJogadas=0;
+    IDPeca.NumJogadas=0;
 
     if(_Cor==BRANCO){
         DistMov[N]=1;

@@ -8,7 +8,8 @@
 #include "testes.hpp"
 
 int main() {
-	testar_posicao();
+
+    testar_posicao();
 
 	return 0;
 }
