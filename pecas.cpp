@@ -386,7 +386,7 @@ std::list<c_movimento> c_torre::encontrar_especiais(std::map<short int, s_idpeca
     //roquei
     std::list<c_movimento> _Movimentos;
     c_movimento *_aux;
-    bool _zero_movimento=false;
+    bool _zero_movimento = false;
 
 
     if(get_NumJogadas() == 0){//ja moveu a torre?
@@ -407,21 +407,21 @@ std::list<c_movimento> c_torre::encontrar_especiais(std::map<short int, s_idpeca
         if(get_posicao().get_x() == 1){ //roque grande?
             if(IDPeca.Cor == BRANCO){//branco
                 if(_Estado[21].Peca == VAZIO && _Estado[31].Peca == VAZIO && _Estado[41].Peca == VAZIO){
-                    _aux = new c_roque(Posicao,c_posicao(4,1),c_posicao(5,1),c_posicao(2,1));
+                    _aux = new c_roque(Posicao, c_posicao(4,1), c_posicao(5,1), c_posicao(2,1));
                 }else return _Movimentos;//tem coisa no meio do rei e da torre banco
             }else{//preto?
                 if(_Estado[28].Peca == VAZIO && _Estado[38].Peca == VAZIO && _Estado[48].Peca == VAZIO){
-                    _aux = new c_roque(Posicao,c_posicao(4,8),c_posicao(5,8),c_posicao(2,8));
+                    _aux = new c_roque(Posicao, c_posicao(4,8), c_posicao(5,8), c_posicao(2,8));
                 }else return _Movimentos;// tem coisa no meio do rei e da torre  preto
             }
         }else{//roque pqqueno
             if(IDPeca.Cor == BRANCO){//branco
                 if(_Estado[61].Peca == VAZIO && _Estado[71].Peca == VAZIO){//meio vazio?
-                    _aux = new c_roque(Posicao,c_posicao(6,1),c_posicao(5,1),c_posicao(7,1));
+                    _aux = new c_roque(Posicao, c_posicao(6,1), c_posicao(5,1), c_posicao(7,1));
                 }else return _Movimentos;
             }else{//preto
                 if(_Estado[68].Peca == VAZIO && _Estado[78].Peca == VAZIO){
-                    _aux = new c_roque(Posicao,c_posicao(6,8),c_posicao(5,8),c_posicao(7,8));
+                    _aux = new c_roque(Posicao, c_posicao(6,8), c_posicao(5,8), c_posicao(7,8));
                 }else return _Movimentos;
             }
         }// verificou se o meio esta vazio
