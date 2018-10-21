@@ -1,0 +1,25 @@
+# depslib dependency file v1.0
+1539628893 source:c:\users\fonso\dropbox\prog 2\xadrez\ia.cpp
+	<iostream>
+	"IA.hpp"
+
+1539628893 c:\users\fonso\dropbox\prog 2\xadrez\ia.hpp
+
+1539983663 source:c:\users\fonso\dropbox\prog 2\xadrez\tabuleiro.cpp
+	<iostream>
+	"tabuleiro.hpp"
+	"utilidades.hpp"
+	"pecas.hpp"
+
+1540150896 c:\users\fonso\dropbox\prog 2\xadrez\tabuleiro.hpp
+	<array>
+	<map>
+	"pecas.hpp"
+
+1540150895 c:\users\fonso\dropbox\prog 2\xadrez\pecas.hpp
+	<array>
+	<list>
+	"tabuleiro.hpp"
+
+1540150896 c:\users\fonso\dropbox\prog 2\xadrez\utilidades.hpp
+
