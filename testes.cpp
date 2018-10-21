@@ -146,3 +146,10 @@ void testar_movimento() {
 	
 	return;
 }
+
+void testar_interface_jogo() {
+	c_interfaceJogo teste("Chess", nullptr, false, 500, 500);
+	
+	teste.desenhar_janela();
+	
+}
