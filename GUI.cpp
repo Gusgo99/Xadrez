@@ -143,7 +143,7 @@ void c_interfaceJogo::desenhar_pecas() {
 		_Estado[57] = temp;
 		_Estado[67] = temp;
 		_Estado[77] = temp;
-		_Estado[85] = temp;
+		_Estado[87] = temp;
 		
 		temp.Peca = TORRE;
 		
@@ -285,20 +285,7 @@ void c_interfaceJogo::desenhar_janela() {
 					break;
 					
 				case sf::Event::MouseButtonPressed:
-					/*if(_Event.mouseButton.x > Largura / 2) {
-						selec++;
-						if(selec == Sprites.end()) {
-							selec = Sprites.begin();
-							
-						}
-					}
-					else {
-						if(selec == Sprites.begin()) {
-							selec = Sprites.end();
-							
-						}
-						selec--;
-					}*/
+					std::cout << "Do something!!\n";
 					break;
 					
 				case sf::Event::Resized:

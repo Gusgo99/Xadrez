@@ -9,6 +9,8 @@
 
 int main() {
 	testar_interface_jogo();
+	
+	//c_jogo teste;
 
 	return 0;
 }
