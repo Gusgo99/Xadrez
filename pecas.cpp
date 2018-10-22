@@ -4,6 +4,12 @@
 #include "pecas.hpp"
 #include "tabuleiro.hpp"
 
+c_posicao::c_posicao(short int _ID) {
+	x = _ID / 10;
+	y = _ID % 10;
+	
+}
+
 c_posicao::c_posicao(short int _x, short int _y) {
 	x = _x;
 	y = _y;

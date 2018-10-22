@@ -146,3 +146,11 @@ void testar_movimento() {
 	
 	return;
 }
+
+void testar_interface_jogo() {
+	c_interfaceJogo teste("Chess", nullptr, LADOBRANCAS);	
+	
+	teste.desenhar_janela();
+	
+	return;
+}

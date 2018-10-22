@@ -39,7 +39,8 @@ class c_posicao {
 		short int y;
 
 	public:
-		c_posicao(short int _x = 0, short int _y = 0);
+		c_posicao(short int _ID = 0);
+		c_posicao(short int _x, short int _y);
 		c_posicao(e_dir _Direcao, short int _Distancia);
 		c_posicao operator+(c_posicao &_temp);
 		void operator+=(c_posicao &_temp);
@@ -55,7 +56,7 @@ class c_posicao {
 		short int get_x();
 		short int get_y();
 		bool validar();																// Verifica se a posicao e valida (Dentro da grade 8x8)
-
+		
 };
 
 class c_jogo;
@@ -100,16 +101,16 @@ class c_peca {
 		s_idpeca IDPeca;																				// Identificacao da peca (Tipo e cor)
 		c_posicao Posicao;																				// Posicao da peca no tabuleiro
 		std::list<c_movimento> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis movimentos
-		std::list<c_movimento> encontrar_capturas(std::map<short int, s_idpeca> _Estado);					// Calcula possiveis capturas
+		std::list<c_movimento> encontrar_capturas(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis capturas
 		virtual std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado) = 0;	// Calcula movimentos especiais
 
 	public:
 		c_peca(e_cor _Cor = SEMCOR, c_posicao _Posicao = c_posicao(0, 0));
 		~c_peca();
-		std::list<c_movimento> listar_movimentos(std::map<short int, s_idpeca> _Estado);					// Lista movimentos possiveis
+		std::list<c_movimento> listar_movimentos(std::map<short int, s_idpeca> _Estado);				// Lista movimentos possiveis
 		bool ameacando_rei(std::map<short int, s_idpeca> _Estado);										// Verifica se a peca esta ameacando o rei inimigo
 		void atualizar_posicao(c_posicao _Posicao);														// Realiza a atualizacao da posicao apos realizar o movimento
-		void marcar_posicao(std::map<short int, s_idpeca> *_Estado);										// Faz com que cada peca marque sua posicao no tabuleiro
+		void marcar_posicao(std::map<short int, s_idpeca> *_Estado);									// Faz com que cada peca marque sua posicao no tabuleiro
 		e_cor get_cor();
 		e_peca get_peca();
 		c_posicao get_posicao();
