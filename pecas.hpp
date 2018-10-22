@@ -38,7 +38,8 @@ class c_posicao {
 		short int y;
 
 	public:
-		c_posicao(short int _x = 0, short int _y = 0);
+		c_posicao(short int _ID = 0);
+		c_posicao(short int _x, short int _y);
 		c_posicao(e_dir _Direcao, short int _Distancia);
 		c_posicao operator+(c_posicao &_temp);
 		void operator+=(c_posicao &_temp);
@@ -53,7 +54,7 @@ class c_posicao {
 		short int get_x();
 		short int get_y();
 		bool validar();																// Verifica se a posicao e valida (Dentro da grade 8x8)
-
+		
 };
 
 class c_jogo;

@@ -13,6 +13,7 @@
 #define LADOTABULEIRO 1080
 #define LADOPECA 135
 
+// Indice onde estao os sprites no vector Sprites
 enum e_numSprite {	TABULEIRO,
 					CASAVERMELHA,
 					CASAVERDE,
@@ -24,7 +25,8 @@ enum e_numSprite {	TABULEIRO,
 					TORREPRETO, TORREBRANCO,
 					CAVALOPRETO, CAVALOBRANCO,
 					NUMSPRITES};
-					
+
+// Caminho ate imagens do jogo
 const std::array<std::string, NUMSPRITES> IMAGENS = {	"./resources/tabuleiro.png",
 														"./resources/tab_quad_red.png",
 														"./resources/tab_quad_ver.png",
@@ -39,14 +41,22 @@ const std::array<std::string, NUMSPRITES> IMAGENS = {	"./resources/tabuleiro.png
 c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, bool _Lado, int _Altura, int _Largura) {
 	JogoMostrado = _JogoMostrado;
 	Lado = _Lado;
+	
 	Largura = _Largura;
 	Altura = _Altura;
 	
 	janela = new sf::RenderWindow(sf::VideoMode(Largura, Altura), _Titulo);
 	
-	carregar_sprites();
+	carregar_texturas();
 	
-	Sprites.front().setScale(menor(Altura, Largura) / float(LADOTABULEIRO), menor(Altura, Largura) / float(LADOTABULEIRO));
+	s_imagempeca _Temp;
+	
+	_Temp.Sprite = sf::Sprite(Texturas[TABULEIRO]);
+	_Temp.Posicao = c_posicao();
+	
+	Sprites.push_back(_Temp);
+	
+	ajustar_sprites();
 	
 	PosXTabuleiro = 0;
 	PosYTabuleiro = 0;
@@ -54,41 +64,59 @@ c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, boo
 	return;
 }
 
-void c_interfaceJogo::carregar_sprites() {
-	sf::Texture *_Textura = nullptr;
-	sf::Sprite _NovaSprite;
+c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, bool _Lado) {
+	JogoMostrado = _JogoMostrado;
+	Lado = _Lado;
 	
+	Largura = menor(sf::VideoMode::getDesktopMode().height, sf::VideoMode::getDesktopMode().width) * 0.75;
+	Altura = Largura;
+	
+	janela = new sf::RenderWindow(sf::VideoMode(Largura, Altura), _Titulo);
+	
+	carregar_texturas();
+	
+	s_imagempeca _Temp;
+	
+	_Temp.Sprite = sf::Sprite(Texturas[TABULEIRO]);
+	_Temp.Posicao = c_posicao();
+	
+	Sprites.push_back(_Temp);
+	
+	ajustar_sprites();
+	
+	PosXTabuleiro = 0;
+	PosYTabuleiro = 0;
+	
+	return;
+}
+
+void c_interfaceJogo::carregar_texturas() {
 	for(auto i: IMAGENS) {
-		_Textura = new sf::Texture;
-		
-		if(!_Textura -> loadFromFile(i)) {
+		sf::Texture _Textura;
+		if(!_Textura.loadFromFile(i)) {
 			std::cout << "Erro ao carregar arquivo " << i << std::endl;
 			continue;
 			
 		}
-		_Textura -> setSmooth(true);
-		_NovaSprite.setTexture(*_Textura);
-		Sprites.push_back(_NovaSprite);
-		
-		ajustar_pecas();
+		Texturas.push_back(_Textura);
 		
 	}
 	
 	return;
 }
 
-void c_interfaceJogo::ajustar_pecas() {
+void c_interfaceJogo::ajustar_sprites() {
 	for(auto &i: Sprites) {
-		i.setScale(menor(Altura, Largura) / float(8 * LADOPECA), menor(Altura, Largura) / float(8 * LADOPECA));
+		i.Sprite.setScale(menor(Altura, Largura) / float(8 * LADOPECA), menor(Altura, Largura) / float(8 * LADOPECA));
 		
 	}
 	
-	Sprites.front().setScale(menor(Altura, Largura) / float(LADOTABULEIRO), menor(Altura, Largura) / float(LADOTABULEIRO));
+	Sprites.front().Sprite.setScale(menor(Altura, Largura) / float(LADOTABULEIRO), menor(Altura, Largura) / float(LADOTABULEIRO));
 	
 	return;
 }
 
-void c_interfaceJogo::desenhar_pecas() {
+void c_interfaceJogo::atualizar_posicao() {
 	std::map<short int, s_idpeca> _Estado;
 
 	if(JogoMostrado != nullptr) {
@@ -170,7 +198,12 @@ void c_interfaceJogo::desenhar_pecas() {
 		
 	}
 	
-	janela -> draw(Sprites[TABULEIRO]);
+	while(Sprites.size() > 1) {
+		Sprites.pop_back();
+		
+	}
+	
+	janela -> draw(Sprites.front().Sprite);
 	
 	for(auto &i: _Estado) {
 		int _PosX, _PosY;
@@ -196,41 +229,55 @@ void c_interfaceJogo::desenhar_pecas() {
 			_PosX *= menor(Altura, Largura) / 8;
 			_PosY *= menor(Altura, Largura) / 8;
 			
-			_PosX -= PosXTabuleiro;
-			_PosY -= PosYTabuleiro;
+			_PosX += PosXTabuleiro;
+			_PosY += PosYTabuleiro;
 		
 		}
+		
+		s_imagempeca _Temp;
 		
 		if(i.second.Cor == BRANCO) {
 			switch(i.second.Peca) {
 				case PEAO:
-					Sprites[PEAOBRANCO].setPosition(_PosX, _PosY);
-					janela -> draw(Sprites[PEAOBRANCO]);
+					_Temp.Sprite.setTexture(Texturas[PEAOBRANCO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					Sprites.push_back(_Temp);
 					break;
 					
 				case CAVALO:
-					Sprites[CAVALOBRANCO].setPosition(_PosX, _PosY);
-					janela -> draw(Sprites[CAVALOBRANCO]);
+					_Temp.Sprite.setTexture(Texturas[CAVALOBRANCO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					Sprites.push_back(_Temp);
 					break;
 					
 				case BISPO:
-					Sprites[BISPOBRANCO].setPosition(_PosX, _PosY);
-					janela -> draw(Sprites[BISPOBRANCO]);
+					_Temp.Sprite.setTexture(Texturas[BISPOBRANCO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					Sprites.push_back(_Temp);
 					break;
 					
 				case TORRE:
-					Sprites[TORREBRANCO].setPosition(_PosX, _PosY);
-					janela -> draw(Sprites[TORREBRANCO]);
+					_Temp.Sprite.setTexture(Texturas[TORREBRANCO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					Sprites.push_back(_Temp);
 					break;
 					
 				case RAINHA:
-					Sprites[RAINHABRANCO].setPosition(_PosX, _PosY);
-					janela -> draw(Sprites[RAINHABRANCO]);
+					_Temp.Sprite.setTexture(Texturas[RAINHABRANCO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					Sprites.push_back(_Temp);
 					break;
 					
 				case REI:
-					Sprites[REIBRANCO].setPosition(_PosX, _PosY);
-					janela -> draw(Sprites[REIBRANCO]);
+					_Temp.Sprite.setTexture(Texturas[REIBRANCO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					Sprites.push_back(_Temp);
 					break;
 				
 			}
@@ -238,45 +285,64 @@ void c_interfaceJogo::desenhar_pecas() {
 		else if(i.second.Cor == PRETO) {
 			switch(i.second.Peca) {
 				case PEAO:
-					Sprites[PEAOPRETO].setPosition(_PosX, _PosY);
-					janela -> draw(Sprites[PEAOPRETO]);
+					_Temp.Sprite.setTexture(Texturas[PEAOPRETO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					Sprites.push_back(_Temp);
 					break;
 					
 				case CAVALO:
-					Sprites[CAVALOPRETO].setPosition(_PosX, _PosY);
-					janela -> draw(Sprites[CAVALOPRETO]);
+					_Temp.Sprite.setTexture(Texturas[CAVALOPRETO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					Sprites.push_back(_Temp);
 					break;
 					
 				case BISPO:
-					Sprites[BISPOPRETO].setPosition(_PosX, _PosY);
-					janela -> draw(Sprites[BISPOPRETO]);
+					_Temp.Sprite.setTexture(Texturas[BISPOPRETO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					Sprites.push_back(_Temp);
 					break;
 					
 				case TORRE:
-					Sprites[TORREPRETO].setPosition(_PosX, _PosY);
-					janela -> draw(Sprites[TORREPRETO]);
+					_Temp.Sprite.setTexture(Texturas[TORREPRETO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					Sprites.push_back(_Temp);
 					break;
 					
 				case RAINHA:
-					Sprites[RAINHAPRETO].setPosition(_PosX, _PosY);
-					janela -> draw(Sprites[RAINHAPRETO]);
+					_Temp.Sprite.setTexture(Texturas[RAINHAPRETO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					Sprites.push_back(_Temp);
 					break;
 					
 				case REI:
-					Sprites[REIPRETO].setPosition(_PosX, _PosY);
-					janela -> draw(Sprites[REIPRETO]);
+					_Temp.Sprite.setTexture(Texturas[REIPRETO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					Sprites.push_back(_Temp);
 					break;
 				
 			}
 		}
+		if(!PosicaoSelecionada == i.first) {
+			Sprites.back().Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
+			
+		}
 	}
+	
+	ajustar_sprites();
 	
 	return;
 }
 
 void c_interfaceJogo::desenhar_janela() {
+	atualizar_posicao();
+	
 	while(janela -> isOpen()) {
-		
 		sf::Event _Event;
         while (janela -> pollEvent(_Event)) {
             switch(_Event.type) {
@@ -285,7 +351,17 @@ void c_interfaceJogo::desenhar_janela() {
 					break;
 					
 				case sf::Event::MouseButtonPressed:
-					std::cout << "Do something!!\n";
+					PosicaoSelecionada = c_posicao();
+					atualizar_posicao();
+					for(auto i: Sprites) {
+						if(&i != &Sprites.front()) {
+							if(i.Sprite.getGlobalBounds().contains(_Event.mouseButton.x, _Event.mouseButton.y)) {
+								PosicaoSelecionada = i.Posicao;
+								i.Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
+								
+							}
+						}
+					}
 					break;
 					
 				case sf::Event::Resized:
@@ -294,17 +370,22 @@ void c_interfaceJogo::desenhar_janela() {
 					
 					janela -> setView(sf::View(sf::Vector2f(Largura / 2, Altura / 2), sf::Vector2f(Largura, Altura)));
 					
-					ajustar_pecas();
+					ajustar_sprites();
+					atualizar_posicao();
 					break;
 					
-				
 			}
 			
         }
 		
 		janela -> clear();
 		
-		desenhar_pecas();
+		atualizar_posicao();
+		
+		for(auto i: Sprites) {
+			janela -> draw(i.Sprite);
+			
+		}
 		
 		janela -> display();
 		
