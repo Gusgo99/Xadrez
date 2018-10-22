@@ -148,8 +148,9 @@ void testar_movimento() {
 }
 
 void testar_interface_jogo() {
-	c_interfaceJogo teste("Chess", nullptr, false, 500, 500);
+	c_interfaceJogo teste("Chess", nullptr, LADOPRETAS, 750, 750);
 	
 	teste.desenhar_janela();
 	
+	return;
 }

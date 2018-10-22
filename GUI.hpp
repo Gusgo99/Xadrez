@@ -13,15 +13,17 @@ class c_interfaceJogo {
 		c_jogo *JogoMostrado;
 		bool Lado;
 		sf::RenderWindow *janela;
-		std::list<sf::Sprite> Sprites;
+		std::vector<sf::Sprite> Sprites;
 		int Altura;
 		int Largura;
+		int PosXTabuleiro;
+		int PosYTabuleiro;
 		void carregar_sprites();
-		std::list<sf::Sprite>::iterator selec = Sprites.begin();
+		void ajustar_pecas();
+		void desenhar_pecas();
 		
 	public:
 		c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, bool _Lado, int _Altura, int _Largura);
-		//void carregar_tabuleiro();
 		void desenhar_janela();
 	
 };
