@@ -294,7 +294,7 @@ c_bispo::c_bispo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 
 
 
-//reinha
+//rainha
 c_rainha::c_rainha(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 
     DistMov[N]  = 8;
@@ -354,11 +354,48 @@ c_posicao c_peca::get_posicao() {
 	return Posicao;
 }
 
-std::list<c_movimento> c_rei::encontrar_especiais() {
+std::list<c_movimento> c_rei::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {
 
-    //implementar
+    c_movimento *_aux;
+    std::list<c_movimento> _Movimento;
 
-    return std::list<c_movimento>();
+    if(IDPeca.NumJogadas != 0)//o rei moveu?
+        return _Movimento;
+
+    if(IDPeca.Cor == BRANCO){//REI BRANCO
+
+        if(_Estado[11].Cor == BRANCO && _Estado[11].Peca == TORRE){//roque grande?
+            if(_Estado[21].Peca == VAZIO && _Estado[31].Peca == VAZIO && _Estado[41].Peca == VAZIO){//tem peca no caminho?
+                _aux = new c_roque(Posicao,c_posicao(2,1),c_posicao(1,1),c_posicao(4,1));
+                _Movimento.push_back(*_aux);}
+        }
+
+        if(_Estado[81].Cor == BRANCO && _Estado[81].Peca == TORRE){//roque pequeno?
+            if(_Estado[61].Peca == VAZIO && _Estado[71].Peca == VAZIO){//tem peca no caminho?
+                _aux = new c_roque(Posicao,c_posicao(6,1),c_posicao(8,1),c_posicao(7,1));
+                _Movimento.push_back(*_aux);}
+        }
+
+
+    }else{//REI PRETO
+
+        if(_Estado[18].Cor == PRETO && _Estado[18].Peca == TORRE){//roque grande?
+            if(_Estado[28].Peca == VAZIO && _Estado[38].Peca == VAZIO && _Estado[48].Peca == VAZIO){//tem peca no caminho?
+                _aux = new c_roque(Posicao,c_posicao(2,8),c_posicao(1,8),c_posicao(4,8));
+                _Movimento.push_back(*_aux);}
+
+        }
+
+        if(_Estado[88].Cor == PRETO && _Estado[88].Peca == TORRE){//roque pequeno?
+            if(_Estado[68].Peca == VAZIO && _Estado[78].Peca == VAZIO){//tem peca no caminho?
+                _aux = new c_roque(Posicao,c_posicao(6,8),c_posicao(8,8),c_posicao(7,8));
+                _Movimento.push_back(*_aux);}
+        }
+
+    }
+    //implementar}
+
+    return _Movimento;
 }
 //torre
 
@@ -381,56 +418,6 @@ c_torre::c_torre(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 
     return;
 }
-
-std::list<c_movimento> c_torre::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {//##########
-    //roquei
-    std::list<c_movimento> _Movimentos;
-    c_movimento *_aux;
-    bool _zero_movimento = false;
-
-
-    if(get_NumJogadas() == 0){//ja moveu a torre?
-        if(IDPeca.Cor == BRANCO){//a peca e branca?
-            if(_Estado[51].Peca == REI && _Estado[51].NumJogadas == 0){//o rei  branco esta na posicao e nao foi movido?
-                _zero_movimento = true;
-            }else return _Movimentos; //o rei branco moveu e nao retona nada
-        }else// preta?
-            if(_Estado[58].Peca == REI && _Estado[58].NumJogadas == 0){//o rei preto esta na posicao e nao foi movido?
-                _zero_movimento = true;
-            }else return _Movimentos; //o rei preto moveu e nao retona nada
-    }else{
-        return _Movimentos;//a torre moveu e nao retoena dana
-    }
-
-    if(_zero_movimento){
-    //verifica se não tem nada no caminho
-        if(get_posicao().get_x() == 1){ //roque grande?
-            if(IDPeca.Cor == BRANCO){//branco
-                if(_Estado[21].Peca == VAZIO && _Estado[31].Peca == VAZIO && _Estado[41].Peca == VAZIO){
-                    _aux = new c_roque(Posicao, c_posicao(4,1), c_posicao(5,1), c_posicao(2,1));
-                }else return _Movimentos;//tem coisa no meio do rei e da torre banco
-            }else{//preto?
-                if(_Estado[28].Peca == VAZIO && _Estado[38].Peca == VAZIO && _Estado[48].Peca == VAZIO){
-                    _aux = new c_roque(Posicao, c_posicao(4,8), c_posicao(5,8), c_posicao(2,8));
-                }else return _Movimentos;// tem coisa no meio do rei e da torre  preto
-            }
-        }else{//roque pqqueno
-            if(IDPeca.Cor == BRANCO){//branco
-                if(_Estado[61].Peca == VAZIO && _Estado[71].Peca == VAZIO){//meio vazio?
-                    _aux = new c_roque(Posicao, c_posicao(6,1), c_posicao(5,1), c_posicao(7,1));
-                }else return _Movimentos;
-            }else{//preto
-                if(_Estado[68].Peca == VAZIO && _Estado[78].Peca == VAZIO){
-                    _aux = new c_roque(Posicao, c_posicao(6,8), c_posicao(5,8), c_posicao(7,8));
-                }else return _Movimentos;
-            }
-        }// verificou se o meio esta vazio
-
-        _Movimentos.push_back (*_aux);
-    }
-    return _Movimentos;
-}
-
 
 //peao
 

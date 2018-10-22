@@ -5,6 +5,7 @@
 #include <list>
 
 class c_movimento;
+class c_roque;
 class c_posicao;
 
 class c_peca;
@@ -145,7 +146,7 @@ class c_rei : public c_peca {
         bool Ameacado;
 	public:
 	    c_rei(e_cor _Cor, c_posicao _Posicao);
-		std::list<c_movimento> encontrar_especiais();
+		std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
         bool get_ameacado(){return Ameacado;};;
 };
 
@@ -166,7 +167,7 @@ class c_torre : public c_peca {
 
 	public:
 	    c_torre(e_cor _Cor, c_posicao _Posicao);
-		std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
+		std::list<c_movimento> encontrar_especiais(){return std::list<c_movimento>();};
 
 };
 
