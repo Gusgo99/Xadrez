@@ -49,7 +49,15 @@ void testar_posicao() {
 		
 	} while(!b.validar());
 	
-	std::cout << "Os dois pontos " << (a == b ? "" : "nao ") << "sao iguais" << std::endl;
+	if(a == b) {
+		std::cout << "a == b" << std::endl;
+		
+	}
+	
+	if(a != b) {
+		std::cout << "a != b" << std::endl;
+		
+	}
 	
 	std::cout << "Distancia entre pontos: " << (b - a) << std::endl;
 	
@@ -76,24 +84,60 @@ void testar_posicao() {
 	std::cout << "Posicao b: (" << b.get_x() << ", " << b.get_y() << ")" << std::endl;
 
 	std::cout << "Posicao a: (" << a.get_x() << ", " << a.get_y() << ")" << std::endl;
-
-	std::cout << "Teste de copia de validade:" << std::endl;
 	
-	b = c_posicao(0, 15);
+	std::cout << "Iniciando teste de direcao:" << std::endl;
 	
-	a = b;
+	a = c_posicao(4, 4);
 	
-	std::cout << "b(Invalido): " << (b.validar() ? "Valido" : "Invalido") << std::endl;
+	b = c_posicao(N, 1);
 	
-	std::cout << "a(Invalido): " << (a.validar() ? "Valido" : "Invalido") << std::endl;
+	std::cout << "Posicao a: (" << a.get_x() << ", " << a.get_y() << ")" << std::endl;
 	
-	b = c_posicao(1, 1);
+	b += a;
 	
-	a = b;
+	std::cout << "Distancia 1 na direcao N: (" << b.get_x() << ", " << b.get_y() << ")" << std::endl;
 	
-	std::cout << "b(Valido): " << (b.validar() ? "Valido" : "Invalido") << std::endl;
+	b = c_posicao(S, 1);
 	
-	std::cout << "a(Valido): " << (a.validar() ? "Valido" : "Invalido") << std::endl;
+	b = a + b;
+	
+	std::cout << "Distancia 1 na direcao S: (" << b.get_x() << ", " << b.get_y() << ")" << std::endl;
+	
+	b = c_posicao(E, 1);
+	
+	b = a + b;
+	
+	std::cout << "Distancia 1 na direcao E: (" << b.get_x() << ", " << b.get_y() << ")" << std::endl;
+	
+	b = c_posicao(O, 1);
+	
+	b = a + b;
+	
+	std::cout << "Distancia 1 na direcao O: (" << b.get_x() << ", " << b.get_y() << ")" << std::endl;
+	
+	b = c_posicao(NE, 1);
+	
+	b = a + b;
+	
+	std::cout << "Distancia 1 na direcao NE: (" << b.get_x() << ", " << b.get_y() << ")" << std::endl;
+	
+	b = c_posicao(NO, 1);
+	
+	b = a + b;
+	
+	std::cout << "Distancia 1 na direcao NO: (" << b.get_x() << ", " << b.get_y() << ")" << std::endl;
+	
+	b = c_posicao(SE, 1);
+	
+	b = a + b;
+	
+	std::cout << "Distancia 1 na direcao SE: (" << b.get_x() << ", " << b.get_y() << ")" << std::endl;
+	
+	b = c_posicao(SO, 1);
+	
+	b = a + b;
+	
+	std::cout << "Distancia 1 na direcao SO: (" << b.get_x() << ", " << b.get_y() << ")" << std::endl;
 	
 	return;
 }
