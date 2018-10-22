@@ -9,3 +9,5 @@ modificações.txt
 *.dll
 Xadrez.layout
 Xadrez.depend
+*.layout
+*.depend

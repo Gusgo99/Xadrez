@@ -355,6 +355,7 @@ c_posicao c_peca::get_posicao() {
 }
 
 std::list<c_movimento> c_rei::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {
+//encontra o roque do rei
 
     c_movimento *_aux;
     std::list<c_movimento> _Movimento;
@@ -367,12 +368,14 @@ std::list<c_movimento> c_rei::encontrar_especiais(std::map<short int, s_idpeca> 
         if(_Estado[11].Cor == BRANCO && _Estado[11].Peca == TORRE){//roque grande?
             if(_Estado[21].Peca == VAZIO && _Estado[31].Peca == VAZIO && _Estado[41].Peca == VAZIO){//tem peca no caminho?
                 _aux = new c_roque(Posicao,c_posicao(2,1),c_posicao(1,1),c_posicao(4,1));
+                (*_aux).set_tipo(ESPECIAL);
                 _Movimento.push_back(*_aux);}
         }
 
         if(_Estado[81].Cor == BRANCO && _Estado[81].Peca == TORRE){//roque pequeno?
             if(_Estado[61].Peca == VAZIO && _Estado[71].Peca == VAZIO){//tem peca no caminho?
                 _aux = new c_roque(Posicao,c_posicao(6,1),c_posicao(8,1),c_posicao(7,1));
+                (*_aux).set_tipo(ESPECIAL);
                 _Movimento.push_back(*_aux);}
         }
 
@@ -382,6 +385,7 @@ std::list<c_movimento> c_rei::encontrar_especiais(std::map<short int, s_idpeca> 
         if(_Estado[18].Cor == PRETO && _Estado[18].Peca == TORRE){//roque grande?
             if(_Estado[28].Peca == VAZIO && _Estado[38].Peca == VAZIO && _Estado[48].Peca == VAZIO){//tem peca no caminho?
                 _aux = new c_roque(Posicao,c_posicao(2,8),c_posicao(1,8),c_posicao(4,8));
+                (*_aux).set_tipo(ESPECIAL);
                 _Movimento.push_back(*_aux);}
 
         }
@@ -389,6 +393,7 @@ std::list<c_movimento> c_rei::encontrar_especiais(std::map<short int, s_idpeca> 
         if(_Estado[88].Cor == PRETO && _Estado[88].Peca == TORRE){//roque pequeno?
             if(_Estado[68].Peca == VAZIO && _Estado[78].Peca == VAZIO){//tem peca no caminho?
                 _aux = new c_roque(Posicao,c_posicao(6,8),c_posicao(8,8),c_posicao(7,8));
+                (*_aux).set_tipo(ESPECIAL);
                 _Movimento.push_back(*_aux);}
         }
 
@@ -440,11 +445,11 @@ c_peao::c_peao(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     IDPeca.NumJogadas=0;
 
     if(_Cor==BRANCO){
-        DistMov[N]=1;
+        DistMov[N]=2;
         DistCome[NE]=1;
         DistCome[NO]=1;
     }else{
-        DistMov[S]=1;
+        DistMov[S]=2;
         DistCome[SE]=1;
         DistCome[SO]=1;
     }
@@ -454,8 +459,8 @@ c_peao::c_peao(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 }
 
 std::list<c_movimento> c_peao::encontrar_especiais() {
+//primeiro movimento peao
 
-    //implementar
 
     return std::list<c_movimento>();
 }

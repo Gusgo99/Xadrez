@@ -146,7 +146,7 @@ class c_rei : public c_peca {
         bool Ameacado;
 	public:
 	    c_rei(e_cor _Cor, c_posicao _Posicao);
-		std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
+	    std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
         bool get_ameacado(){return Ameacado;};;
 };
 
@@ -155,6 +155,7 @@ class c_peao : public c_peca {
 
 	public:
 	    c_peao(e_cor _Cor, c_posicao _Posicao);
+	    std::list<c_movimento> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis movimentos
 		void jogar(std::array<unsigned short int, 2> Posicao);
 		void promocao();
 		std::list<c_movimento> encontrar_especiais();
