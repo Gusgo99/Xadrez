@@ -20,8 +20,9 @@ class c_jogo {
 		c_jogo(c_jogo *_original);
 		salvar_jogo();
 		carregar_jogo();
-		void operator+(c_movimento &_movimento);
+		void operator+=(c_movimento &_movimento);
 		std::map<short int, s_idpeca> get_estado();
+		std::list<c_movimento> get_movimentos(c_posicao _Posicao);
 		
 };
 
