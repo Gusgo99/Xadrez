@@ -5,20 +5,29 @@
 
 #include "tabuleiro.hpp"
 
-struct s_imagempeca{
+struct s_imgpeca {
 	sf::Sprite Sprite;
 	e_cor Cor;
 	c_posicao Posicao;
 	
 };
 
+struct s_imgmov {
+	sf::Sprite Sprite;
+	c_movimento *Movimento;
+	
+};
+
 class c_interfaceJogo {
 	private:
 		c_jogo *JogoMostrado;																					// Ponteiro para o jogo que deverá ser mostrado
-		bool Lado;																								// Define lado que o tabuleiro será visto
+		e_cor Lado;																								// Define lado que o tabuleiro será visto
 		sf::RenderWindow *janela;																				// Ponteiro para a instancia da janela
 		std::vector<sf::Texture> Texturas;																		// Texturas de cada peca
-		std::list<s_imagempeca> Sprites;
+		sf::Sprite SpriteTabuleiro;
+		std::list<s_imgpeca> SpritesBrancas;
+		std::list<s_imgpeca> SpritesPretas;
+		std::list<s_imgmov> SpritesMovimento;
 		c_posicao PosicaoSelecionada;
 		std::list<c_movimento> MovimentosDisponiveis;
 		int Altura;																								// Largura da janela
