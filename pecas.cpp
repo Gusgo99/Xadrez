@@ -151,13 +151,31 @@ c_movimento::c_movimento(c_posicao _PosInicial, c_posicao _PosFinal, e_movimento
 }
 
 
-c_roque::c_roque(c_posicao _PosInicial, c_posicao _PosFinal, c_posicao _PosInicial2, c_posicao _PosFinal2){
-    TipoMovimento = ESPECIAL;
-    PosInicial=_PosInicial;
-    PosFinal=_PosFinal;
-    PosInicial2=PosInicial2;
-    PosFinal2=PosFinal2;
+c_roque::c_roque(e_cor _Cor, bool _Tipo) {
+    Cor = _Cor;
+	Tipo = _Tipo;
+
     return;
+}
+
+e_cor c_roque::get_cor() {
+	return Cor;
+}
+
+bool c_roque::get_tipo() {
+	return Tipo;
+}
+
+void c_roque::set_cor(e_cor _Cor) {
+	Cor = _Cor;
+
+	return;
+}
+
+void c_roque::set_tipo(bool _Tipo) {
+	Tipo = _Tipo;
+
+	return;
 }
 
 c_posicao c_movimento::get_inicio() {
@@ -181,6 +199,16 @@ e_movimento c_movimento::get_tipo() {
 c_peca::c_peca(e_cor _Cor, c_posicao _Posicao) {
 	IDPeca.Cor = _Cor;
 	Posicao = _Posicao;
+
+	for(auto &i: DistCome) {
+		i.second = 0;
+
+	}
+
+	for(auto &i: DistMov) {
+		i.second = 0;
+
+	}
 
 	return;
 }
@@ -365,16 +393,16 @@ std::list<c_movimento> c_rei::encontrar_especiais(std::map<short int, s_idpeca> 
 
     if(IDPeca.Cor == BRANCO){//REI BRANCO
 
-        if(_Estado[11].Cor == BRANCO && _Estado[11].Peca == TORRE){//roque grande?
-            if(_Estado[21].Peca == VAZIO && _Estado[31].Peca == VAZIO && _Estado[41].Peca == VAZIO){//tem peca no caminho?
-                _aux = new c_roque(Posicao,c_posicao(2,1),c_posicao(1,1),c_posicao(4,1));
+        if(_Estado[!c_posicao(1, 1)].Cor == BRANCO && _Estado[!c_posicao(1, 1)].Peca == TORRE){//roque grande?
+            if((_Estado[!c_posicao(2, 1)].Peca == VAZIO) && (_Estado[!c_posicao(3, 1)].Peca == VAZIO) && (_Estado[!c_posicao(4, 1)].Peca == VAZIO)) {//tem peca no caminho?
+                _aux = new c_roque(BRANCO, ROQUEMAIOR);
                 (*_aux).set_tipo(ESPECIAL);
                 _Movimento.push_back(*_aux);}
         }
 
-        if(_Estado[81].Cor == BRANCO && _Estado[81].Peca == TORRE){//roque pequeno?
-            if(_Estado[61].Peca == VAZIO && _Estado[71].Peca == VAZIO){//tem peca no caminho?
-                _aux = new c_roque(Posicao,c_posicao(6,1),c_posicao(8,1),c_posicao(7,1));
+        if((_Estado[!c_posicao(8, 1)].Cor == BRANCO) && (_Estado[!c_posicao(8, 1)].Peca == TORRE)) {//roque pequeno?
+            if(_Estado[!c_posicao(6, 1)].Peca == VAZIO && _Estado[!c_posicao(7, 1)].Peca == VAZIO){//tem peca no caminho?
+                _aux = new c_roque(BRANCO, ROQUEMENOR);
                 (*_aux).set_tipo(ESPECIAL);
                 _Movimento.push_back(*_aux);}
         }
@@ -382,30 +410,27 @@ std::list<c_movimento> c_rei::encontrar_especiais(std::map<short int, s_idpeca> 
 
     }else{//REI PRETO
 
-        if(_Estado[18].Cor == PRETO && _Estado[18].Peca == TORRE){//roque grande?
-            if(_Estado[28].Peca == VAZIO && _Estado[38].Peca == VAZIO && _Estado[48].Peca == VAZIO){//tem peca no caminho?
-                _aux = new c_roque(Posicao,c_posicao(2,8),c_posicao(1,8),c_posicao(4,8));
+        if((_Estado[!c_posicao(1, 8)].Cor == PRETO) && (_Estado[!c_posicao(1, 8)].Peca == TORRE)) {//roque grande?
+            if((_Estado[!c_posicao(2, 8)].Peca == VAZIO) && (_Estado[!c_posicao(3, 8)].Peca == VAZIO) && (_Estado[!c_posicao(4, 8)].Peca == VAZIO)) {//tem peca no caminho?
+                _aux = new c_roque(PRETO, ROQUEMAIOR);
                 (*_aux).set_tipo(ESPECIAL);
                 _Movimento.push_back(*_aux);}
 
         }
 
-        if(_Estado[88].Cor == PRETO && _Estado[88].Peca == TORRE){//roque pequeno?
-            if(_Estado[68].Peca == VAZIO && _Estado[78].Peca == VAZIO){//tem peca no caminho?
-                _aux = new c_roque(Posicao,c_posicao(6,8),c_posicao(8,8),c_posicao(7,8));
+        if((_Estado[!c_posicao(8, 8)].Cor == PRETO) && (_Estado[!c_posicao(8, 8)].Peca == TORRE)) {//roque pequeno?
+            if((_Estado[!c_posicao(6, 8)].Peca == VAZIO) && (_Estado[!c_posicao(7, 8)].Peca == VAZIO)) {//tem peca no caminho?
+                _aux = new c_roque(PRETO, ROQUEMENOR);
                 (*_aux).set_tipo(ESPECIAL);
                 _Movimento.push_back(*_aux);}
         }
 
     }
-    //implementar}
 
     return _Movimento;
 }
-//torre
-
+// Construtor da torre
 c_torre::c_torre(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
-
     DistMov[N]  = 8;
     DistMov[NE] = 0;
     DistMov[E]  = 8;
@@ -424,66 +449,33 @@ c_torre::c_torre(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     return;
 }
 
-//peao
-
+// Construtor do peao
 c_peao::c_peao(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 
-    DistMov[N]  = 0;
-    DistMov[NE] = 0;
-    DistMov[E]  = 0;
-    DistMov[SE] = 0;
-    DistMov[S]  = 0;
-    DistMov[SO] = 0;
-    DistMov[O]  = 0;
-    DistMov[NO] = 0;
+    IDPeca.Peca = PEAO;								//eh um enum
+    IDPeca.NumJogadas = 0;
 
-    DistCome = DistMov;
-
-    IDPeca.Peca = PEAO;//eh um enum
-    Posicao = _Posicao;
-    IDPeca.Cor = _Cor;
-    IDPeca.NumJogadas=0;
-
-    if(_Cor==BRANCO){
-        DistMov[N]=2;
-        DistCome[NE]=1;
-        DistCome[NO]=1;
+    if(_Cor == BRANCO){
+        DistMov[N] = 2;
+        DistCome[NE] = 1;
+        DistCome[NO] = 1;
     }else{
-        DistMov[S]=2;
-        DistCome[SE]=1;
-        DistCome[SO]=1;
+        DistMov[S] = 2;
+        DistCome[SE] = 1;
+        DistCome[SO] = 1;
     }
-
 
     return;
 }
 
 std::list<c_movimento> c_peao::encontrar_especiais() {
-//promocao
-
-
+//436b49dd83d7691d87c9ee0800f2a51f38b9995a
     return std::list<c_movimento>();
 }
 
-//cavalo
-
+// Construtor cavalo:
 c_cavalo::c_cavalo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
-
-    DistMov[N]  = 0;
-    DistMov[NE] = 0;
-    DistMov[E]  = 0;
-    DistMov[SE] = 0;
-    DistMov[S]  = 0;
-    DistMov[SO] = 0;
-    DistMov[O]  = 0;
-    DistMov[NO] = 0;
-
-    DistCome = DistMov;
-
     IDPeca.Peca = CAVALO;//eh um enum
-    Posicao = _Posicao;
-    IDPeca.Cor = _Cor;
-
 
     return;
 }
@@ -683,9 +675,6 @@ std::list<c_movimento> c_cavalo::encontrar_capturas(std::map<short int, s_idpeca
 }
 
 std::list<c_movimento> c_cavalo::encontrar_especiais() {
-
-    //implementar
-
     return std::list<c_movimento>();
 }
 

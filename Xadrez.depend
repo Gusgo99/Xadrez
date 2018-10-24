@@ -19,7 +19,7 @@
 	"tabuleiro.hpp"
 	"testes.hpp"
 
-1540399474 c:\users\fonso\dropbox\prog 2\xadrez\pecas.hpp
+1540399648 c:\users\fonso\dropbox\prog 2\xadrez\pecas.hpp
 	<array>
 	<list>
 	"tabuleiro.hpp"
@@ -31,7 +31,7 @@
 
 1540331044 c:\users\fonso\dropbox\prog 2\xadrez\testes.hpp
 
-1540344549 source:c:\users\fonso\dropbox\prog 2\xadrez\tabuleiro.cpp
+1540399601 source:c:\users\fonso\dropbox\prog 2\xadrez\tabuleiro.cpp
 	<iostream>
 	"tabuleiro.hpp"
 	"utilidades.hpp"

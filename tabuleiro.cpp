@@ -14,7 +14,7 @@ c_jogo::c_jogo() {
 
 }
 
-bool c_jogo::get_xeque(){
+bool c_jogo::get_xeque() {
     return Xeque;
 }
 
