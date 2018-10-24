@@ -169,9 +169,9 @@ c_movimento::c_movimento(c_posicao _PosInicial, c_posicao _PosFinal, e_movimento
 	return;
 }
 
-c_roque::c_roque(e_cor _Cor, bool _Tipo) {
+c_roque::c_roque(c_posicao _PosFinal, e_cor _Cor, bool _Roque) : c_movimento(c_posicao(5, 1), _PosFinal) {
     Cor = _Cor;
-	Tipo = _Tipo;
+	Roque = _Roque;
 	
     return;
 }
@@ -180,8 +180,8 @@ e_cor c_roque::get_cor() {
 	return Cor;
 }
 
-bool c_roque::get_tipo() {
-	return Tipo;
+bool c_roque::get_roque() {
+	return Roque;
 }
 
 void c_roque::set_cor(e_cor _Cor) {
@@ -190,8 +190,8 @@ void c_roque::set_cor(e_cor _Cor) {
 	return;
 }
 
-void c_roque::set_tipo(bool _Tipo) {
-	Tipo = _Tipo;
+void c_roque::set_roque(bool _Roque) {
+	Roque = _Roque;
 	
 	return;
 }
@@ -383,26 +383,31 @@ c_posicao c_peca::get_posicao() {
 std::list<c_movimento*> c_rei::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {
 //encontra o roque do rei
 
-    c_movimento *_aux;
+    c_roque *_aux;
     std::list<c_movimento*> _Movimento;
 
-    /*if(IDPeca.NumJogadas != 0)//o rei moveu?
+    if(IDPeca.NumJogadas != 0)//o rei moveu?
         return _Movimento;
 
     if(IDPeca.Cor == BRANCO){//REI BRANCO
 
-        if(_Estado[!c_posicao(1, 1)].Cor == BRANCO && _Estado[!c_posicao(1, 1)].Peca == TORRE){//roque grande?
+        if(_Estado[!c_posicao(1, 1)].Cor == BRANCO && _Estado[!c_posicao(1, 1)].Peca == TORRE) {//roque grande?
             if((_Estado[!c_posicao(2, 1)].Peca == VAZIO) && (_Estado[!c_posicao(3, 1)].Peca == VAZIO) && (_Estado[!c_posicao(4, 1)].Peca == VAZIO)) {//tem peca no caminho?
-                _aux = new c_roque(BRANCO, ROQUEMAIOR);
-                (*_aux).set_tipo(ESPECIAL);
-                _Movimento.push_back(*_aux);}
+                _aux = new c_roque(c_posicao(2, 1), BRANCO, ROQUEMAIOR);
+				_aux -> set_tipo(ESPECIAL);
+                _Movimento.push_back(_aux);
+				
+			}
         }
 
         if((_Estado[!c_posicao(8, 1)].Cor == BRANCO) && (_Estado[!c_posicao(8, 1)].Peca == TORRE)) {//roque pequeno?
             if(_Estado[!c_posicao(6, 1)].Peca == VAZIO && _Estado[!c_posicao(7, 1)].Peca == VAZIO){//tem peca no caminho?
-                _aux = new c_roque(BRANCO, ROQUEMENOR);
-                (*_aux).set_tipo(ESPECIAL);
-                _Movimento.push_back(*_aux);}
+                _aux = new c_roque(c_posicao(7, 1), BRANCO, ROQUEMENOR);
+				_aux -> set_tipo(ESPECIAL);
+                _aux -> set_roque(ROQUEMENOR);
+                _Movimento.push_back(_aux);
+				
+			}
         }
 
 
@@ -410,20 +415,21 @@ std::list<c_movimento*> c_rei::encontrar_especiais(std::map<short int, s_idpeca>
 
         if((_Estado[!c_posicao(1, 8)].Cor == PRETO) && (_Estado[!c_posicao(1, 8)].Peca == TORRE)) {//roque grande?
             if((_Estado[!c_posicao(2, 8)].Peca == VAZIO) && (_Estado[!c_posicao(3, 8)].Peca == VAZIO) && (_Estado[!c_posicao(4, 8)].Peca == VAZIO)) {//tem peca no caminho?
-                _aux = new c_roque(PRETO, ROQUEMAIOR);
-                (*_aux).set_tipo(ESPECIAL);
-                _Movimento.push_back(*_aux);}
-
+                _aux = new c_roque(c_posicao(7, 8), PRETO, ROQUEMAIOR);
+				_aux -> set_tipo(ESPECIAL);
+                _Movimento.push_back(_aux);
+				
+			}
         }
 
         if((_Estado[!c_posicao(8, 8)].Cor == PRETO) && (_Estado[!c_posicao(8, 8)].Peca == TORRE)) {//roque pequeno?
             if((_Estado[!c_posicao(6, 8)].Peca == VAZIO) && (_Estado[!c_posicao(7, 8)].Peca == VAZIO)) {//tem peca no caminho?
-                _aux = new c_roque(PRETO, ROQUEMENOR);
-                (*_aux).set_tipo(ESPECIAL);
-                _Movimento.push_back(*_aux);}
+                _aux = new c_roque(c_posicao(2, 8), PRETO, ROQUEMENOR);
+				_aux -> set_tipo(ESPECIAL);
+                _Movimento.push_back(_aux);}
         }
 
-    }*/
+    }
 
     return _Movimento;
 }

@@ -73,3 +73,33 @@ void c_jogo::inserir_peca(c_posicao _Posicao, e_cor _Cor) {
 	
 	return;
 }
+
+void c_jogo::operator+=(c_movimento &_Movimento) {
+	std::cout << "Nao essa\n";
+	if(_Movimento.get_inicio().validar() && _Movimento.get_fim().validar()) {
+		if(Tabuleiro[!_Movimento.get_fim()] != nullptr) {
+			delete Tabuleiro[!_Movimento.get_fim()];
+			
+		}
+		Tabuleiro[!_Movimento.get_fim()] = Tabuleiro[!_Movimento.get_inicio()];
+		Tabuleiro[!_Movimento.get_inicio()] = nullptr;
+		Tabuleiro[!_Movimento.get_fim()] -> atualizar_posicao(_Movimento.get_fim());
+		
+	}
+	
+	return;
+}
+
+void c_jogo::operator+=(c_roque &_Movimento) {
+	std::cout << "HEY!! AQUI CARAIO!!!\n";
+	if(_Movimento.get_cor() == BRANCO) {
+		
+		
+	}
+	else {
+		
+		
+	}
+	
+	return;
+}

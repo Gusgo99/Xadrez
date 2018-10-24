@@ -156,6 +156,7 @@ void c_interfaceJogo::posicionar_movimentos() {
 		s_imgmov _Temp;
 		_Temp.Sprite.setPosition(_PosX, _PosY);
 		_Temp.Sprite.setTexture(Texturas[CASAMOVIMENTO]);
+		_Temp.Movimento = i;
 		SpritesMovimentos.push_back(_Temp);
 		switch(i -> get_tipo()) {
 			case SIMPLES:
@@ -424,6 +425,7 @@ void c_interfaceJogo::atualizar_posicao() {
 void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 	PosicaoSelecionada = c_posicao();
 	atualizar_posicao();
+	
 	if(Lado == BRANCO) {
 		for(auto &i: SpritesBrancas) {
 			if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
@@ -442,12 +444,12 @@ void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 		}
 	}
 	
+	MovimentoEscolhido = nullptr;
 	for(auto i: SpritesMovimentos) {
 		if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
 			MovimentoEscolhido = i.Movimento;
 			
 		}
-		
 	}
 	
 	if(PosicaoSelecionada.validar() && (JogoMostrado != nullptr)) {
@@ -464,8 +466,12 @@ void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 
 void c_interfaceJogo::executar_movimentos() {
 	if(MovimentoEscolhido != nullptr) {
-#warning Descomentar depois de implementar a soma na c_jogo
-		//*JogoMostrado += MovimentoEscolhido;
+		*JogoMostrado += *MovimentoEscolhido;
+		
+		for(auto &i: MovimentosDisponiveis) {
+			delete i;
+			
+		}
 		MovimentosDisponiveis.clear();
 		MovimentoEscolhido = nullptr;
 		SpritesMovimentos.clear();

@@ -85,14 +85,14 @@ class c_movimento {
 class c_roque : public c_movimento{
     private:
 		e_cor Cor;
-		bool Tipo;
+		bool Roque;
 		
     public:
-        c_roque(e_cor _Cor = SEMCOR, bool _Tipo = ROQUEMAIOR);
+        c_roque(c_posicao _PosFinal, e_cor _Cor = SEMCOR, bool _Roque = ROQUEMAIOR);
 		e_cor get_cor();
-		bool get_tipo();
+		bool get_roque();
 		void set_cor(e_cor _Cor);
-		void set_tipo(bool _Tipo);
+		void set_roque(bool _Roque);
 		
 };
 
