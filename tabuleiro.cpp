@@ -12,8 +12,7 @@ c_jogo::c_jogo() {
 		}
 	}
 	
-#warning Descomentar depois de implementar as classes de pecas
-	/*for(auto i = 1; i <= 8; i++) {
+	for(auto i = 1; i <= 8; i++) {
 		Tabuleiro[!c_posicao(i, 2)] = new c_peao(BRANCO, c_posicao(i, 2));
 		Tabuleiro[!c_posicao(i, 7)] = new c_peao(PRETO, c_posicao(i, 7));
 		
@@ -37,7 +36,7 @@ c_jogo::c_jogo() {
 	Tabuleiro[!c_posicao(4, 1)] = new c_rainha(BRANCO, c_posicao(4, 1));
 	Tabuleiro[!c_posicao(5, 1)] = new c_rei(BRANCO, c_posicao(5, 1));
 	Tabuleiro[!c_posicao(4, 8)] = new c_rainha(PRETO, c_posicao(4, 8));
-	Tabuleiro[!c_posicao(5, 8)] = new c_rei(PRETO, c_posicao(5, 8));*/
+	Tabuleiro[!c_posicao(5, 8)] = new c_rei(PRETO, c_posicao(5, 8));
 	
 	return;
 }
@@ -57,4 +56,15 @@ std::map<short int, s_idpeca> c_jogo::get_estado() {
 	}
 
 	return _Estado;
+}
+
+std::list<c_movimento> c_jogo::get_movimentos(c_posicao _Posicao) {
+	if(_Posicao.validar()) {
+		if(Tabuleiro[!_Posicao] != nullptr) {
+			return Tabuleiro[!_Posicao] -> listar_movimentos(get_estado());
+			
+		}
+	}
+	
+	return std::list<c_movimento>();
 }

@@ -130,62 +130,60 @@ class c_peca {
 
 class c_bispo : public c_peca {
 	private:
+		std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado) {return std::list<c_movimento>();};
 
 	public:
 		c_bispo(e_cor _Cor, c_posicao _Posicao);
-		std::list<c_movimento> encontrar_especiais(){return std::list<c_movimento>();};
 
 
 };
 
 class c_rainha : public c_peca {
 	private:
+		std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado) {return std::list<c_movimento>();};
 
 	public:
 		c_rainha(e_cor _Cor, c_posicao _Posicao);
-		std::list<c_movimento> encontrar_especiais(){return std::list<c_movimento>();};
 
 };
 
 class c_rei : public c_peca {
 	private:
         bool Ameacado;
+	    std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
 	public:
 	    c_rei(e_cor _Cor, c_posicao _Posicao);
-	    std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
         bool get_ameacado(){return Ameacado;};;
 };
 
 class c_peao : public c_peca {
 	private:
+		std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado);				// Calcula movimentos especiais
 
 	public:
 	    c_peao(e_cor _Cor, c_posicao _Posicao);
 	    std::list<c_movimento> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis movimentos
 		void jogar(std::array<unsigned short int, 2> Posicao);
-		void promocao();
-		std::list<c_movimento> encontrar_especiais();
 
 
 };
 
 class c_torre : public c_peca {
 	private:
+		std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado) {return std::list<c_movimento>();};
 
 	public:
 	    c_torre(e_cor _Cor, c_posicao _Posicao);
-		std::list<c_movimento> encontrar_especiais(){return std::list<c_movimento>();};
 
 };
 
 class c_cavalo : public c_peca {
 	private:
-		
+		std::list<c_movimento*> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);
+		std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado) {return std::list<c_movimento>();};
 
 	public:
 	    c_cavalo(e_cor _Cor, c_posicao _Posicao);
-		std::list<c_movimento*> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);
-		std::list<c_movimento> encontrar_especiais();
 
 };
 

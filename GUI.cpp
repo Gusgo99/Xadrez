@@ -450,11 +450,15 @@ void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 	}
 	
 	if(PosicaoSelecionada.validar() && (JogoMostrado != nullptr)) {
-		//MovimentosDisponiveis = JogoMostrado -> get_movimentos(!PosicaoSelecionada);
+		MovimentosDisponiveis = JogoMostrado -> get_movimentos(!PosicaoSelecionada);
+		
+	}
+	else {
+		MovimentosDisponiveis.clear();
 		
 	}
 	
-	MovimentosDisponiveis.clear();
+	/*MovimentosDisponiveis.clear();
 	
 	if(PosicaoSelecionada.validar()) {
 		c_posicao a(2, 2);
@@ -486,7 +490,7 @@ void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 		MovimentosDisponiveis.push_back(a >> b);
 		MovimentosDisponiveis.back().set_tipo(ESPECIAL);
 		
-	}
+	}*/
 	
 	return;
 }
