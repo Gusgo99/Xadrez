@@ -469,7 +469,7 @@ c_peao::c_peao(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 }
 
 std::list<c_movimento> c_peao::encontrar_especiais() {
-//436b49dd83d7691d87c9ee0800f2a51f38b9995a
+// 436b49dd83d7691d87c9ee0800f2a51f38b9995a
     return std::list<c_movimento>();
 }
 
