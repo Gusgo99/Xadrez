@@ -21,7 +21,7 @@ c_jogo::c_jogo() {
 	inserir_peca<c_torre>(c_posicao(1, 8), PRETO);
 	inserir_peca<c_torre>(c_posicao(8, 8), PRETO);
 	
-	/*inserir_peca<c_cavalo>(c_posicao(2, 1), BRANCO);
+	inserir_peca<c_cavalo>(c_posicao(2, 1), BRANCO);
 	inserir_peca<c_cavalo>(c_posicao(7, 1), BRANCO);
 	inserir_peca<c_cavalo>(c_posicao(2, 8), PRETO);
 	inserir_peca<c_cavalo>(c_posicao(7, 8), PRETO);
@@ -29,10 +29,10 @@ c_jogo::c_jogo() {
 	inserir_peca<c_bispo>(c_posicao(3, 1), BRANCO);
 	inserir_peca<c_bispo>(c_posicao(6, 1), BRANCO);
 	inserir_peca<c_bispo>(c_posicao(3, 8), PRETO);
-	inserir_peca<c_bispo>(c_posicao(6, 8), PRETO);*/
+	inserir_peca<c_bispo>(c_posicao(6, 8), PRETO);
 	
-	//inserir_peca<c_rainha>(c_posicao(4, 8), PRETO);
-	//inserir_peca<c_rainha>(c_posicao(4, 1), BRANCO);
+	inserir_peca<c_rainha>(c_posicao(4, 8), PRETO);
+	inserir_peca<c_rainha>(c_posicao(4, 1), BRANCO);
 	inserir_peca<c_rei>(c_posicao(5, 1), BRANCO);
 	inserir_peca<c_rei>(c_posicao(5, 8), PRETO);
 	
@@ -123,6 +123,7 @@ void c_jogo::operator+=(c_movimento &_Movimento) {
 			break;
 			
 		case PROMOCAO:
+			
 			break;
 			
 	}

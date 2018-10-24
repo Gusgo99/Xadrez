@@ -447,6 +447,21 @@ c_peao::c_peao(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     return;
 }
 
+void c_peao::atualizar_posicao(c_posicao _Posicao) {
+	c_peca::atualizar_posicao(_Posicao);
+	
+	if(DistMov[N] == 2) {
+		DistMov[N] = 1;
+		
+	}
+	else  if(DistMov[S] == 2) {
+		DistMov[S] = 1;
+		
+	}
+	
+	return;
+}
+
 std::list<c_movimento*> c_peao::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {
     return std::list<c_movimento*>();
 }

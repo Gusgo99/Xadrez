@@ -1,5 +1,4 @@
 #include <iostream>
-#include <thread>
 
 #include "GUI.hpp"
 #include "IA.hpp"
@@ -13,5 +12,3 @@ int main() {
 
 	return 0;
 }
-
-	

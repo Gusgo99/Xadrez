@@ -98,7 +98,7 @@ class c_peca {
 		~c_peca();
 		virtual std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);				// Lista movimentos possiveis
 		bool ameacando_rei(std::map<short int, s_idpeca> _Estado);										// Verifica se a peca esta ameacando o rei inimigo
-		void atualizar_posicao(c_posicao _Posicao);														// Realiza a atualizacao da posicao apos realizar o movimento
+		virtual void atualizar_posicao(c_posicao _Posicao);														// Realiza a atualizacao da posicao apos realizar o movimento
 		void marcar_posicao(std::map<short int, s_idpeca> *_Estado);									// Faz com que cada peca marque sua posicao no tabuleiro
 		e_cor get_cor();
 		e_peca get_peca();
@@ -148,6 +148,7 @@ class c_peao : public c_peca {
 	    c_peao(e_cor _Cor, c_posicao _Posicao);
 	    std::list<c_movimento> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis movimentos
 		void jogar(std::array<unsigned short int, 2> Posicao);
+		void atualizar_posicao(c_posicao _Posicao);
 
 
 };
