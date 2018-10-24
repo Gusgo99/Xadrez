@@ -8,7 +8,7 @@ c_jogo::c_jogo() {
 	for(auto i = 1; i <= 8; i++) {
 		for(auto j = 1; j <= 8; j++) {
 			Tabuleiro[!c_posicao(i, j)] = nullptr;
-			
+
 		}
 	}
 	
@@ -42,15 +42,19 @@ c_jogo::c_jogo() {
 	return;
 }
 
+bool c_jogo::get_xeque() {
+    return Xeque;
+}
+
 std::map<short int, s_idpeca> c_jogo::get_estado() {
 	std::map<short int, s_idpeca> _Estado;
-	
+
 	for(auto i: Tabuleiro) {
 		if(i.second != nullptr) {
 			i.second -> marcar_posicao(&_Estado);
 			
 		}
 	}
-	
+
 	return _Estado;
 }
