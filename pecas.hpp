@@ -4,6 +4,9 @@
 #include <array>
 #include <list>
 
+#define ROQUEMAIOR true
+#define ROQUEMENOR false
+
 class c_movimento;
 class c_roque;
 class c_posicao;
@@ -31,6 +34,7 @@ struct s_idpeca {
 
 #include "tabuleiro.hpp"
 
+// Maneira simples de iterar por todas as direcoes
 const std::array<e_dir, 8> Direcoes = {N, S, E, O, NE, SE, NO, SO};
 
 // Classe responsavel por guardar a posicao de cada peca
@@ -79,16 +83,17 @@ class c_movimento {
 
 class c_roque : public c_movimento{
     private:
-        c_posicao PosInicial2;
-        c_posicao PosFinal2;
+		e_cor Cor;
+		bool Tipo;
+	
     public:
-        c_roque(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0),c_posicao _PosInicial2 = c_posicao(0, 0), c_posicao _PosFinal2 = c_posicao(0, 0));
-        c_posicao get_inicio2(){return PosInicial2;};   //tirar daqui depois
-		c_posicao get_fim2(){return PosFinal2;};          //tirar daqui depois
-
-
+        c_roque(e_cor _Cor = SEMCOR, bool _Tipo = ROQUEMAIOR);
+		e_cor get_cor();
+		bool get_tipo();
+		void set_cor(e_cor _Cor);
+		void set_tipo(bool _Tipo);
+		
 };
-
 
 //#####################################################
             //classe peca
@@ -174,10 +179,11 @@ class c_torre : public c_peca {
 
 class c_cavalo : public c_peca {
 	private:
-
+		
 
 	public:
 	    c_cavalo(e_cor _Cor, c_posicao _Posicao);
+		std::list<c_movimento*> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);
 		std::list<c_movimento> encontrar_especiais();
 
 };
