@@ -459,7 +459,7 @@ c_peao::c_peao(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 }
 
 std::list<c_movimento> c_peao::encontrar_especiais() {
-//primeiro movimento peao
+//promocao
 
 
     return std::list<c_movimento>();
@@ -486,6 +486,200 @@ c_cavalo::c_cavalo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 
 
     return;
+}
+
+std::list<c_movimento> c_cavalo::encontrar_movimentos(std::map<short int, s_idpeca> _Estado){
+
+    short int _auxx, _auxy, x, y;
+    c_movimento *_auxMov;
+    bool _valido;
+    std::list<c_movimento> _movimentos;
+
+
+    for(x=-2;x<3;x++){
+        for(y=-2;y<3;y++){
+            _valido=true;
+
+
+            if( (x != y) && (x != 0) && (y !=0 ) ){//posicoes do cavalo
+
+                //em X eh valido o movimento?
+                if(x>0){//x positivo
+                    if(x==1){//x==1
+                        if(Posicao.get_x()>7){
+                            _valido = false;
+                        }else{
+                        _auxx=x;
+                        }
+                    }else{//x==2
+                        if(Posicao.get_x()>6){
+                            _valido = false;
+                        }else{
+                        _auxx=x;
+                        }
+                    }
+                }else{//x negativo
+                    if(x==-1){//x==-1
+                        if(Posicao.get_x()<2){//x==1
+                            _valido = false;
+                        }else{
+                        _auxx=x;
+                        }
+                    }else{//x=-2
+                        if(Posicao.get_x()<3){//x==2
+                            _valido = false;
+                        }else{
+                        _auxx=x;
+                        }
+                    }
+                }
+
+
+                //em Y eh valido o movimento?
+                if(y>0){//y positivo
+                    if(y==1){//y==1
+                        if(Posicao.get_y()>7){
+                            _valido = false;
+                        }else{
+                        _auxy=y;
+                        }
+                    }else{//y==2
+                        if(Posicao.get_y()>6){
+                            _valido = false;
+                        }else{
+                        _auxy=y;
+                        }
+                    }
+                }else{//y negativo
+                    if(y==-1){//y==-1
+                        if(Posicao.get_y()<2){//y==1
+                            _valido = false;
+                        }else{
+                        _auxy=y;
+                        }
+                    }else{//y=-2
+                        if(Posicao.get_y()<3){//y==2
+                            _valido = false;
+                        }else{
+                        _auxy=y;
+                        }
+                    }
+                }//se aqui sair com _valido=true _auxx e _auxy sai com a posição
+
+
+            }else{
+            _valido=false;
+            }//se aqui sair com _valido=true _auxx e _auxy sai com a posição
+
+            //movimento foi validado e lugar eh vazio??
+            if(_valido && _Estado[_auxx*10 + _auxy].Peca == VAZIO){
+                _auxMov= new c_movimento(Posicao,c_posicao(_auxx,_auxy));
+                _movimentos.push_back(*_auxMov);
+            }
+
+
+        }//end for y
+    }//end for x
+
+
+    return _movimentos;
+}
+
+std::list<c_movimento> c_cavalo::encontrar_capturas(std::map<short int, s_idpeca> _Estado){
+
+    short int _auxx, _auxy, x, y;
+    c_movimento *_auxMov;
+    bool _valido;
+    std::list<c_movimento> _movimentos;
+
+
+    for(x=-2;x<3;x++){
+        for(y=-2;y<3;y++){
+            _valido=true;
+
+
+            if( (x != y) && (x != 0) && (y !=0 ) ){//posicoes do cavalo
+
+                //em X eh valido o movimento?
+                if(x>0){//x positivo
+                    if(x==1){//x==1
+                        if(Posicao.get_x()>7){
+                            _valido = false;
+                        }else{
+                        _auxx=x;
+                        }
+                    }else{//x==2
+                        if(Posicao.get_x()>6){
+                            _valido = false;
+                        }else{
+                        _auxx=x;
+                        }
+                    }
+                }else{//x negativo
+                    if(x==-1){//x==-1
+                        if(Posicao.get_x()<2){//x==1
+                            _valido = false;
+                        }else{
+                        _auxx=x;
+                        }
+                    }else{//x=-2
+                        if(Posicao.get_x()<3){//x==2
+                            _valido = false;
+                        }else{
+                        _auxx=x;
+                        }
+                    }
+                }
+
+
+                //em Y eh valido o movimento?
+                if(y>0){//y positivo
+                    if(y==1){//y==1
+                        if(Posicao.get_y()>7){
+                            _valido = false;
+                        }else{
+                        _auxy=y;
+                        }
+                    }else{//y==2
+                        if(Posicao.get_y()>6){
+                            _valido = false;
+                        }else{
+                        _auxy=y;
+                        }
+                    }
+                }else{//y negativo
+                    if(y==-1){//y==-1
+                        if(Posicao.get_y()<2){//y==1
+                            _valido = false;
+                        }else{
+                        _auxy=y;
+                        }
+                    }else{//y=-2
+                        if(Posicao.get_y()<3){//y==2
+                            _valido = false;
+                        }else{
+                        _auxy=y;
+                        }
+                    }
+                }//se aqui sair com _valido=true _auxx e _auxy sai com a posição
+
+
+            }else{
+            _valido=false;
+            }//se aqui sair com _valido=true _auxx e _auxy sai com a posição
+
+            //movimento foi validado e lugar eh vazio??
+            if(_valido && _Estado[_auxx*10 + _auxy].Peca != VAZIO && _Estado[_auxx*10 + _auxy].Cor != IDPeca.Cor){
+                _auxMov= new c_movimento(Posicao,c_posicao(_auxx,_auxy));
+                _movimentos.push_back(*_auxMov);
+            }
+
+
+        }//end for y
+    }//end for x
+
+
+    return _movimentos;
 }
 
 std::list<c_movimento> c_cavalo::encontrar_especiais() {

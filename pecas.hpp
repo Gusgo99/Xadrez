@@ -55,6 +55,7 @@ class c_posicao {
 		void set_xy(short int _x, short int _y);
 		short int get_x();
 		short int get_y();
+
 		bool validar();																// Verifica se a posicao e valida (Dentro da grade 8x8)
 
 };
@@ -179,6 +180,9 @@ class c_cavalo : public c_peca {
 	public:
 	    c_cavalo(e_cor _Cor, c_posicao _Posicao);
 		std::list<c_movimento> encontrar_especiais();
+        std::list<c_movimento> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);
+	    std::list<c_movimento> encontrar_capturas(std::map<short int, s_idpeca> _Estado);
+
 
 };
 
