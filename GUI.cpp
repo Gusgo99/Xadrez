@@ -127,8 +127,8 @@ void c_interfaceJogo::posicionar_movimentos() {
 	for(auto i: MovimentosDisponiveis) {
 		int _PosX, _PosY;
 		if(Lado == PRETO) {
-			_PosX = i.get_fim().get_x() - 1;
-			_PosY = i.get_fim().get_y() -  1;
+			_PosX = i -> get_fim().get_x() - 1;
+			_PosY = i -> get_fim().get_y() -  1;
 			
 			_PosX = 7 - _PosX;
 			
@@ -140,8 +140,8 @@ void c_interfaceJogo::posicionar_movimentos() {
 			
 		}
 		else {
-			_PosX = i.get_fim().get_x() - 1;
-			_PosY = i.get_fim().get_y() -  1;
+			_PosX = i -> get_fim().get_x() - 1;
+			_PosY = i -> get_fim().get_y() -  1;
 			
 			_PosY = 7 - _PosY;
 			
@@ -156,7 +156,7 @@ void c_interfaceJogo::posicionar_movimentos() {
 		_Temp.Sprite.setPosition(_PosX, _PosY);
 		_Temp.Sprite.setTexture(Texturas[CASAMOVIMENTO]);
 		SpritesMovimentos.push_back(_Temp);
-		switch(i.get_tipo()) {
+		switch(i -> get_tipo()) {
 			case SIMPLES:
 				SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0x00, 0xFF, 0xFF));
 				break;
@@ -458,40 +458,6 @@ void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 		
 	}
 	
-	/*MovimentosDisponiveis.clear();
-	
-	if(PosicaoSelecionada.validar()) {
-		c_posicao a(2, 2);
-		c_posicao b(2, 3);
-		
-		MovimentosDisponiveis.push_back(a >> b);
-		
-		b = c_posicao(2, 4);
-		
-		MovimentosDisponiveis.push_back(a >> b);
-		
-		b = c_posicao(1, 4);
-		
-		MovimentosDisponiveis.push_back(a >> b);
-		MovimentosDisponiveis.back().set_tipo(CAPTURA);
-		
-		b = c_posicao(1, 3);
-		
-		MovimentosDisponiveis.push_back(a >> b);
-		MovimentosDisponiveis.back().set_tipo(CAPTURA);
-		
-		b = c_posicao(3, 3);
-		
-		MovimentosDisponiveis.push_back(a >> b);
-		MovimentosDisponiveis.back().set_tipo(ESPECIAL);
-		
-		b = c_posicao(3, 4);
-		
-		MovimentosDisponiveis.push_back(a >> b);
-		MovimentosDisponiveis.back().set_tipo(ESPECIAL);
-		
-	}*/
-	
 	return;
 }
 
@@ -562,4 +528,5 @@ void c_interfaceJogo::desenhar_janela() {
 		
 	}
 	
+	return;
 }
