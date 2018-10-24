@@ -12,7 +12,7 @@ c_jogo::c_jogo() {
 		}
 	}
 	
-	// Finalizar implementação dos contrutores e da função encontrar_especiais para retirar o comentario
+#warning Descomentar depois de implementar as classes de pecas
 	/*for(auto i = 1; i <= 8; i++) {
 		Tabuleiro[!c_posicao(i, 2)] = new c_peao(BRANCO, c_posicao(i, 2));
 		Tabuleiro[!c_posicao(i, 7)] = new c_peao(PRETO, c_posicao(i, 7));

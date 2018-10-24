@@ -27,9 +27,10 @@ class c_interfaceJogo {
 		sf::Sprite SpriteTabuleiro;
 		std::list<s_imgpeca> SpritesBrancas;
 		std::list<s_imgpeca> SpritesPretas;
-		std::list<s_imgmov> SpritesMovimento;
+		std::list<s_imgmov> SpritesMovimentos;
 		c_posicao PosicaoSelecionada;
 		std::list<c_movimento> MovimentosDisponiveis;
+		c_movimento *MovimentoEscolhido;
 		int Altura;																								// Largura da janela
 		int Largura;																							// Altura da janela
 		int PosXTabuleiro;																						// Posição em X do tabuleiro dentro da janela
@@ -40,10 +41,12 @@ class c_interfaceJogo {
 		void localizar_clique(unsigned _x, unsigned _y);
 		void posicionar_movimentos();
 		void posicionar_pecas(std::map<short int, s_idpeca> _Estado);
+		void executar_movimentos();
 		
 	public:
 		c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor Lado);								// Construtor com tamanho de tela relativo
 		c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor Lado, int _Altura, int _Largura);		// Construtor com tamanho de tela absoluto
+		~c_interfaceJogo();
 		void desenhar_janela();
 	
 };

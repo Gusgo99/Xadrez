@@ -1,4 +1,5 @@
 #include <iostream>
+#include <thread>
 
 #include "GUI.hpp"
 #include "IA.hpp"
@@ -9,8 +10,6 @@
 
 int main() {
 	testar_interface_jogo();
-	
-	//c_jogo teste;
 
 	return 0;
 }

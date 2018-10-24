@@ -76,6 +76,18 @@ c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_c
 	return;
 }
 
+c_interfaceJogo::~c_interfaceJogo() {
+	janela -> close();
+	
+	SpritesBrancas.clear();
+	SpritesPretas.clear();
+	SpritesMovimentos.clear();
+	
+	Texturas.clear();
+	
+	return;
+}
+
 void c_interfaceJogo::carregar_texturas() {
 	for(auto i: IMAGENS) {
 		sf::Texture _Textura;
@@ -100,7 +112,7 @@ void c_interfaceJogo::ajustar_sprites() {
 		i.Sprite.setScale(menor(Altura, Largura) / float(8 * LADOPECA), menor(Altura, Largura) / float(8 * LADOPECA));
 		
 	}
-	for(auto &i: SpritesMovimento) {
+	for(auto &i: SpritesMovimentos) {
 		i.Sprite.setScale(menor(Altura, Largura) / float(8 * LADOPECA), menor(Altura, Largura) / float(8 * LADOPECA));
 		
 	}
@@ -111,7 +123,7 @@ void c_interfaceJogo::ajustar_sprites() {
 }
 
 void c_interfaceJogo::posicionar_movimentos() {
-	SpritesMovimento.clear();
+	SpritesMovimentos.clear();
 	for(auto i: MovimentosDisponiveis) {
 		int _PosX, _PosY;
 		if(Lado == PRETO) {
@@ -143,18 +155,18 @@ void c_interfaceJogo::posicionar_movimentos() {
 		s_imgmov _Temp;
 		_Temp.Sprite.setPosition(_PosX, _PosY);
 		_Temp.Sprite.setTexture(Texturas[CASAMOVIMENTO]);
-		SpritesMovimento.push_back(_Temp);
+		SpritesMovimentos.push_back(_Temp);
 		switch(i.get_tipo()) {
 			case SIMPLES:
-				SpritesMovimento.back().Sprite.setColor(sf::Color(0x00, 0x00, 0xFF, 0xFF));
+				SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0x00, 0xFF, 0xFF));
 				break;
 				
 			case CAPTURA:
-				SpritesMovimento.back().Sprite.setColor(sf::Color(0xFF, 0x00, 0x00, 0xFF));
+				SpritesMovimentos.back().Sprite.setColor(sf::Color(0xFF, 0x00, 0x00, 0xFF));
 				break;
 				
 			case ESPECIAL:
-				SpritesMovimento.back().Sprite.setColor(sf::Color(0x00, 0xFF, 0x00, 0xFF));
+				SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0xFF, 0x00, 0xFF));
 				break;
 			
 		}
@@ -429,6 +441,14 @@ void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 		}
 	}
 	
+	for(auto i: SpritesMovimentos) {
+		if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
+			MovimentoEscolhido = i.Movimento;
+			
+		}
+		
+	}
+	
 	if(PosicaoSelecionada.validar() && (JogoMostrado != nullptr)) {
 		//MovimentosDisponiveis = JogoMostrado -> get_movimentos(!PosicaoSelecionada);
 		
@@ -471,6 +491,19 @@ void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 	return;
 }
 
+void c_interfaceJogo::executar_movimentos() {
+	if(MovimentoEscolhido != nullptr) {
+#warning Descomentar depois de implementar a soma na c_jogo
+		//*JogoMostrado += MovimentoEscolhido;
+		MovimentosDisponiveis.clear();
+		MovimentoEscolhido = nullptr;
+		SpritesMovimentos.clear();
+		
+	}
+	
+	return;
+}
+
 void c_interfaceJogo::desenhar_janela() {
 	atualizar_posicao();
 	
@@ -502,6 +535,7 @@ void c_interfaceJogo::desenhar_janela() {
 		janela -> clear();
 		
 		atualizar_posicao();
+		executar_movimentos();
 		
 		janela -> draw(SpriteTabuleiro);
 		
@@ -515,7 +549,7 @@ void c_interfaceJogo::desenhar_janela() {
 			
 		}
 		
-		for(auto i: SpritesMovimento) {
+		for(auto i: SpritesMovimentos) {
 			janela -> draw(i.Sprite);
 			
 		}
