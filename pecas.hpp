@@ -182,7 +182,7 @@ class c_torre : public c_peca {
 class c_cavalo : public c_peca {
 	private:
 		std::list<c_movimento> encontrar_especiais(std::map<short int, s_idpeca> _Estado) {return std::list<c_movimento>();};
-		std::list<c_movimento*> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);
+		std::list<c_movimento> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);
 	    std::list<c_movimento> encontrar_capturas(std::map<short int, s_idpeca> _Estado);
 
 	public:

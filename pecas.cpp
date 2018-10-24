@@ -482,9 +482,8 @@ c_cavalo::c_cavalo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     return;
 }
 
-std::list<c_movimento> c_cavalo::encontrar_movimentos(std::map<short int, s_idpeca> _Estado){
-
-    short int _auxx, _auxy, x, y;
+std::list<c_movimento> c_cavalo::encontrar_movimentos(std::map<short int, s_idpeca> _Estado) {
+	short int _auxx, _auxy, x, y;
     c_movimento *_auxMov;
     bool _valido;
     std::list<c_movimento> _movimentos;
@@ -579,8 +578,7 @@ std::list<c_movimento> c_cavalo::encontrar_movimentos(std::map<short int, s_idpe
     return _movimentos;
 }
 
-std::list<c_movimento> c_cavalo::encontrar_capturas(std::map<short int, s_idpeca> _Estado){
-
+std::list<c_movimento> c_cavalo::encontrar_capturas(std::map<short int, s_idpeca> _Estado) {
     short int _auxx, _auxy, x, y;
     c_movimento *_auxMov;
     bool _valido;
@@ -674,16 +672,4 @@ std::list<c_movimento> c_cavalo::encontrar_capturas(std::map<short int, s_idpeca
 
 
     return _movimentos;
-}
-
-std::list<c_movimento> c_peao::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {
-#warning Adicionar codigo para encontrar promocoes
-    return std::list<c_movimento>();
-}
-
-// Construtor cavalo: 
-c_cavalo::c_cavalo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
-    IDPeca.Peca = CAVALO;//eh um enum
-	
-    return;
 }
