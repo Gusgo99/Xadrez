@@ -15,6 +15,8 @@ class c_jogo {
 		unsigned Turno;
 		unsigned JogadasRestantes;
 		bool Xeque;
+		template<class T>
+		void inserir_peca(c_posicao _Posicao, e_cor _Cor);
 
 	public:
 		c_jogo();
