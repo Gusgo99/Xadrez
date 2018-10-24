@@ -61,7 +61,7 @@ class c_posicao {
 		short int get_x();
 		short int get_y();
 		bool validar();																// Verifica se a posicao e valida (Dentro da grade 8x8)
-		
+
 };
 
 class c_jogo;
@@ -86,14 +86,14 @@ class c_roque : public c_movimento{
     private:
 		e_cor Cor;
 		bool Tipo;
-		
+
     public:
         c_roque(e_cor _Cor = SEMCOR, bool _Tipo = ROQUEMAIOR);
 		e_cor get_cor();
 		bool get_tipo();
 		void set_cor(e_cor _Cor);
 		void set_tipo(bool _Tipo);
-		
+
 };
 
 //#####################################################
@@ -109,7 +109,7 @@ class c_peca {
 		std::list<c_movimento*> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis movimentos
 		std::list<c_movimento*> encontrar_capturas(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis capturas
 		virtual std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) = 0;	// Calcula movimentos especiais
-		
+
 	public:
 		c_peca(e_cor _Cor = SEMCOR, c_posicao _Posicao = c_posicao(0, 0));
 		~c_peca();
@@ -151,7 +151,7 @@ class c_rei : public c_peca {
 	private:
         bool Ameacado;
 	    std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
-		
+
 	public:
 	    c_rei(e_cor _Cor, c_posicao _Posicao);
         bool get_ameacado(){return Ameacado;};;
@@ -163,7 +163,7 @@ class c_peao : public c_peca {
 
 	public:
 	    c_peao(e_cor _Cor, c_posicao _Posicao);
-	    std::list<c_movimento> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis movimentos
+	    std::list<c_movimento*> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis movimentos
 		void jogar(std::array<unsigned short int, 2> Posicao);
 
 
