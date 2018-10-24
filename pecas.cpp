@@ -68,6 +68,7 @@ void c_posicao::set_y(short int _y) {
 void c_posicao::set_xy(short int _x, short int _y){
     x = _x;
     y = _y;
+	
     return;
 }
 
@@ -91,6 +92,7 @@ void c_posicao::operator+=(c_posicao &_temp) {
 	x += _temp.get_x();
 	y += _temp.get_y();
 
+	return;
 }
 
 short int c_posicao::operator-(c_posicao &_temp) {
@@ -215,6 +217,7 @@ e_movimento c_movimento::get_tipo() {
 
 c_peca::c_peca(e_cor _Cor, c_posicao _Posicao) {
 	IDPeca.Cor = _Cor;
+	IDPeca.NumJogadas = 0;
 	Posicao = _Posicao;
 	
 	for(auto &i: DistCome) {
@@ -227,8 +230,6 @@ c_peca::c_peca(e_cor _Cor, c_posicao _Posicao) {
 }
 
 c_peca::~c_peca() {
-
-
 	return;
 }
 
@@ -310,32 +311,24 @@ std::list<c_movimento*> c_peca::encontrar_capturas(std::map<short int, s_idpeca>
 }
 
 //#####################################################
-            //sub classe peca
+            // Sub classes das pecas
 //#####################################################
 
-//bispo
+// Construtor bispo
 c_bispo::c_bispo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
-
-    DistMov[N]  = 0;
     DistMov[NE] = 8;
-    DistMov[E]  = 0;
     DistMov[SE] = 8;
-    DistMov[S]  = 0;
     DistMov[SO] = 8;
-    DistMov[O]  = 0;
     DistMov[NO] = 8;
 
     DistCome = DistMov;
     IDPeca.Peca = BISPO;//BISPO eh um enum
-    Posicao = _Posicao;
-    IDPeca.Cor = _Cor;
 
     return;
 }
 
 // Construtor rainha
 c_rainha::c_rainha(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
-
     DistMov[N]  = 8;
     DistMov[NE] = 8;
     DistMov[E]  = 8;
@@ -347,14 +340,12 @@ c_rainha::c_rainha(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 
     DistCome = DistMov;
     IDPeca.Peca = RAINHA;//eh um enum
-    IDPeca.NumJogadas=0;
 
     return;
 }
 
 // Construtor rei
 c_rei::c_rei(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
-
     DistMov[N]  = 1;
     DistMov[NE] = 1;
     DistMov[E]  = 1;
@@ -366,7 +357,6 @@ c_rei::c_rei(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 
     DistCome = DistMov;
     IDPeca.Peca = REI;//eh um enum
-    IDPeca.NumJogadas = 0;
     Ameacado = false;
 
     return;
@@ -456,7 +446,6 @@ c_torre::c_torre(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 c_peao::c_peao(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 
     IDPeca.Peca = PEAO;								//eh um enum
-    IDPeca.NumJogadas = 0;
 
     if(_Cor == BRANCO) {
         DistMov[N] = 2;

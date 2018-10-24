@@ -109,7 +109,7 @@ class c_peca {
 		std::list<c_movimento*> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis movimentos
 		std::list<c_movimento*> encontrar_capturas(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis capturas
 		virtual std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) = 0;	// Calcula movimentos especiais
-
+		
 	public:
 		c_peca(e_cor _Cor = SEMCOR, c_posicao _Posicao = c_posicao(0, 0));
 		~c_peca();

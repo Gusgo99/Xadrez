@@ -25,14 +25,15 @@ enum e_numSprite {	TABULEIRO,
 					NUMSPRITES};
 
 // Caminho ate imagens do jogo
-const std::array<std::string, NUMSPRITES> IMAGENS = {	"./resources/tabuleiro.png",
-														"./resources/tab_quad.png",
-														"./resources/rei_preto.png", "./resources/rei_branco.png",
-														"./resources/peao_preto.png", "./resources/peao_branco.png",
-														"./resources/rainha_preto.png", "./resources/rainha_branco.png",
-														"./resources/bispo_preto.png", "./resources/bispo_branco.png",
-														"./resources/torre_preto.png", "./resources/torre_branco.png",
-														"./resources/cavalo_preto.png", "./resources/cavalo_branco.png"};
+const std::array<std::string, NUMSPRITES> IMAGENS = {	
+"./resources/tabuleiro.png",
+"./resources/tab_quad.png",
+"./resources/rei_preto.png", "./resources/rei_branco.png",
+"./resources/peao_preto.png", "./resources/peao_branco.png",
+"./resources/rainha_preto.png", "./resources/rainha_branco.png",
+"./resources/bispo_preto.png", "./resources/bispo_branco.png",
+"./resources/torre_preto.png", "./resources/torre_branco.png",
+"./resources/cavalo_preto.png", "./resources/cavalo_branco.png"};
 
 c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor _Lado, int _Altura, int _Largura) {
 	JogoMostrado = _JogoMostrado;
