@@ -25,14 +25,15 @@ enum e_numSprite {	TABULEIRO,
 					NUMSPRITES};
 
 // Caminho ate imagens do jogo
-const std::array<std::string, NUMSPRITES> IMAGENS = {	"./resources/tabuleiro.png",
-														"./resources/tab_quad.png",
-														"./resources/rei_preto.png", "./resources/rei_branco.png",
-														"./resources/peao_preto.png", "./resources/peao_branco.png",
-														"./resources/rainha_preto.png", "./resources/rainha_branco.png",
-														"./resources/bispo_preto.png", "./resources/bispo_branco.png",
-														"./resources/torre_preto.png", "./resources/torre_branco.png",
-														"./resources/cavalo_preto.png", "./resources/cavalo_branco.png"};
+const std::array<std::string, NUMSPRITES> IMAGENS = {	
+"./resources/tabuleiro.png",
+"./resources/tab_quad.png",
+"./resources/rei_preto.png", "./resources/rei_branco.png",
+"./resources/peao_preto.png", "./resources/peao_branco.png",
+"./resources/rainha_preto.png", "./resources/rainha_branco.png",
+"./resources/bispo_preto.png", "./resources/bispo_branco.png",
+"./resources/torre_preto.png", "./resources/torre_branco.png",
+"./resources/cavalo_preto.png", "./resources/cavalo_branco.png"};
 
 c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor _Lado, int _Altura, int _Largura) {
 	JogoMostrado = _JogoMostrado;
@@ -127,8 +128,8 @@ void c_interfaceJogo::posicionar_movimentos() {
 	for(auto i: MovimentosDisponiveis) {
 		int _PosX, _PosY;
 		if(Lado == PRETO) {
-			_PosX = i.get_fim().get_x() - 1;
-			_PosY = i.get_fim().get_y() -  1;
+			_PosX = i -> get_fim().get_x() - 1;
+			_PosY = i -> get_fim().get_y() -  1;
 			
 			_PosX = 7 - _PosX;
 			
@@ -140,8 +141,8 @@ void c_interfaceJogo::posicionar_movimentos() {
 			
 		}
 		else {
-			_PosX = i.get_fim().get_x() - 1;
-			_PosY = i.get_fim().get_y() -  1;
+			_PosX = i -> get_fim().get_x() - 1;
+			_PosY = i -> get_fim().get_y() -  1;
 			
 			_PosY = 7 - _PosY;
 			
@@ -156,7 +157,7 @@ void c_interfaceJogo::posicionar_movimentos() {
 		_Temp.Sprite.setPosition(_PosX, _PosY);
 		_Temp.Sprite.setTexture(Texturas[CASAMOVIMENTO]);
 		SpritesMovimentos.push_back(_Temp);
-		switch(i.get_tipo()) {
+		switch(i -> get_tipo()) {
 			case SIMPLES:
 				SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0x00, 0xFF, 0xFF));
 				break;
@@ -450,41 +451,11 @@ void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 	}
 	
 	if(PosicaoSelecionada.validar() && (JogoMostrado != nullptr)) {
-		//MovimentosDisponiveis = JogoMostrado -> get_movimentos(!PosicaoSelecionada);
+		MovimentosDisponiveis = JogoMostrado -> get_movimentos(!PosicaoSelecionada);
 		
 	}
-	
-	MovimentosDisponiveis.clear();
-	
-	if(PosicaoSelecionada.validar()) {
-		c_posicao a(2, 2);
-		c_posicao b(2, 3);
-		
-		MovimentosDisponiveis.push_back(a >> b);
-		
-		b = c_posicao(2, 4);
-		
-		MovimentosDisponiveis.push_back(a >> b);
-		
-		b = c_posicao(1, 4);
-		
-		MovimentosDisponiveis.push_back(a >> b);
-		MovimentosDisponiveis.back().set_tipo(CAPTURA);
-		
-		b = c_posicao(1, 3);
-		
-		MovimentosDisponiveis.push_back(a >> b);
-		MovimentosDisponiveis.back().set_tipo(CAPTURA);
-		
-		b = c_posicao(3, 3);
-		
-		MovimentosDisponiveis.push_back(a >> b);
-		MovimentosDisponiveis.back().set_tipo(ESPECIAL);
-		
-		b = c_posicao(3, 4);
-		
-		MovimentosDisponiveis.push_back(a >> b);
-		MovimentosDisponiveis.back().set_tipo(ESPECIAL);
+	else {
+		MovimentosDisponiveis.clear();
 		
 	}
 	
