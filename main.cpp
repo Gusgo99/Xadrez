@@ -1,4 +1,5 @@
 #include <iostream>
+#include <thread>
 
 #include "GUI.hpp"
 #include "IA.hpp"

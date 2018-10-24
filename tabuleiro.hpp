@@ -26,7 +26,6 @@ class c_jogo {
 		std::map<short int, s_idpeca> get_estado();
 		bool get_xeque();
 		std::list<c_movimento> get_movimentos(c_posicao _Posicao);
-
 };
 
 #endif
