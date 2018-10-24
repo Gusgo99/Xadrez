@@ -4,9 +4,6 @@
 #include <array>
 #include <list>
 
-#define ROQUEMAIOR true
-#define ROQUEMENOR false
-
 class c_movimento;
 class c_roque;
 class c_posicao;
@@ -21,7 +18,7 @@ class c_torre;
 enum e_dir {N = 0x01, S = 0x02, E = 0x04, O = 0x08, NE = N | E, SE = S | E, NO = N | O, SO = S | O};
 enum e_cor {SEMCOR, BRANCO, PRETO};
 enum e_peca {VAZIO, PEAO, CAVALO, BISPO, TORRE, RAINHA, REI};
-enum e_movimento {SIMPLES, CAPTURA, ESPECIAL};
+enum e_movimento {SIMPLES, CAPTURA, ROQUEMENOR, ROQUEMAIOR, PROMOCAO};
 
 // Armazena cor e tipo da peca
 struct s_idpeca {
@@ -80,20 +77,6 @@ class c_movimento {
 		void set_tipo(e_movimento _TipoMovimento);
 		e_movimento get_tipo();
 
-};
-
-class c_roque : public c_movimento{
-    private:
-		e_cor Cor;
-		bool Roque;
-		
-    public:
-        c_roque(c_posicao _PosFinal, e_cor _Cor = SEMCOR, bool _Roque = ROQUEMAIOR);
-		e_cor get_cor();
-		bool get_roque();
-		void set_cor(e_cor _Cor);
-		void set_roque(bool _Roque);
-		
 };
 
 //#####################################################

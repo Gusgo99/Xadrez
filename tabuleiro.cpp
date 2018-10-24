@@ -21,7 +21,7 @@ c_jogo::c_jogo() {
 	inserir_peca<c_torre>(c_posicao(1, 8), PRETO);
 	inserir_peca<c_torre>(c_posicao(8, 8), PRETO);
 	
-	inserir_peca<c_cavalo>(c_posicao(2, 1), BRANCO);
+	/*inserir_peca<c_cavalo>(c_posicao(2, 1), BRANCO);
 	inserir_peca<c_cavalo>(c_posicao(7, 1), BRANCO);
 	inserir_peca<c_cavalo>(c_posicao(2, 8), PRETO);
 	inserir_peca<c_cavalo>(c_posicao(7, 8), PRETO);
@@ -29,10 +29,10 @@ c_jogo::c_jogo() {
 	inserir_peca<c_bispo>(c_posicao(3, 1), BRANCO);
 	inserir_peca<c_bispo>(c_posicao(6, 1), BRANCO);
 	inserir_peca<c_bispo>(c_posicao(3, 8), PRETO);
-	inserir_peca<c_bispo>(c_posicao(6, 8), PRETO);
+	inserir_peca<c_bispo>(c_posicao(6, 8), PRETO);*/
 	
-	inserir_peca<c_rainha>(c_posicao(4, 8), PRETO);
-	inserir_peca<c_rainha>(c_posicao(4, 1), BRANCO);
+	//inserir_peca<c_rainha>(c_posicao(4, 8), PRETO);
+	//inserir_peca<c_rainha>(c_posicao(4, 1), BRANCO);
 	inserir_peca<c_rei>(c_posicao(5, 1), BRANCO);
 	inserir_peca<c_rei>(c_posicao(5, 8), PRETO);
 	
@@ -75,30 +75,56 @@ void c_jogo::inserir_peca(c_posicao _Posicao, e_cor _Cor) {
 }
 
 void c_jogo::operator+=(c_movimento &_Movimento) {
-	std::cout << "Nao essa\n";
-	if(_Movimento.get_inicio().validar() && _Movimento.get_fim().validar()) {
-		if(Tabuleiro[!_Movimento.get_fim()] != nullptr) {
-			delete Tabuleiro[!_Movimento.get_fim()];
+	switch(_Movimento.get_tipo()) {
+		case SIMPLES:
+		case CAPTURA:
+			if(_Movimento.get_inicio().validar() && _Movimento.get_fim().validar()) {
+				if(Tabuleiro[!_Movimento.get_fim()] != nullptr) {
+					delete Tabuleiro[!_Movimento.get_fim()];
+					
+				}
+				Tabuleiro[!_Movimento.get_fim()] = Tabuleiro[!_Movimento.get_inicio()];
+				Tabuleiro[!_Movimento.get_inicio()] = nullptr;
+				Tabuleiro[!_Movimento.get_fim()] -> atualizar_posicao(_Movimento.get_fim());
+				
+			}
+			break;
 			
-		}
-		Tabuleiro[!_Movimento.get_fim()] = Tabuleiro[!_Movimento.get_inicio()];
-		Tabuleiro[!_Movimento.get_inicio()] = nullptr;
-		Tabuleiro[!_Movimento.get_fim()] -> atualizar_posicao(_Movimento.get_fim());
-		
-	}
-	
-	return;
-}
-
-void c_jogo::operator+=(c_roque &_Movimento) {
-	std::cout << "HEY!! AQUI CARAIO!!!\n";
-	if(_Movimento.get_cor() == BRANCO) {
-		
-		
-	}
-	else {
-		
-		
+		case ROQUEMENOR:
+			if(_Movimento.get_inicio().validar() && _Movimento.get_fim().validar()) {
+				c_posicao _Temp = c_posicao(E, 3);
+				c_posicao _PosicaoInicialTorre = _Movimento.get_inicio() + _Temp;
+				_Temp = c_posicao(E, 1);
+				c_posicao _NovaPosicaoTorre = _Movimento.get_inicio() + _Temp;
+				Tabuleiro[!_Movimento.get_fim()] = Tabuleiro[!_Movimento.get_inicio()];
+				Tabuleiro[!_NovaPosicaoTorre] = Tabuleiro[!_PosicaoInicialTorre];
+				Tabuleiro[!_Movimento.get_inicio()] = nullptr;
+				Tabuleiro[!_PosicaoInicialTorre] = nullptr;
+				Tabuleiro[!_Movimento.get_fim()] -> atualizar_posicao(_Movimento.get_fim());
+				Tabuleiro[!_NovaPosicaoTorre] -> atualizar_posicao(_NovaPosicaoTorre);
+				
+			}
+			break;
+			
+		case ROQUEMAIOR:
+			if(_Movimento.get_inicio().validar() && _Movimento.get_fim().validar()) {
+				c_posicao _Temp = c_posicao(O, 4);
+				c_posicao _PosicaoInicialTorre = _Movimento.get_inicio() + _Temp;
+				_Temp = c_posicao(O, 1);
+				c_posicao _NovaPosicaoTorre = _Movimento.get_inicio() + _Temp;
+				Tabuleiro[!_Movimento.get_fim()] = Tabuleiro[!_Movimento.get_inicio()];
+				Tabuleiro[!_NovaPosicaoTorre] = Tabuleiro[!_PosicaoInicialTorre];
+				Tabuleiro[!_Movimento.get_inicio()] = nullptr;
+				Tabuleiro[!_PosicaoInicialTorre] = nullptr;
+				Tabuleiro[!_Movimento.get_fim()] -> atualizar_posicao(_Movimento.get_fim());
+				Tabuleiro[!_NovaPosicaoTorre] -> atualizar_posicao(_NovaPosicaoTorre);
+				
+			}
+			break;
+			
+		case PROMOCAO:
+			break;
+			
 	}
 	
 	return;

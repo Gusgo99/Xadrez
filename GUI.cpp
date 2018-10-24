@@ -167,7 +167,11 @@ void c_interfaceJogo::posicionar_movimentos() {
 				SpritesMovimentos.back().Sprite.setColor(sf::Color(0xFF, 0x00, 0x00, 0xFF));
 				break;
 				
-			case ESPECIAL:
+			case ROQUEMAIOR:
+				SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0xFF, 0x00, 0xFF));
+				break;
+				
+			case ROQUEMENOR:
 				SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0xFF, 0x00, 0xFF));
 				break;
 			
@@ -505,6 +509,10 @@ void c_interfaceJogo::desenhar_janela() {
 					ajustar_sprites();
 					atualizar_posicao();
 					break;
+					
+				default:
+					break;
+				
 					
 			}
         }

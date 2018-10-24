@@ -169,33 +169,6 @@ c_movimento::c_movimento(c_posicao _PosInicial, c_posicao _PosFinal, e_movimento
 	return;
 }
 
-c_roque::c_roque(c_posicao _PosFinal, e_cor _Cor, bool _Roque) : c_movimento(c_posicao(5, 1), _PosFinal) {
-    Cor = _Cor;
-	Roque = _Roque;
-	
-    return;
-}
-
-e_cor c_roque::get_cor() {
-	return Cor;
-}
-
-bool c_roque::get_roque() {
-	return Roque;
-}
-
-void c_roque::set_cor(e_cor _Cor) {
-	Cor = _Cor;
-	
-	return;
-}
-
-void c_roque::set_roque(bool _Roque) {
-	Roque = _Roque;
-	
-	return;
-}
-
 c_posicao c_movimento::get_inicio() {
 	return PosInicial;
 }
@@ -255,6 +228,7 @@ void c_peca::atualizar_posicao(c_posicao _Posicao) {
 		Posicao = _Posicao;
 
 	}
+	IDPeca.NumJogadas++;
 
 	return;
 }
@@ -383,7 +357,7 @@ c_posicao c_peca::get_posicao() {
 std::list<c_movimento*> c_rei::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {
 //encontra o roque do rei
 
-    c_roque *_aux;
+    c_movimento *_aux;
     std::list<c_movimento*> _Movimento;
 
     if(IDPeca.NumJogadas != 0)//o rei moveu?
@@ -391,42 +365,48 @@ std::list<c_movimento*> c_rei::encontrar_especiais(std::map<short int, s_idpeca>
 
     if(IDPeca.Cor == BRANCO){//REI BRANCO
 
-        if(_Estado[!c_posicao(1, 1)].Cor == BRANCO && _Estado[!c_posicao(1, 1)].Peca == TORRE) {//roque grande?
-            if((_Estado[!c_posicao(2, 1)].Peca == VAZIO) && (_Estado[!c_posicao(3, 1)].Peca == VAZIO) && (_Estado[!c_posicao(4, 1)].Peca == VAZIO)) {//tem peca no caminho?
-                _aux = new c_roque(c_posicao(2, 1), BRANCO, ROQUEMAIOR);
-				_aux -> set_tipo(ESPECIAL);
-                _Movimento.push_back(_aux);
-				
+        if(_Estado[!c_posicao(1, 1)].Cor == BRANCO && _Estado[!c_posicao(1, 1)].Peca == TORRE) { // Roque grande?
+            if((_Estado[!c_posicao(2, 1)].Peca == VAZIO) && (_Estado[!c_posicao(3, 1)].Peca == VAZIO) && (_Estado[!c_posicao(4, 1)].Peca == VAZIO)) { // Tem peca no caminho?
+				if(_Estado[!c_posicao(1, 1)].NumJogadas == 0) {
+					_aux = new c_movimento(c_posicao(5, 1), c_posicao(3, 1), ROQUEMAIOR);
+					_Movimento.push_back(_aux);
+					
+				}
 			}
         }
 
-        if((_Estado[!c_posicao(8, 1)].Cor == BRANCO) && (_Estado[!c_posicao(8, 1)].Peca == TORRE)) {//roque pequeno?
-            if(_Estado[!c_posicao(6, 1)].Peca == VAZIO && _Estado[!c_posicao(7, 1)].Peca == VAZIO){//tem peca no caminho?
-                _aux = new c_roque(c_posicao(7, 1), BRANCO, ROQUEMENOR);
-				_aux -> set_tipo(ESPECIAL);
-                _aux -> set_roque(ROQUEMENOR);
-                _Movimento.push_back(_aux);
-				
+        if((_Estado[!c_posicao(8, 1)].Cor == BRANCO) && (_Estado[!c_posicao(8, 1)].Peca == TORRE)) { // Roque pequeno?
+            if(_Estado[!c_posicao(6, 1)].Peca == VAZIO && _Estado[!c_posicao(7, 1)].Peca == VAZIO) { // Tem peca no caminho?
+				if(_Estado[!c_posicao(8, 1)].NumJogadas == 0) {
+					_aux = new c_movimento(c_posicao(5, 1), c_posicao(7, 1), ROQUEMENOR);
+					_Movimento.push_back(_aux);
+					
+				}
 			}
         }
 
 
-    }else{//REI PRETO
+    }
+	else { // REI PRETO
 
-        if((_Estado[!c_posicao(1, 8)].Cor == PRETO) && (_Estado[!c_posicao(1, 8)].Peca == TORRE)) {//roque grande?
-            if((_Estado[!c_posicao(2, 8)].Peca == VAZIO) && (_Estado[!c_posicao(3, 8)].Peca == VAZIO) && (_Estado[!c_posicao(4, 8)].Peca == VAZIO)) {//tem peca no caminho?
-                _aux = new c_roque(c_posicao(7, 8), PRETO, ROQUEMAIOR);
-				_aux -> set_tipo(ESPECIAL);
-                _Movimento.push_back(_aux);
-				
+        if((_Estado[!c_posicao(1, 8)].Cor == PRETO) && (_Estado[!c_posicao(1, 8)].Peca == TORRE)) { // Roque grande?
+            if((_Estado[!c_posicao(2, 8)].Peca == VAZIO) && (_Estado[!c_posicao(3, 8)].Peca == VAZIO) && (_Estado[!c_posicao(4, 8)].Peca == VAZIO)) { // Tem peca no caminho?
+				if(_Estado[!c_posicao(1, 8)].NumJogadas == 0) {
+					_aux = new c_movimento(c_posicao(5, 8), c_posicao(3, 8), ROQUEMAIOR);
+					_Movimento.push_back(_aux);
+					
+				}
 			}
         }
 
-        if((_Estado[!c_posicao(8, 8)].Cor == PRETO) && (_Estado[!c_posicao(8, 8)].Peca == TORRE)) {//roque pequeno?
-            if((_Estado[!c_posicao(6, 8)].Peca == VAZIO) && (_Estado[!c_posicao(7, 8)].Peca == VAZIO)) {//tem peca no caminho?
-                _aux = new c_roque(c_posicao(2, 8), PRETO, ROQUEMENOR);
-				_aux -> set_tipo(ESPECIAL);
-                _Movimento.push_back(_aux);}
+        if((_Estado[!c_posicao(8, 8)].Cor == PRETO) && (_Estado[!c_posicao(8, 8)].Peca == TORRE)) { // Roque pequeno?
+            if((_Estado[!c_posicao(6, 8)].Peca == VAZIO) && (_Estado[!c_posicao(7, 8)].Peca == VAZIO)) { // Tem peca no caminho?
+				if(_Estado[!c_posicao(8, 8)].NumJogadas == 0) {
+					_aux = new c_movimento(c_posicao(5, 8), c_posicao(7, 8), ROQUEMENOR);
+					_Movimento.push_back(_aux);
+				
+				}
+			}
         }
 
     }
