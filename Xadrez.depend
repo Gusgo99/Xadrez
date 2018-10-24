@@ -3,7 +3,9 @@
 	<iostream>
 	"GUI.hpp"
 
-1540229919 c:\users\fonso\dropbox\prog 2\xadrez\gui.hpp
+1540413665 c:\users\fonso\dropbox\prog 2\xadrez\gui.hpp
+	<SFML\Graphics.hpp>
+	"tabuleiro.hpp"
 
 1539628893 source:c:\users\fonso\dropbox\prog 2\xadrez\ia.cpp
 	<iostream>
@@ -11,43 +13,45 @@
 
 1539628893 c:\users\fonso\dropbox\prog 2\xadrez\ia.hpp
 
-1540231559 source:c:\users\fonso\dropbox\prog 2\xadrez\main.cpp
+1540414431 source:c:\users\fonso\dropbox\prog 2\xadrez\main.cpp
 	<iostream>
+	<thread>
 	"GUI.hpp"
 	"IA.hpp"
 	"pecas.hpp"
 	"tabuleiro.hpp"
 	"testes.hpp"
 
-1540243953 c:\users\fonso\dropbox\prog 2\xadrez\pecas.hpp
+1540419537 c:\users\fonso\dropbox\prog 2\xadrez\pecas.hpp
 	<array>
 	<list>
 	"tabuleiro.hpp"
 
-1540233115 c:\users\fonso\dropbox\prog 2\xadrez\tabuleiro.hpp
+1540413665 c:\users\fonso\dropbox\prog 2\xadrez\tabuleiro.hpp
 	<array>
 	<map>
 	"pecas.hpp"
 
-1540229919 c:\users\fonso\dropbox\prog 2\xadrez\testes.hpp
+1540406656 c:\users\fonso\dropbox\prog 2\xadrez\testes.hpp
 
-1540233218 source:c:\users\fonso\dropbox\prog 2\xadrez\tabuleiro.cpp
+1540419537 source:c:\users\fonso\dropbox\prog 2\xadrez\tabuleiro.cpp
 	<iostream>
 	"tabuleiro.hpp"
 	"utilidades.hpp"
 	"pecas.hpp"
 
-1540229919 c:\users\fonso\dropbox\prog 2\xadrez\utilidades.hpp
+1540413665 c:\users\fonso\dropbox\prog 2\xadrez\utilidades.hpp
 
-1540231559 source:c:\users\fonso\dropbox\prog 2\xadrez\testes.cpp
+1540419537 source:c:\users\fonso\dropbox\prog 2\xadrez\testes.cpp
 	<iostream>
+	<thread>
 	"testes.hpp"
 	"GUI.hpp"
 	"IA.hpp"
 	"pecas.hpp"
 	"tabuleiro.hpp"
 
-1540242001 source:c:\users\fonso\dropbox\prog 2\xadrez\pecas.cpp
+1540419537 source:c:\users\fonso\dropbox\prog 2\xadrez\pecas.cpp
 	<iostream>
 	<list>
 	"pecas.hpp"
