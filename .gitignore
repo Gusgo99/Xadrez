@@ -7,10 +7,5 @@
 *.save-failed
 modificações.txt
 *.dll
-Xadrez.layout
-Xadrez.depend
 *.layout
 *.depend
-*.layout
-*.depend
-Xadrez.depend

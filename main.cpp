@@ -8,8 +8,9 @@
 #include "testes.hpp"
 
 int main() {
-
-    testar_posicao();
+	testar_interface_jogo();
 
 	return 0;
 }
+
+	

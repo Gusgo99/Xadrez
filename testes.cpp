@@ -1,4 +1,5 @@
 #include <iostream>
+#include <thread>
 
 #include "testes.hpp"
 #include "GUI.hpp"
@@ -143,6 +144,16 @@ void testar_posicao() {
 }
 
 void testar_movimento() {
+	
+	return;
+}
+
+void testar_interface_jogo() {
+	c_jogo jogo;
+	
+	c_interfaceJogo teste("Chess", &jogo, BRANCO);
+	
+	teste.desenhar_janela();
 	
 	return;
 }
