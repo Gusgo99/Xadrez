@@ -4,6 +4,17 @@
 #include "pecas.hpp"
 #include "tabuleiro.hpp"
 
+// Constantes com posicoes relativas do movimento do cavalo
+const std::array<c_posicao, 8> MOVIMENTOSCAVALO = {
+c_posicao(2, 1),
+c_posicao(2, -1),
+c_posicao(1, 2),
+c_posicao(1, -2),
+c_posicao(-2, 1),
+c_posicao(-2, -1),
+c_posicao(-1, 2),
+c_posicao(-1, -2)};
+
 c_posicao::c_posicao(short int _ID) {
 	x = _ID / 10;
 	y = _ID % 10;
@@ -254,19 +265,19 @@ void c_peca::atualizar_posicao(c_posicao _Posicao) {
 	return;
 }
 
-std::list<c_movimento> c_peca::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
-	std::list<c_movimento> _Movimentos = encontrar_movimentos(_Estado);
-	std::list<c_movimento> _Capturas = encontrar_capturas(_Estado);
-	std::list<c_movimento> _Especiais = encontrar_especiais(_Estado);
-
+std::list<c_movimento*> c_peca::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
+	std::list<c_movimento*> _Movimentos = encontrar_movimentos(_Estado);
+	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
+	std::list<c_movimento*> _Especiais = encontrar_especiais(_Estado);
+	
 	_Movimentos.splice(_Movimentos.end(), _Capturas);
 	_Movimentos.splice(_Movimentos.end(), _Especiais);
 
 	return _Movimentos;
 }
 
-std::list<c_movimento> c_peca::encontrar_movimentos(std::map<short int, s_idpeca> _Estado) {
-	std::list<c_movimento> _Movimentos;
+std::list<c_movimento*> c_peca::encontrar_movimentos(std::map<short int, s_idpeca> _Estado) {
+	std::list<c_movimento*> _Movimentos;
 
 	for(auto i: Direcoes) {
 		for(auto j = 1; j <= DistMov[i]; j++) {
@@ -274,8 +285,8 @@ std::list<c_movimento> c_peca::encontrar_movimentos(std::map<short int, s_idpeca
 			_NovaPosicao += Posicao;
 			if(!_NovaPosicao.validar()) break;
 			if(_Estado[!_NovaPosicao].Peca != VAZIO) break;
-
-			_Movimentos.push_back(Posicao >> _NovaPosicao);
+			
+			_Movimentos.push_back(new c_movimento(Posicao, _NovaPosicao, SIMPLES));
 
 		}
 	}
@@ -283,8 +294,8 @@ std::list<c_movimento> c_peca::encontrar_movimentos(std::map<short int, s_idpeca
 	return _Movimentos;
 }
 
-std::list<c_movimento> c_peca::encontrar_capturas(std::map<short int, s_idpeca> _Estado) {
-	std::list<c_movimento> _Movimentos;
+std::list<c_movimento*> c_peca::encontrar_capturas(std::map<short int, s_idpeca> _Estado) {
+	std::list<c_movimento*> _Movimentos;
 
 	for(auto i: Direcoes) {
 		for(auto j = 1; j <= DistCome[i]; j++) {
@@ -294,8 +305,8 @@ std::list<c_movimento> c_peca::encontrar_capturas(std::map<short int, s_idpeca> 
 
 			if(_Estado[!_NovaPosicao].Peca != VAZIO) {
 				if(_Estado[!_NovaPosicao].Cor == IDPeca.Cor) break;
-				_Movimentos.push_back(Posicao >> _NovaPosicao);
-				_Movimentos.back().set_tipo(CAPTURA);
+				
+				_Movimentos.push_back(new c_movimento(Posicao, _NovaPosicao, CAPTURA));
 				break;
 
 			}
@@ -373,10 +384,10 @@ c_rei::c_rei(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 
 // Verifica se alguma peca ameaca o rei
 bool c_peca::ameacando_rei(std::map<short int, s_idpeca> _Estado) {
-	std::list<c_movimento> _Capturas = encontrar_capturas(_Estado);
+	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
 
 	for(auto i: _Capturas) {
-		if((_Estado[!(i.get_fim())].Peca == REI) && (_Estado[!(i.get_fim())].Cor == IDPeca.Cor)) {
+		if(_Estado[!(i -> get_fim())].Peca == REI) {
 			return true;
 
 		}
@@ -389,13 +400,13 @@ c_posicao c_peca::get_posicao() {
 	return Posicao;
 }
 
-std::list<c_movimento> c_rei::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {
+std::list<c_movimento*> c_rei::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {
 //encontra o roque do rei
 
     c_movimento *_aux;
-    std::list<c_movimento> _Movimento;
+    std::list<c_movimento*> _Movimento;
 
-    if(IDPeca.NumJogadas != 0)//o rei moveu?
+    /*if(IDPeca.NumJogadas != 0)//o rei moveu?
         return _Movimento;
 
     if(IDPeca.Cor == BRANCO){//REI BRANCO
@@ -432,7 +443,7 @@ std::list<c_movimento> c_rei::encontrar_especiais(std::map<short int, s_idpeca> 
                 _Movimento.push_back(*_aux);}
         }
 
-    }
+    }*/
 
     return _Movimento;
 }
@@ -471,8 +482,8 @@ c_peao::c_peao(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     return;
 }
 
-std::list<c_movimento> c_peao::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {
-    return std::list<c_movimento>();
+std::list<c_movimento*> c_peao::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {
+    return std::list<c_movimento*>();
 }
 
 // Construtor cavalo:
@@ -482,194 +493,46 @@ c_cavalo::c_cavalo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     return;
 }
 
-std::list<c_movimento> c_cavalo::encontrar_movimentos(std::map<short int, s_idpeca> _Estado) {
-	short int _auxx, _auxy, x, y;
-    c_movimento *_auxMov;
-    bool _valido;
-    std::list<c_movimento> _movimentos;
+std::list<c_movimento*> c_cavalo::encontrar_movimentos(std::map<short int, s_idpeca> _Estado) {
+	std::list<c_movimento*> _Movimentos;
+	
+	for(auto i: MOVIMENTOSCAVALO) {
+		c_posicao _NovaPosicao = Posicao + i;
+		if(!_NovaPosicao.validar()) continue;
+		if(_Estado[!_NovaPosicao].Peca == VAZIO) {
+			_Movimentos.push_back(new c_movimento(Posicao, _NovaPosicao, SIMPLES));
+			
+		}
+	}
 
 
-    for(x=-2;x<3;x++){
-        for(y=-2;y<3;y++){
-            _valido=true;
-
-
-            if( (x != y) && (x != 0) && (y !=0 ) ){//posicoes do cavalo
-
-                //em X eh valido o movimento?
-                if(x>0){//x positivo
-                    if(x==1){//x==1
-                        if(Posicao.get_x()>7){
-                            _valido = false;
-                        }else{
-                        _auxx=x;
-                        }
-                    }else{//x==2
-                        if(Posicao.get_x()>6){
-                            _valido = false;
-                        }else{
-                        _auxx=x;
-                        }
-                    }
-                }else{//x negativo
-                    if(x==-1){//x==-1
-                        if(Posicao.get_x()<2){//x==1
-                            _valido = false;
-                        }else{
-                        _auxx=x;
-                        }
-                    }else{//x=-2
-                        if(Posicao.get_x()<3){//x==2
-                            _valido = false;
-                        }else{
-                        _auxx=x;
-                        }
-                    }
-                }
-
-
-                //em Y eh valido o movimento?
-                if(y>0){//y positivo
-                    if(y==1){//y==1
-                        if(Posicao.get_y()>7){
-                            _valido = false;
-                        }else{
-                        _auxy=y;
-                        }
-                    }else{//y==2
-                        if(Posicao.get_y()>6){
-                            _valido = false;
-                        }else{
-                        _auxy=y;
-                        }
-                    }
-                }else{//y negativo
-                    if(y==-1){//y==-1
-                        if(Posicao.get_y()<2){//y==1
-                            _valido = false;
-                        }else{
-                        _auxy=y;
-                        }
-                    }else{//y=-2
-                        if(Posicao.get_y()<3){//y==2
-                            _valido = false;
-                        }else{
-                        _auxy=y;
-                        }
-                    }
-                }//se aqui sair com _valido=true _auxx e _auxy sai com a posição
-
-
-            }else{
-            _valido=false;
-            }//se aqui sair com _valido=true _auxx e _auxy sai com a posição
-
-            //movimento foi validado e lugar eh vazio??
-            if(_valido && _Estado[_auxx*10 + _auxy].Peca == VAZIO){
-                _auxMov= new c_movimento(Posicao,c_posicao(_auxx,_auxy));
-                _movimentos.push_back(*_auxMov);
-            }
-
-
-        }//end for y
-    }//end for x
-
-
-    return _movimentos;
+    return _Movimentos;
 }
 
-std::list<c_movimento> c_cavalo::encontrar_capturas(std::map<short int, s_idpeca> _Estado) {
-    short int _auxx, _auxy, x, y;
-    c_movimento *_auxMov;
-    bool _valido;
-    std::list<c_movimento> _movimentos;
+std::list<c_movimento*> c_cavalo::encontrar_capturas(std::map<short int, s_idpeca> _Estado) {
+	std::list<c_movimento*> _Movimentos;
+	
+	for(auto i: MOVIMENTOSCAVALO) {
+		c_posicao _NovaPosicao = Posicao + i;
+		if(!_NovaPosicao.validar()) continue;
+		if(_Estado[!_NovaPosicao].Peca != VAZIO) {
+			if(_Estado[!_NovaPosicao].Cor != IDPeca.Cor) {
+			_Movimentos.push_back(new c_movimento(Posicao, _NovaPosicao, CAPTURA));
+				
+			}			
+		}
+	}
 
+    return _Movimentos;
+}
 
-    for(x=-2;x<3;x++){
-        for(y=-2;y<3;y++){
-            _valido=true;
+std::list<c_movimento*> c_cavalo::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
+	std::list<c_movimento*> _Movimentos = encontrar_movimentos(_Estado);
+	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
+	std::list<c_movimento*> _Especiais = encontrar_especiais(_Estado);
 
+	_Movimentos.splice(_Movimentos.end(), _Capturas);
+	_Movimentos.splice(_Movimentos.end(), _Especiais);
 
-            if( (x != y) && (x != 0) && (y !=0 ) ){//posicoes do cavalo
-
-                //em X eh valido o movimento?
-                if(x>0){//x positivo
-                    if(x==1){//x==1
-                        if(Posicao.get_x()>7){
-                            _valido = false;
-                        }else{
-                        _auxx=x;
-                        }
-                    }else{//x==2
-                        if(Posicao.get_x()>6){
-                            _valido = false;
-                        }else{
-                        _auxx=x;
-                        }
-                    }
-                }else{//x negativo
-                    if(x==-1){//x==-1
-                        if(Posicao.get_x()<2){//x==1
-                            _valido = false;
-                        }else{
-                        _auxx=x;
-                        }
-                    }else{//x=-2
-                        if(Posicao.get_x()<3){//x==2
-                            _valido = false;
-                        }else{
-                        _auxx=x;
-                        }
-                    }
-                }
-
-
-                //em Y eh valido o movimento?
-                if(y>0){//y positivo
-                    if(y==1){//y==1
-                        if(Posicao.get_y()>7){
-                            _valido = false;
-                        }else{
-                        _auxy=y;
-                        }
-                    }else{//y==2
-                        if(Posicao.get_y()>6){
-                            _valido = false;
-                        }else{
-                        _auxy=y;
-                        }
-                    }
-                }else{//y negativo
-                    if(y==-1){//y==-1
-                        if(Posicao.get_y()<2){//y==1
-                            _valido = false;
-                        }else{
-                        _auxy=y;
-                        }
-                    }else{//y=-2
-                        if(Posicao.get_y()<3){//y==2
-                            _valido = false;
-                        }else{
-                        _auxy=y;
-                        }
-                    }
-                }//se aqui sair com _valido=true _auxx e _auxy sai com a posição
-
-
-            }else{
-            _valido=false;
-            }//se aqui sair com _valido=true _auxx e _auxy sai com a posição
-
-            //movimento foi validado e lugar eh vazio??
-            if(_valido && _Estado[_auxx*10 + _auxy].Peca != VAZIO && _Estado[_auxx*10 + _auxy].Cor != IDPeca.Cor){
-                _auxMov= new c_movimento(Posicao,c_posicao(_auxx,_auxy));
-                _movimentos.push_back(*_auxMov);
-            }
-
-
-        }//end for y
-    }//end for x
-
-
-    return _movimentos;
+	return _Movimentos;
 }

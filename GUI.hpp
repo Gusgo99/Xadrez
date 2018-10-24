@@ -29,7 +29,7 @@ class c_interfaceJogo {
 		std::list<s_imgpeca> SpritesPretas;
 		std::list<s_imgmov> SpritesMovimentos;
 		c_posicao PosicaoSelecionada;
-		std::list<c_movimento> MovimentosDisponiveis;
+		std::list<c_movimento*> MovimentosDisponiveis;
 		c_movimento *MovimentoEscolhido;
 		int Altura;																								// Largura da janela
 		int Largura;																							// Altura da janela

@@ -51,7 +51,7 @@ std::map<short int, s_idpeca> c_jogo::get_estado() {
 	return _Estado;
 }
 
-std::list<c_movimento> c_jogo::get_movimentos(c_posicao _Posicao) {
+std::list<c_movimento*> c_jogo::get_movimentos(c_posicao _Posicao) {
 	if(_Posicao.validar()) {
 		if(Tabuleiro[!_Posicao] != nullptr) {
 			return Tabuleiro[!_Posicao] -> listar_movimentos(get_estado());
@@ -59,5 +59,5 @@ std::list<c_movimento> c_jogo::get_movimentos(c_posicao _Posicao) {
 		}
 	}
 	
-	return std::list<c_movimento>();
+	return std::list<c_movimento*>();
 }
