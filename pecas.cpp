@@ -376,6 +376,18 @@ bool c_peca::ameacando_rei(std::map<short int, s_idpeca> _Estado) {
 	return false;
 }
 
+bool c_peca::ameacando_posicao(std::map<short int, s_idpeca> _Estado ,c_posicao _posicao) {
+	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
+
+	for(auto i: _Capturas) {
+		if(i -> get_fim() == _posicao) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 c_posicao c_peca::get_posicao() {
 	return Posicao;
 }
