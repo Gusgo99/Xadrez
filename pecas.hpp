@@ -122,7 +122,7 @@ class c_peca {
 		e_peca get_peca();
 		c_posicao get_posicao();
 		unsigned get_NumJogadas(){return IDPeca.NumJogadas;} //tirar daqui depois
-
+        std::map<short int , bool> encontrar_ameacas(std::map<short int, s_idpeca> *_Estado);
 };
 
 //#####################################################

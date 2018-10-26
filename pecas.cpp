@@ -310,6 +310,26 @@ std::list<c_movimento*> c_peca::encontrar_capturas(std::map<short int, s_idpeca>
 	return _Movimentos;
 }
 
+std::map<short int , bool> c_peca::encontrar_ameacas(std::map<short int, s_idpeca> *_Estado){
+    std::map<short int , bool> _Ameacados;
+
+    for(auto i: Direcoes) {
+		for(auto j = 1; j <= DistCome[i]; j++) {
+			c_posicao _NovaPosicao(i, j);
+			_NovaPosicao += Posicao;
+			if(!_NovaPosicao.validar()) break;
+
+			_Ameacados[!_NovaPosicao]=true;
+
+			if(Estado[!_NovaPosicao].Peca != VAZIO) break;
+		}
+	}
+
+
+
+    return _Ameacados;
+}
+
 //#####################################################
             // Sub classes das pecas
 //#####################################################
