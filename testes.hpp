@@ -6,5 +6,6 @@ void testar_posicao();
 void testar_movimento();
 
 void testar_interface_jogo();
+void testar_promocao();
 
 #endif

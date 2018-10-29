@@ -1,4 +1,5 @@
 #include <map>
+#include <thread>
 #include <vector>
 
 #include <SFML\Graphics.hpp>
@@ -14,35 +15,96 @@
 #define LADOPECA 135
 
 // Indice onde estao os sprites no vector Sprites
-enum e_numSprite {	TABULEIRO,
-					CASAMOVIMENTO,
-					REIPRETO, REIBRANCO,
-					PEAOPRETO, PEAOBRANCO,
-					RAINHAPRETO, RAINHABRANCO,
-					BISPOPRETO, BISPOBRANCO,
-					TORREPRETO, TORREBRANCO,
-					CAVALOPRETO, CAVALOBRANCO,
-					NUMSPRITES};
+enum e_numSprite {
+	TABULEIRO,
+	CASAMOVIMENTO,
+	REIPRETO, REIBRANCO,
+	PEAOPRETO, PEAOBRANCO,
+	RAINHAPRETO, RAINHABRANCO,
+	BISPOPRETO, BISPOBRANCO,
+	TORREPRETO, TORREBRANCO,
+	CAVALOPRETO, CAVALOBRANCO,
+	NUMSPRITES};
 
 // Caminho ate imagens do jogo
 const std::array<std::string, NUMSPRITES> IMAGENS = {
-"./resources/tabuleiro.png",
-"./resources/tab_quad.png",
-"./resources/rei_preto.png", "./resources/rei_branco.png",
-"./resources/peao_preto.png", "./resources/peao_branco.png",
-"./resources/rainha_preto.png", "./resources/rainha_branco.png",
-"./resources/bispo_preto.png", "./resources/bispo_branco.png",
-"./resources/torre_preto.png", "./resources/torre_branco.png",
-"./resources/cavalo_preto.png", "./resources/cavalo_branco.png"};
+	"./resources/tabuleiro.png",
+	"./resources/tab_quad.png",
+	"./resources/rei_preto.png", "./resources/rei_branco.png",
+	"./resources/peao_preto.png", "./resources/peao_branco.png",
+	"./resources/rainha_preto.png", "./resources/rainha_branco.png",
+	"./resources/bispo_preto.png", "./resources/bispo_branco.png",
+	"./resources/torre_preto.png", "./resources/torre_branco.png",
+	"./resources/cavalo_preto.png", "./resources/cavalo_branco.png"};
+
+c_interface::c_interface(std::string _Titulo, unsigned _Altura, unsigned _Largura, bool Vsync) {
+	Janela = new sf::RenderWindow(sf::VideoMode(_Largura, _Altura), _Titulo);
+	Janela -> setVerticalSyncEnabled(Vsync);
+	
+	Desenhar = true;
+	
+	return;
+}
+
+void c_interface::desenhar_janela() {
+	while(Janela -> isOpen()) {
+		sf::Event _Event;
+        while(Janela -> pollEvent(_Event)) {
+			event_handler(_Event);
+			
+		}
+	}
+	
+	posicionar_sprites();
+	
+	if(Desenhar) {
+		Janela -> clear();
+		
+		for(auto i: Sprites) {
+			Janela -> draw(i);
+			
+		}
+		
+		Janela -> display();
+		
+		Desenhar = false;
+	
+	}
+	
+	return;
+}
+
+void c_interface::ajustar_sprites() {
+	
+	
+}
+
+void c_interface::carregar_texturas(std::vector<std::string> _Imagens) {
+	for(auto i: _Imagens) {
+		sf::Texture _Textura;
+		if(!_Textura.loadFromFile(i)) {
+			std::clog << "log: Erro ao carregar arquivo " << i << std::endl;
+			continue;
+
+		}
+		Texturas.push_back(_Textura);
+
+	}
+	
+	return;
+}
 
 c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor _Lado, int _Altura, int _Largura) {
 	JogoMostrado = _JogoMostrado;
 	Lado = _Lado;
+	
+	MovimentoEscolhido = nullptr;
 
 	Largura = _Largura;
 	Altura = _Altura;
 
-	janela = new sf::RenderWindow(sf::VideoMode(Largura, Altura), _Titulo);
+	Janela = new sf::RenderWindow(sf::VideoMode(Largura, Altura), _Titulo);
+	Janela -> setVerticalSyncEnabled(true);
 
 	carregar_texturas();
 
@@ -59,11 +121,14 @@ c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_c
 c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor _Lado) {
 	JogoMostrado = _JogoMostrado;
 	Lado = _Lado;
+	
+	MovimentoEscolhido = nullptr;
 
 	Largura = menor(sf::VideoMode::getDesktopMode().height, sf::VideoMode::getDesktopMode().width) * 0.75;
 	Altura = Largura;
 
-	janela = new sf::RenderWindow(sf::VideoMode(Largura, Altura), _Titulo);
+	Janela = new sf::RenderWindow(sf::VideoMode(Largura, Altura), _Titulo);
+	Janela -> setVerticalSyncEnabled(true);
 
 	carregar_texturas();
 
@@ -78,7 +143,10 @@ c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_c
 }
 
 c_interfaceJogo::~c_interfaceJogo() {
-	janela -> close();
+	Janela -> close();
+	
+	delete Janela;
+	Janela = nullptr;
 
 	SpritesBrancas.clear();
 	SpritesPretas.clear();
@@ -93,7 +161,7 @@ void c_interfaceJogo::carregar_texturas() {
 	for(auto i: IMAGENS) {
 		sf::Texture _Textura;
 		if(!_Textura.loadFromFile(i)) {
-			std::cout << "Erro ao carregar arquivo " << i << std::endl;
+			std::clog << "log: Erro ao carregar arquivo " << i << std::endl;
 			continue;
 
 		}
@@ -123,28 +191,28 @@ void c_interfaceJogo::ajustar_sprites() {
 	return;
 }
 
-void c_interfaceJogo::posicionar_movimentos() {//ainda não desenha
+void c_interfaceJogo::posicionar_movimentos() { // Ainda não desenha
 	SpritesMovimentos.clear();
-	for(auto i: MovimentosDisponiveis) {//vai correr na lista de movimentos
+	for(auto i: MovimentosDisponiveis) { // Vai correr na lista de movimentos
 		int _PosX, _PosY;
 		if(Lado == PRETO) {
 			_PosX = i -> get_fim().get_x() - 1;
 			_PosY = i -> get_fim().get_y() -  1;
 
-			_PosX = 7 - _PosX; //por causa do movimento invertido
+			_PosX = 7 - _PosX; // Por causa do movimento invertido
 
-			_PosX *= menor(Altura, Largura) / 8;//divide o tamnho t atela por 8
+			_PosX *= menor(Altura, Largura) / 8; // Divide o tamnho t atela por 8
 			_PosY *= menor(Altura, Largura) / 8;
 
 			_PosX -= PosXTabuleiro;
 			_PosY -= PosYTabuleiro;
 
 		}
-		else {//BRANCO
+		else { // BRANCO
 			_PosX = i -> get_fim().get_x() - 1;
 			_PosY = i -> get_fim().get_y() -  1;
 
-			_PosY = 7 - _PosY;//por causa das coordenada
+			_PosY = 7 - _PosY; // Por causa das coordenada
 
 			_PosX *= menor(Altura, Largura) / 8;
 			_PosY *= menor(Altura, Largura) / 8;
@@ -158,25 +226,22 @@ void c_interfaceJogo::posicionar_movimentos() {//ainda não desenha
 		_Temp.Sprite.setTexture(Texturas[CASAMOVIMENTO]);
 		_Temp.Movimento = i;
 		SpritesMovimentos.push_back(_Temp);
-		switch(i -> get_tipo()) {//coloca cor no CASAMOVIMENTO
-			case SIMPLES:
-				SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0x00, 0xFF, 0xFF));
-				break;
-
-			case CAPTURA:
-				SpritesMovimentos.back().Sprite.setColor(sf::Color(0xFF, 0x00, 0x00, 0xFF));
-				break;
-
-			case ROQUEMAIOR:
-				SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0xFF, 0x00, 0xFF));
-				break;
-
-			case ROQUEMENOR:
-				SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0xFF, 0x00, 0xFF));
-				break;
-
+		if(dynamic_cast<c_roque*>(i)) {
+			SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0xFF, 0x00, 0xFF));
+			
 		}
-
+		else if(dynamic_cast<c_promocao*>(i)) {
+			SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0xFF, 0x00, 0xFF));
+			
+		}
+		else if(dynamic_cast<c_captura*>(i)) {
+			SpritesMovimentos.back().Sprite.setColor(sf::Color(0xFF, 0x00, 0x00, 0xFF));
+			
+		}
+		else {
+			SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0x00, 0xFF, 0xFF));
+			
+		}
 
 	}//fim do for
 
@@ -435,6 +500,7 @@ void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 			if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
 					PosicaoSelecionada = i.Posicao;
 					i.Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
+					break;
 
 			}
 		}
@@ -444,6 +510,7 @@ void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 			if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
 					PosicaoSelecionada = i.Posicao;
 					i.Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
+					break;
 			}
 		}
 	}
@@ -452,6 +519,7 @@ void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 	for(auto i: SpritesMovimentos) {
 		if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
 			MovimentoEscolhido = i.Movimento;
+			break;
 
 		}
 	}
@@ -470,41 +538,76 @@ void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 
 void c_interfaceJogo::executar_movimentos() {
 	if(MovimentoEscolhido != nullptr) {
-		*JogoMostrado += *MovimentoEscolhido;
-
+		if(dynamic_cast<c_roque*>(MovimentoEscolhido)) {
+			*JogoMostrado += *dynamic_cast<c_roque*>(MovimentoEscolhido);
+			
+		}
+		else if(dynamic_cast<c_promocao*>(MovimentoEscolhido)) {
+			*JogoMostrado += *dynamic_cast<c_promocao*>(MovimentoEscolhido);
+			
+		}
+		else if(dynamic_cast<c_captura*>(MovimentoEscolhido)) {
+			*JogoMostrado += *dynamic_cast<c_captura*>(MovimentoEscolhido);
+			
+		}
+		else {
+			*JogoMostrado += *MovimentoEscolhido;
+			
+		}
+		
+		if(JogoMostrado -> get_promocao()) {
+			CorPromocao.store(JogoMostrado -> get_turno());
+			TipoPromocao.store(VAZIO);
+			PosicaoPromocao = MovimentoEscolhido -> get_fim();
+			JanelaPromocao = new std::thread(c_interfaceJogo::escolher_promocao, this);
+			
+		}
 		for(auto &i: MovimentosDisponiveis) {
 			delete i;
 
 		}
 		MovimentosDisponiveis.clear();
+		delete MovimentoEscolhido;
 		MovimentoEscolhido = nullptr;
 		SpritesMovimentos.clear();
-
+		
 	}
 
+	return;
+}
+
+void c_interfaceJogo::escolher_peca_promocao(c_posicao _Posicao) {
+	for(auto i = 0; i != -1; i++) {
+		std::cout << i << std::endl;
+		
+	}
+	
 	return;
 }
 
 void c_interfaceJogo::desenhar_janela() {
 	atualizar_posicao();
 
-	while(janela -> isOpen()) {
+	while(Janela -> isOpen()) {
 		sf::Event _Event;
-        while (janela -> pollEvent(_Event)) {
+        while(Janela -> pollEvent(_Event)) {
             switch(_Event.type) {
 				case sf::Event::Closed:
-					janela -> close();
+					Janela -> close();
 					break;
 
 				case sf::Event::MouseButtonPressed:
-					localizar_clique(_Event.mouseButton.x, _Event.mouseButton.y);
+					if(!JogoMostrado -> get_promocao()) {
+						localizar_clique(_Event.mouseButton.x, _Event.mouseButton.y);
+						
+					}
 					break;
 
 				case sf::Event::Resized:
 					Largura = _Event.size.width;
 					Altura = _Event.size.height;
 
-					janela -> setView(sf::View(sf::Vector2f(Largura / 2, Altura / 2), sf::Vector2f(Largura, Altura)));
+					Janela -> setView(sf::View(sf::Vector2f(Largura / 2, Altura / 2), sf::Vector2f(Largura, Altura)));
 
 					ajustar_sprites();
 					atualizar_posicao();
@@ -517,31 +620,187 @@ void c_interfaceJogo::desenhar_janela() {
 			}
         }
 
-		janela -> clear();
+		Janela -> clear();
 
 		atualizar_posicao();
 		executar_movimentos();
 
-		janela -> draw(SpriteTabuleiro);
+		Janela -> draw(SpriteTabuleiro);
 
 		for(auto i: SpritesBrancas) {
-			janela -> draw(i.Sprite);
+			Janela -> draw(i.Sprite);
 
 		}
 
 		for(auto i: SpritesPretas) {
-			janela -> draw(i.Sprite);
+			Janela -> draw(i.Sprite);
 
 		}
 
 		for(auto i: SpritesMovimentos) {
-			janela -> draw(i.Sprite);
+			Janela -> draw(i.Sprite);
 
 		}
 
-		janela -> display();
+		Janela -> display();
 
 	}
 
+	return;
+}
+
+c_interfacePromocao::c_interfacePromocao(std::atomic<e_peca> *_Selecionado, std::atomic<e_cor> *_Cor) {
+	Selecionado = _Selecionado;
+	Cor = _Cor;
+	
+	Janela = new sf::RenderWindow(sf::VideoMode(540, 135), "Promocao");
+	Janela -> setVerticalSyncEnabled(true);
+	//Janela -> setVisible(false);
+	
+	carregar_texturas();
+	
+	return;
+}
+
+void c_interfacePromocao::posicionar_pecas() {
+	Sprites.clear();
+	
+	if(Cor -> load() == BRANCO) {
+		s_sprites _Temp;
+		_Temp.Sprite.setTexture(Texturas[RAINHABRANCO]);
+		_Temp.Sprite.setPosition(0, 0);
+		_Temp.IDSprite = RAINHA;
+		Sprites.push_back(_Temp);
+		_Temp.Sprite.setTexture(Texturas[BISPOBRANCO]);
+		_Temp.Sprite.setPosition(135, 0);
+		_Temp.IDSprite = BISPO;
+		Sprites.push_back(_Temp);
+		_Temp.Sprite.setTexture(Texturas[TORREBRANCO]);
+		_Temp.Sprite.setPosition(270, 0);
+		_Temp.IDSprite = TORRE;
+		Sprites.push_back(_Temp);
+		_Temp.Sprite.setTexture(Texturas[CAVALOBRANCO]);
+		_Temp.Sprite.setPosition(405, 0);
+		_Temp.IDSprite = CAVALO;
+		Sprites.push_back(_Temp);
+		
+	}
+	else {
+		s_sprites _Temp;
+		_Temp.Sprite.setTexture(Texturas[RAINHAPRETO]);
+		_Temp.Sprite.setPosition(0, 0);
+		_Temp.IDSprite = RAINHA;
+		Sprites.push_back(_Temp);
+		_Temp.Sprite.setTexture(Texturas[BISPOPRETO]);
+		_Temp.Sprite.setPosition(135, 0);
+		_Temp.IDSprite = BISPO;
+		Sprites.push_back(_Temp);
+		_Temp.Sprite.setTexture(Texturas[TORREPRETO]);
+		_Temp.Sprite.setPosition(270, 0);
+		_Temp.IDSprite = TORRE;
+		Sprites.push_back(_Temp);
+		_Temp.Sprite.setTexture(Texturas[CAVALOPRETO]);
+		_Temp.Sprite.setPosition(405, 0);
+		_Temp.IDSprite = CAVALO;
+		Sprites.push_back(_Temp);
+		
+	}
+	
+	ajustar_sprites();
+	
+	return;
+}
+
+void c_interfacePromocao::mostrar_janela() {
+	while(Janela -> isOpen()) {
+		sf::Event _Event;
+        while (Janela -> pollEvent(_Event)) {
+            switch(_Event.type) {
+				case sf::Event::Closed:
+					Janela -> close();
+					break;
+					
+				case sf::Event::MouseButtonPressed:
+					localizar_clique(_Event.mouseButton.x, _Event.mouseButton.y);
+					break;
+
+				case sf::Event::Resized:
+					Janela -> setView(sf::View(sf::Vector2f(_Event.size.width / 2, _Event.size.height / 2), sf::Vector2f(_Event.size.width, _Event.size.height)));
+
+					ajustar_sprites();
+					posicionar_pecas();
+					break;
+
+				default:
+					break;
+
+			}
+        }
+		
+		posicionar_pecas();
+		
+		Janela -> clear();
+		
+		for(auto i: Sprites) {
+			Janela -> draw(i.Sprite);
+			
+		}
+
+		Janela -> display();
+
+	}
+	
+	return;
+}
+
+void c_interfacePromocao::carregar_texturas() {
+	for(auto i: IMAGENS) {
+		sf::Texture _Textura;
+		if(!_Textura.loadFromFile(i)) {
+			std::clog << "log: Erro ao carregar arquivo " << i << std::endl;
+			continue;
+
+		}
+		Texturas.push_back(_Textura);
+
+	}
+	
+	return;
+}
+
+void c_interfacePromocao::ajustar_sprites() {
+	float _Lado = menor(Janela -> getView().getSize().x, Janela -> getView().getSize().y);
+	
+	for(auto &i: Sprites) {
+		i.Sprite.setScale(_Lado / LADOPECA, _Lado / LADOPECA);
+
+	}
+	
+	return;
+}
+
+void c_interfacePromocao::localizar_clique(unsigned _x, unsigned _y) {
+	for(auto &i: Sprites) {
+		if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
+			Selecionado -> store((e_peca)i.IDSprite);
+			Janela -> close();
+			
+			break;
+
+		}
+	}
+	
+	return;
+}
+
+void c_interfaceJogo::escolher_promocao() {
+	c_interfacePromocao tela(&TipoPromocao, &CorPromocao);
+	
+	tela.mostrar_janela();
+	
+	MovimentoEscolhido = new c_promocao(PosicaoPromocao, TipoPromocao.load());
+	
+	JanelaPromocao = nullptr;
+	
 	return;
 }

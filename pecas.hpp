@@ -5,6 +5,9 @@
 #include <list>
 
 class c_movimento;
+class c_captura;
+class c_roque;
+class c_promocao;
 class c_roque;
 class c_posicao;
 
@@ -63,25 +66,60 @@ class c_posicao {
 
 class c_jogo;
 
+// #####################################################
+            // Classe movimento
+// #####################################################
 // Classe responsavel por guardar posicao inicial e final de um movimento e executar o movimento
 class c_movimento {
 	protected:
 		c_posicao PosInicial;
 		c_posicao PosFinal;
-		e_movimento TipoMovimento;
+		
 	public:
 		c_movimento(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0));
-		c_movimento(c_posicao _PosInicial, c_posicao _PosFinal, e_movimento _TipoMovimento);
+		virtual ~c_movimento() {}
 		c_posicao get_inicio();
 		c_posicao get_fim();
-		void set_tipo(e_movimento _TipoMovimento);
-		e_movimento get_tipo();
+		void set_inicio(c_posicao _PosInicial);
+		void set_fim(c_posicao _PosFinal);
 
 };
 
-//#####################################################
+class c_captura : public c_movimento {
+	private:
+	public:
+		c_captura(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0)) : c_movimento(_PosInicial, _PosFinal) {};
+	
+};
+
+class c_roque : public c_movimento {
+	protected:
+		c_posicao PosInicialTorre;
+		c_posicao PosFinalTorre;
+	
+	public:
+		c_roque(c_posicao _PosInicial, c_posicao _PosFinal, c_posicao _PosInicialTorre, c_posicao _PosFinalTorre);
+		void set_inicio_torre(c_posicao _PosInicial);
+		void set_fim_torre(c_posicao _PosFinal);
+		c_posicao get_inicio_torre();
+		c_posicao get_fim_torre();
+	
+};
+
+class c_promocao : public c_movimento {
+	protected:
+		e_peca NovaPeca;
+		
+	public:
+	c_promocao(c_posicao _PosInicial, e_peca _NovaPeca);
+		void set_nova_peca(e_peca _NovaPeca);
+		e_peca get_nova_peca();
+		
+};
+
+// #####################################################
             // Classe peca
-//#####################################################
+// #####################################################
 
 class c_peca {
 	protected:
@@ -89,8 +127,8 @@ class c_peca {
 		std::map<e_dir, short int> DistCome;															// Distancia maxima que a peca pode comer em cada direcao
 		s_idpeca IDPeca;																				// Identificacao da peca (Tipo e cor)
 		c_posicao Posicao;																				// Posicao da peca no tabuleiro
-		std::list<c_movimento*> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis movimentos
-		std::list<c_movimento*> encontrar_capturas(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis capturas
+		virtual std::list<c_movimento*> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis movimentos
+		virtual std::list<c_movimento*> encontrar_capturas(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis capturas
 		virtual std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) = 0;	// Calcula movimentos especiais
 		
 	public:
@@ -98,7 +136,7 @@ class c_peca {
 		~c_peca();
 		virtual std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);				// Lista movimentos possiveis
 		bool ameacando_rei(std::map<short int, s_idpeca> _Estado);										// Verifica se a peca esta ameacando o rei inimigo
-		virtual void atualizar_posicao(c_posicao _Posicao);														// Realiza a atualizacao da posicao apos realizar o movimento
+		virtual bool atualizar_posicao(c_posicao _Posicao);														// Realiza a atualizacao da posicao apos realizar o movimento
 		void marcar_posicao(std::map<short int, s_idpeca> *_Estado);									// Faz com que cada peca marque sua posicao no tabuleiro
 		e_cor get_cor();
 		e_peca get_peca();
@@ -107,9 +145,9 @@ class c_peca {
 
 };
 
-//#####################################################
+// #####################################################
             // Sub classes peca
-//#####################################################
+// #####################################################
 
 class c_bispo : public c_peca {
 	private:
@@ -142,13 +180,11 @@ class c_rei : public c_peca {
 
 class c_peao : public c_peca {
 	private:
-		std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado);				// Calcula movimentos especiais
+		std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) {return std::list<c_movimento*>();}				// Calcula movimentos especiais
 
 	public:
 	    c_peao(e_cor _Cor, c_posicao _Posicao);
-	    std::list<c_movimento> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis movimentos
-		void jogar(std::array<unsigned short int, 2> Posicao);
-		void atualizar_posicao(c_posicao _Posicao);
+		bool atualizar_posicao(c_posicao _Posicao);
 
 
 };

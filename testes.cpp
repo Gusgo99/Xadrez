@@ -1,4 +1,5 @@
 #include <iostream>
+#include <thread>
 
 #include "testes.hpp"
 #include "GUI.hpp"
@@ -153,6 +154,17 @@ void testar_interface_jogo() {
 	c_interfaceJogo teste("Chess", &jogo, BRANCO);
 	
 	teste.desenhar_janela();
+	
+	return;
+}
+
+void testar_promocao() {
+	/*std::atomic<unsigned> Selecionado = 0;
+	std::atomic<e_cor> Cor = BRANCO;
+	
+	c_interfacePromocao teste(&Selecionado, &Cor);
+	
+	teste.mostrar_janela();*/
 	
 	return;
 }

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <thread>
 
 #include "GUI.hpp"
 #include "IA.hpp"
@@ -8,7 +9,10 @@
 #include "testes.hpp"
 
 int main() {
-	testar_interface_jogo();
+	//testar_promocao();
+	
+	std::thread teste(testar_interface_jogo);
+	teste.join();
 
 	return 0;
 }
