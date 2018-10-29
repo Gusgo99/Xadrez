@@ -40,9 +40,9 @@ const std::array<std::string, NUMSPRITES> IMAGENS = {
 c_interface::c_interface(std::string _Titulo, unsigned _Altura, unsigned _Largura, bool Vsync) {
 	Janela = new sf::RenderWindow(sf::VideoMode(_Largura, _Altura), _Titulo);
 	Janela -> setVerticalSyncEnabled(Vsync);
-	
+
 	Desenhar = true;
-	
+
 	return;
 }
 
@@ -51,32 +51,32 @@ void c_interface::desenhar_janela() {
 		sf::Event _Event;
         while(Janela -> pollEvent(_Event)) {
 			event_handler(_Event);
-			
+
 		}
 	}
-	
+
 	posicionar_sprites();
-	
+
 	if(Desenhar) {
 		Janela -> clear();
-		
+
 		for(auto i: Sprites) {
 			Janela -> draw(i);
-			
+
 		}
-		
+
 		Janela -> display();
-		
+
 		Desenhar = false;
-	
+
 	}
-	
+
 	return;
 }
 
 void c_interface::ajustar_sprites() {
-	
-	
+
+
 }
 
 void c_interface::carregar_texturas(std::vector<std::string> _Imagens) {
@@ -90,14 +90,14 @@ void c_interface::carregar_texturas(std::vector<std::string> _Imagens) {
 		Texturas.push_back(_Textura);
 
 	}
-	
+
 	return;
 }
 
 c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor _Lado, int _Altura, int _Largura) {
 	JogoMostrado = _JogoMostrado;
 	Lado = _Lado;
-	
+
 	MovimentoEscolhido = nullptr;
 
 	Largura = _Largura;
@@ -121,7 +121,7 @@ c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_c
 c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor _Lado) {
 	JogoMostrado = _JogoMostrado;
 	Lado = _Lado;
-	
+
 	MovimentoEscolhido = nullptr;
 
 	Largura = menor(sf::VideoMode::getDesktopMode().height, sf::VideoMode::getDesktopMode().width) * 0.75;
@@ -144,7 +144,7 @@ c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_c
 
 c_interfaceJogo::~c_interfaceJogo() {
 	Janela -> close();
-	
+
 	delete Janela;
 	Janela = nullptr;
 
@@ -187,7 +187,7 @@ void c_interfaceJogo::ajustar_sprites() {
 	}
 	for(auto &i: SpritesXeque) {
 		i.setScale(menor(Altura, Largura) / float(8 * LADOPECA), menor(Altura, Largura) / float(8 * LADOPECA));
-		
+
 	}
 
 	SpriteTabuleiro.setScale(menor(Altura, Largura) / float(LADOTABULEIRO), menor(Altura, Largura) / float(LADOTABULEIRO));
@@ -197,6 +197,7 @@ void c_interfaceJogo::ajustar_sprites() {
 
 void c_interfaceJogo::posicionar_movimentos() { // Ainda não desenha
 	SpritesMovimentos.clear();
+	
 	for(auto i: MovimentosDisponiveis) { // Vai correr na lista de movimentos
 		int _PosX, _PosY;
 		if(Lado == PRETO) {
@@ -232,19 +233,19 @@ void c_interfaceJogo::posicionar_movimentos() { // Ainda não desenha
 		SpritesMovimentos.push_back(_Temp);
 		if(dynamic_cast<c_roque*>(i)) {
 			SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0xFF, 0x00, 0xFF));
-			
+
 		}
 		else if(dynamic_cast<c_promocao*>(i)) {
 			SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0xFF, 0x00, 0xFF));
-			
+
 		}
 		else if(dynamic_cast<c_captura*>(i)) {
 			SpritesMovimentos.back().Sprite.setColor(sf::Color(0xFF, 0x00, 0x00, 0xFF));
-			
+
 		}
 		else {
 			SpritesMovimentos.back().Sprite.setColor(sf::Color(0x00, 0x00, 0xFF, 0xFF));
-			
+
 		}
 
 	}//fim do for
@@ -335,6 +336,7 @@ void c_interfaceJogo::posicionar_pecas(std::map<short int, s_idpeca> _Estado) {
 					break;
 
 			}
+			SpritesBrancas.back().Sprite.setColor(sf::Color(0xE0, 0xE0, 0xE0, 0xFF));
 			if(!PosicaoSelecionada == i.first) {
 				SpritesBrancas.back().Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
 
@@ -489,7 +491,7 @@ void c_interfaceJogo::atualizar_posicao() {//atualiza o mapa de s_idpeca
 	posicionar_movimentos();
 
 	posicionar_pecas(_Estado);
-	
+
 	posicionar_indicador_xeque();
 
 	ajustar_sprites();
@@ -565,21 +567,28 @@ void c_interfaceJogo::executar_movimentos() {
 		if(MovimentoEscolhido != nullptr) {
 			if(dynamic_cast<c_roque*>(MovimentoEscolhido)) {
 				*JogoMostrado += *dynamic_cast<c_roque*>(MovimentoEscolhido);
-				
+
 			}
 			else if(dynamic_cast<c_promocao*>(MovimentoEscolhido)) {
 				*JogoMostrado += *dynamic_cast<c_promocao*>(MovimentoEscolhido);
-				
+
 			}
 			else if(dynamic_cast<c_captura*>(MovimentoEscolhido)) {
 				*JogoMostrado += *dynamic_cast<c_captura*>(MovimentoEscolhido);
-				
+
 			}
 			else {
 				*JogoMostrado += *MovimentoEscolhido;
-				
+
 			}
 			
+			PosicaoSelecionada = c_posicao();
+			
+			if(JogoMostrado -> verificar_mate()) {
+				std::cout << "Xeque mate!\n";
+				
+			}
+
 			if(JogoMostrado -> get_promocao()) {
 				if(JogoMostrado -> get_turno() == BRANCO) {
 					CorPromocao.store(PRETO);
@@ -592,7 +601,7 @@ void c_interfaceJogo::executar_movimentos() {
 				TipoPromocao.store(VAZIO);
 				PosicaoPromocao = MovimentoEscolhido -> get_fim();
 				JanelaPromocao = new std::thread(c_interfaceJogo::escolher_promocao, this);
-				
+
 			}
 			for(auto &i: MovimentosDisponiveis) {
 				delete i;
@@ -604,7 +613,7 @@ void c_interfaceJogo::executar_movimentos() {
 			SpritesMovimentos.clear();
 		}
 	}
-	
+
 	return;
 }
 
@@ -622,7 +631,7 @@ void c_interfaceJogo::desenhar_janela() {
 				case sf::Event::MouseButtonPressed:
 					if(!JogoMostrado -> get_promocao()) {
 						localizar_clique(_Event.mouseButton.x, _Event.mouseButton.y);
-						
+
 					}
 					break;
 
@@ -660,15 +669,16 @@ void c_interfaceJogo::desenhar_janela() {
 
 		}
 
+		for(auto i: SpritesXeque) {
+			Janela -> draw(i);
+
+		}
+
 		for(auto i: SpritesMovimentos) {
 			Janela -> draw(i.Sprite);
 
 		}
-		
-		for(auto i: SpritesXeque) {
-			Janela -> draw(i);
-			
-		}
+
 
 		Janela -> display();
 
@@ -679,7 +689,7 @@ void c_interfaceJogo::desenhar_janela() {
 
 void c_interfaceJogo::posicionar_indicador_xeque() {
 	SpritesXeque.clear();
-	
+
 	if(JogoMostrado != nullptr) {
 		if(JogoMostrado -> get_xeque()) {
 			int _PosX, _PosY;
@@ -709,12 +719,12 @@ void c_interfaceJogo::posicionar_indicador_xeque() {
 				_PosY += PosYTabuleiro;
 
 			}
-			
+
 			SpritesXeque.push_back(sf::Sprite(Texturas[CASAMOVIMENTO]));
 			SpritesXeque.back().setPosition(_PosX, _PosY);
-			SpritesXeque.back().setColor(sf::Color(0xFF, 0x00, 0x00, 0xFF));
-			
-			
+			SpritesXeque.back().setColor(sf::Color(0xFF, 0xF2, 0x00, 0xFF));
+
+
 			if(Lado == PRETO) {
 				_PosX = JogoMostrado -> get_posicao_ameacado().get_x() - 1;
 				_PosY = JogoMostrado -> get_posicao_ameacado().get_y() - 1;
@@ -741,34 +751,34 @@ void c_interfaceJogo::posicionar_indicador_xeque() {
 				_PosY += PosYTabuleiro;
 
 			}
-			
+
 			SpritesXeque.push_back(sf::Sprite(Texturas[CASAMOVIMENTO]));
 			SpritesXeque.back().setPosition(_PosX, _PosY);
-			SpritesXeque.back().setColor(sf::Color(0xFF, 0x00, 0x00, 0xFF));
-		
+			SpritesXeque.back().setColor(sf::Color(0xFF, 0xF2, 0x00, 0xFF));
+
 		}
-		
+
 	}
-	
+
 	return;
 }
 
 c_interfacePromocao::c_interfacePromocao(std::atomic<e_peca> *_Selecionado, std::atomic<e_cor> *_Cor) {
 	Selecionado = _Selecionado;
 	Cor = _Cor;
-	
+
 	Janela = new sf::RenderWindow(sf::VideoMode(540, 135), "Promocao");
 	Janela -> setVerticalSyncEnabled(true);
 	//Janela -> setVisible(false);
-	
+
 	carregar_texturas();
-	
+
 	return;
 }
 
 void c_interfacePromocao::posicionar_pecas() {
 	Sprites.clear();
-	
+
 	if(Cor -> load() == BRANCO) {
 		s_sprites _Temp;
 		_Temp.Sprite.setTexture(Texturas[RAINHABRANCO]);
@@ -787,7 +797,7 @@ void c_interfacePromocao::posicionar_pecas() {
 		_Temp.Sprite.setPosition(405, 0);
 		_Temp.IDSprite = CAVALO;
 		Sprites.push_back(_Temp);
-		
+
 	}
 	else {
 		s_sprites _Temp;
@@ -807,11 +817,11 @@ void c_interfacePromocao::posicionar_pecas() {
 		_Temp.Sprite.setPosition(405, 0);
 		_Temp.IDSprite = CAVALO;
 		Sprites.push_back(_Temp);
-		
+
 	}
-	
+
 	ajustar_sprites();
-	
+
 	return;
 }
 
@@ -823,7 +833,7 @@ void c_interfacePromocao::mostrar_janela() {
 				case sf::Event::Closed:
 					Janela -> close();
 					break;
-					
+
 				case sf::Event::MouseButtonPressed:
 					localizar_clique(_Event.mouseButton.x, _Event.mouseButton.y);
 					break;
@@ -840,20 +850,20 @@ void c_interfacePromocao::mostrar_janela() {
 
 			}
         }
-		
+
 		posicionar_pecas();
-		
+
 		Janela -> clear();
-		
+
 		for(auto i: Sprites) {
 			Janela -> draw(i.Sprite);
-			
+
 		}
 
 		Janela -> display();
 
 	}
-	
+
 	return;
 }
 
@@ -868,18 +878,18 @@ void c_interfacePromocao::carregar_texturas() {
 		Texturas.push_back(_Textura);
 
 	}
-	
+
 	return;
 }
 
 void c_interfacePromocao::ajustar_sprites() {
 	float _Lado = menor(Janela -> getView().getSize().x, Janela -> getView().getSize().y);
-	
+
 	for(auto &i: Sprites) {
 		i.Sprite.setScale(_Lado / LADOPECA, _Lado / LADOPECA);
 
 	}
-	
+
 	return;
 }
 
@@ -888,23 +898,23 @@ void c_interfacePromocao::localizar_clique(unsigned _x, unsigned _y) {
 		if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
 			Selecionado -> store((e_peca)i.IDSprite);
 			Janela -> close();
-			
+
 			break;
 
 		}
 	}
-	
+
 	return;
 }
 
 void c_interfaceJogo::escolher_promocao() {
 	c_interfacePromocao tela(&TipoPromocao, &CorPromocao);
-	
+
 	tela.mostrar_janela();
-	
+
 	MovimentoEscolhido = new c_promocao(PosicaoPromocao, TipoPromocao.load());
-	
+
 	JanelaPromocao = nullptr;
-	
+
 	return;
 }

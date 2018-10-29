@@ -85,6 +85,7 @@ class c_interfaceJogo {
 		std::atomic<e_peca> TipoPromocao;
 		c_posicao PosicaoPromocao;
 		void posicionar_indicador_xeque();
+		void verificar_mate();
 		
 	public:
 		// Construtor com tamanho de tela relativo

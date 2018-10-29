@@ -27,7 +27,7 @@ enum e_dir {
 	SE = S | E,
 	NO = N | O,
 	SO = S | O};
-	
+
 enum e_cor {SEMCOR, BRANCO, PRETO};
 enum e_peca {VAZIO, PEAO, CAVALO, BISPO, TORRE, RAINHA, REI};
 
@@ -69,7 +69,7 @@ class c_posicao {
 		short int get_x();
 		short int get_y();
 		bool validar();																// Verifica se a posicao e valida (Dentro da grade 8x8)
-		
+
 };
 
 class c_jogo;
@@ -82,7 +82,7 @@ class c_movimento {
 	protected:
 		c_posicao PosInicial;
 		c_posicao PosFinal;
-		
+
 	public:
 		c_movimento(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0));
 		virtual ~c_movimento() {}
@@ -97,32 +97,32 @@ class c_captura : public c_movimento {
 	private:
 	public:
 		c_captura(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0)) : c_movimento(_PosInicial, _PosFinal) {};
-	
+
 };
 
 class c_roque : public c_movimento {
 	protected:
 		c_posicao PosInicialTorre;
 		c_posicao PosFinalTorre;
-	
+
 	public:
 		c_roque(c_posicao _PosInicial, c_posicao _PosFinal, c_posicao _PosInicialTorre, c_posicao _PosFinalTorre);
 		void set_inicio_torre(c_posicao _PosInicial);
 		void set_fim_torre(c_posicao _PosFinal);
 		c_posicao get_inicio_torre();
 		c_posicao get_fim_torre();
-	
+
 };
 
 class c_promocao : public c_movimento {
 	protected:
 		e_peca NovaPeca;
-		
+
 	public:
 	c_promocao(c_posicao _PosInicial, e_peca _NovaPeca);
 		void set_nova_peca(e_peca _NovaPeca);
 		e_peca get_nova_peca();
-		
+
 };
 
 // #####################################################
@@ -153,15 +153,18 @@ class c_peca {
 		virtual std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);
 		// Verifica se a peca esta ameacando o rei inimigo
 		bool ameacando_rei(std::map<short int, s_idpeca> _Estado);
+		// Verifica se a peca esta ameacando o rei inimigo
+		bool ameacando_posicao(std::map<short int, s_idpeca> _Estado, c_posicao _posicao);
 		// Realiza a atualizacao da posicao apos realizar o movimento
 		virtual bool atualizar_posicao(c_posicao _Posicao);
 		// Faz com que cada peca marque sua posicao no tabuleiro
 		void marcar_posicao(std::map<short int, s_idpeca> *_Estado);
+		s_idpeca get_ID();
 		e_cor get_cor();
 		e_peca get_peca();
 		c_posicao get_posicao();
 		unsigned get_num_jogadas();
-
+        std::map<short int , bool> encontrar_ameacas(std::map<short int, s_idpeca> _Estado);
 };
 
 // #####################################################
@@ -191,7 +194,7 @@ class c_rei : public c_peca {
 	private:
         bool Ameacado;
 	    std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
-		
+
 	public:
 	    c_rei(e_cor _Cor, c_posicao _Posicao);
         bool get_ameacado(){return Ameacado;};
@@ -205,7 +208,6 @@ class c_peao : public c_peca {
 	public:
 	    c_peao(e_cor _Cor, c_posicao _Posicao);
 		bool atualizar_posicao(c_posicao _Posicao);
-
 
 };
 

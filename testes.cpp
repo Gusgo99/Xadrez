@@ -159,12 +159,12 @@ void testar_interface_jogo() {
 }
 
 void testar_promocao() {
-	/*std::atomic<unsigned> Selecionado = 0;
+	std::atomic<e_peca> Selecionado = VAZIO;
 	std::atomic<e_cor> Cor = BRANCO;
 	
 	c_interfacePromocao teste(&Selecionado, &Cor);
 	
-	teste.mostrar_janela();*/
+	teste.mostrar_janela();
 	
 	return;
 }

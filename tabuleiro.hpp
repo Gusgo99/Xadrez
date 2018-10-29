@@ -21,6 +21,7 @@ class c_jogo {
 		template<typename T>
 		void inserir_peca(c_posicao _Posicao, e_cor _Cor);
 		void verificar_xeque();
+		void verificar_xeque(std::map<short int, s_idpeca> _Estado);
 		c_posicao *PosicaoAmeaca;
 		c_posicao *PosicaoAmeacado;
 
@@ -36,12 +37,13 @@ class c_jogo {
 		std::map<short int, s_idpeca> get_estado();
 		bool get_xeque();
 		std::list<c_movimento*> get_movimentos(c_posicao _Posicao);
+		std::map<short int,bool> get_ameacas(e_cor _Cor);
 		bool get_promocao();
 		e_cor get_turno();
 		c_posicao get_posicao_ameaca();
 		c_posicao get_posicao_ameacado();
-		
-		
+		bool verificar_mate();
+
 };
 
 #endif
