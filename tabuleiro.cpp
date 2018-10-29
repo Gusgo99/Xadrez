@@ -61,7 +61,7 @@ std::list<c_movimento*> c_jogo::get_movimentos(c_posicao _Posicao) {
 
 	if(_Posicao.validar()) {
 		if(Tabuleiro[!_Posicao] != nullptr) {
-			_Movimentos Tabuleiro[!_Posicao] -> listar_movimentos(get_estado());
+			_Movimentos = Tabuleiro[!_Posicao] -> listar_movimentos(get_estado());
 #warning excluir intercesces de get_ameacas da lista
 		}
 	}
@@ -86,7 +86,7 @@ std::map<short int,bool> c_jogo::get_ameacas(e_cor _Cor){
 
             for(auto j: _AmeacasAux){
 
-                if(j.second) i.second=true;
+                if(j.second) j.second=true;
 
             }
         }
@@ -94,4 +94,3 @@ std::map<short int,bool> c_jogo::get_ameacas(e_cor _Cor){
 
     return _Ameacas;
 }
-
