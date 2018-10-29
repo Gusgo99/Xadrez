@@ -12,11 +12,17 @@ class c_movimento;
 class c_jogo {
 	private:
 		std::map<short int, c_peca*> Tabuleiro;
+		c_peca *ReiBranco;
+		c_peca *ReiPreto;
 		unsigned Turno;
 		unsigned JogadasRestantes;
 		bool Promocao;
+		bool Xeque;
 		template<typename T>
 		void inserir_peca(c_posicao _Posicao, e_cor _Cor);
+		void verificar_xeque();
+		c_posicao *PosicaoAmeaca;
+		c_posicao *PosicaoAmeacado;
 
 	public:
 		c_jogo();
@@ -32,6 +38,9 @@ class c_jogo {
 		std::list<c_movimento*> get_movimentos(c_posicao _Posicao);
 		bool get_promocao();
 		e_cor get_turno();
+		c_posicao get_posicao_ameaca();
+		c_posicao get_posicao_ameacado();
+		
 		
 };
 

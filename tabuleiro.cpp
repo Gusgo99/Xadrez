@@ -7,6 +7,9 @@
 c_jogo::c_jogo() {
 	Promocao = false;
 	Turno = 1;
+	Xeque = false;
+	PosicaoAmeaca = nullptr;
+	PosicaoAmeacado = nullptr;
 	
 	for(auto i: Tabuleiro) {
 		i.second = nullptr;
@@ -39,20 +42,14 @@ c_jogo::c_jogo() {
 	inserir_peca<c_rei>(c_posicao(5, 1), BRANCO);
 	inserir_peca<c_rei>(c_posicao(5, 8), PRETO);
 	
+	ReiBranco = Tabuleiro[!c_posicao(5, 1)];
+	ReiPreto = Tabuleiro[!c_posicao(5, 8)];
+	
 	return;
 }
 
 bool c_jogo::get_xeque() {
-	for(auto i: Tabuleiro) {
-		if(i.second != nullptr) {
-			if(i.second -> ameacando_rei(get_estado())) {
-				return true;
-				
-			}
-		}
-	}
-	
-	return false;
+	return Xeque;
 }
 
 std::map<short int, s_idpeca> c_jogo::get_estado() {
@@ -93,6 +90,8 @@ void c_jogo::operator+=(c_movimento &_Movimento) {
 	Tabuleiro[!_Movimento.get_inicio()] = nullptr;
 	if(Tabuleiro[!_Movimento.get_fim()] -> atualizar_posicao(_Movimento.get_fim())) Promocao = true;
 	
+	verificar_xeque();
+	
 	return;
 }
 
@@ -103,6 +102,8 @@ void c_jogo::operator+=(c_captura &_Movimento) {
 	Tabuleiro[!_Movimento.get_fim()] = Tabuleiro[!_Movimento.get_inicio()];
 	Tabuleiro[!_Movimento.get_inicio()] = nullptr;
 	if(Tabuleiro[!_Movimento.get_fim()] -> atualizar_posicao(_Movimento.get_fim())) Promocao = true;
+	
+	verificar_xeque();
 	
 	return;
 }
@@ -117,6 +118,8 @@ void c_jogo::operator+=(c_roque &_Movimento) {
 	Tabuleiro[!_Movimento.get_fim_torre()] = Tabuleiro[!_Movimento.get_inicio_torre()];
 	Tabuleiro[!_Movimento.get_inicio_torre()] = nullptr;
 	if(Tabuleiro[!_Movimento.get_fim_torre()] -> atualizar_posicao(_Movimento.get_fim_torre())) Promocao = true;
+	
+	verificar_xeque();
 	
 	return;
 }
@@ -152,6 +155,8 @@ void c_jogo::operator+=(c_promocao &_Movimento) {
 	delete Tabuleiro[!_Movimento.get_inicio()];
 	Tabuleiro[!_Movimento.get_fim()] = _Temp;
 	
+	verificar_xeque();
+	
 	return;
 }
 
@@ -169,4 +174,43 @@ e_cor c_jogo::get_turno() {
 		
 	}
 	
+}
+
+void c_jogo::verificar_xeque() {
+	std::map<short int, s_idpeca> _Estado = get_estado();
+	
+	Xeque = false;
+	delete PosicaoAmeaca;
+	delete PosicaoAmeacado;
+	PosicaoAmeaca = nullptr;
+	PosicaoAmeacado = nullptr;
+	
+	for(auto i: Tabuleiro) {
+		if(i.second != nullptr) {
+			if(i.second -> ameacando_rei(_Estado)) {
+				Xeque = true;
+				PosicaoAmeaca = new c_posicao(!(i.second -> get_posicao()));
+				if(i.second -> get_cor() == BRANCO) {
+					PosicaoAmeacado = new c_posicao(!(ReiPreto -> get_posicao()));
+					
+				}
+				else {
+					PosicaoAmeacado = new c_posicao(!(ReiBranco -> get_posicao()));
+					
+				}
+				break;
+				
+			}
+		}
+	}
+	
+	return;
+}
+
+c_posicao c_jogo::get_posicao_ameaca() {
+	return *PosicaoAmeaca;
+}
+
+c_posicao c_jogo::get_posicao_ameacado() {
+	return *PosicaoAmeacado;
 }

@@ -58,6 +58,7 @@ class c_interfaceJogo {
 		std::list<s_imgpeca> SpritesBrancas;
 		std::list<s_imgpeca> SpritesPretas;
 		std::list<s_imgmov> SpritesMovimentos;
+		std::list<sf::Sprite> SpritesXeque;
 		c_posicao PosicaoSelecionada;
 		std::list<c_movimento*> MovimentosDisponiveis;
 		c_movimento *MovimentoEscolhido;
@@ -79,11 +80,11 @@ class c_interfaceJogo {
 		void posicionar_movimentos();
 		void posicionar_pecas(std::map<short int, s_idpeca> _Estado);
 		void executar_movimentos();
-		void escolher_peca_promocao(c_posicao _Posicao);
 		void escolher_promocao();
 		std::atomic<e_cor> CorPromocao;
 		std::atomic<e_peca> TipoPromocao;
 		c_posicao PosicaoPromocao;
+		void posicionar_indicador_xeque();
 		
 	public:
 		c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor Lado);								// Construtor com tamanho de tela relativo

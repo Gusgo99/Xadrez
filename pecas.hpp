@@ -18,10 +18,18 @@ class c_cavalo;
 class c_rei;
 class c_torre;
 
-enum e_dir {N = 0x01, S = 0x02, E = 0x04, O = 0x08, NE = N | E, SE = S | E, NO = N | O, SO = S | O};
+enum e_dir {
+	N = 0x01,
+	S = 0x02,
+	E = 0x04,
+	O = 0x08,
+	NE = N | E,
+	SE = S | E,
+	NO = N | O,
+	SO = S | O};
+	
 enum e_cor {SEMCOR, BRANCO, PRETO};
 enum e_peca {VAZIO, PEAO, CAVALO, BISPO, TORRE, RAINHA, REI};
-enum e_movimento {SIMPLES, CAPTURA, ROQUEMENOR, ROQUEMAIOR, PROMOCAO};
 
 // Armazena cor e tipo da peca
 struct s_idpeca {
@@ -175,7 +183,7 @@ class c_rei : public c_peca {
 		
 	public:
 	    c_rei(e_cor _Cor, c_posicao _Posicao);
-        bool get_ameacado(){return Ameacado;};;
+        bool get_ameacado(){return Ameacado;};
 };
 
 class c_peao : public c_peca {
