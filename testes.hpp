@@ -5,6 +5,7 @@
 void testar_posicao();
 void testar_movimento();
 
+// Teste de interfaces
 void testar_interface_jogo();
 void testar_promocao();
 

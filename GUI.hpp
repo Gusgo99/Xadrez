@@ -87,8 +87,10 @@ class c_interfaceJogo {
 		void posicionar_indicador_xeque();
 		
 	public:
-		c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor Lado);								// Construtor com tamanho de tela relativo
-		c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor Lado, int _Altura, int _Largura);		// Construtor com tamanho de tela absoluto
+		// Construtor com tamanho de tela relativo
+		c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor Lado);
+		// Construtor com tamanho de tela absoluto
+		c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor Lado, int _Altura, int _Largura);
 		~c_interfaceJogo();
 		void desenhar_janela();
 	

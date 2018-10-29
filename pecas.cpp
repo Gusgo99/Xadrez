@@ -560,3 +560,7 @@ std::list<c_movimento*> c_cavalo::listar_movimentos(std::map<short int, s_idpeca
 
 	return _Movimentos;
 }
+
+unsigned c_peca::get_num_jogadas() {
+	return IDPeca.NumJogadas;
+}

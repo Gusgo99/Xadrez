@@ -131,25 +131,36 @@ class c_promocao : public c_movimento {
 
 class c_peca {
 	protected:
-		std::map<e_dir, short int> DistMov;																// Distancia maxima que a peca pode se mover em cada direcao
-		std::map<e_dir, short int> DistCome;															// Distancia maxima que a peca pode comer em cada direcao
-		s_idpeca IDPeca;																				// Identificacao da peca (Tipo e cor)
-		c_posicao Posicao;																				// Posicao da peca no tabuleiro
-		virtual std::list<c_movimento*> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis movimentos
-		virtual std::list<c_movimento*> encontrar_capturas(std::map<short int, s_idpeca> _Estado);				// Calcula possiveis capturas
-		virtual std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) = 0;	// Calcula movimentos especiais
+		// Distancia maxima que a peca pode se mover em cada direcao
+		std::map<e_dir, short int> DistMov;
+		// Distancia maxima que a peca pode comer em cada direcao
+		std::map<e_dir, short int> DistCome;
+		// Identificacao da peca (Tipo e cor)
+		s_idpeca IDPeca;
+		// Posicao da peca no tabuleiro
+		c_posicao Posicao;
+		// Calcula possiveis movimentos
+		virtual std::list<c_movimento*> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);
+		// Calcula possiveis capturas
+		virtual std::list<c_movimento*> encontrar_capturas(std::map<short int, s_idpeca> _Estado);
+		// Calcula movimentos especiais
+		virtual std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) = 0;
 		
 	public:
 		c_peca(e_cor _Cor = SEMCOR, c_posicao _Posicao = c_posicao(0, 0));
 		~c_peca();
-		virtual std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);				// Lista movimentos possiveis
-		bool ameacando_rei(std::map<short int, s_idpeca> _Estado);										// Verifica se a peca esta ameacando o rei inimigo
-		virtual bool atualizar_posicao(c_posicao _Posicao);														// Realiza a atualizacao da posicao apos realizar o movimento
-		void marcar_posicao(std::map<short int, s_idpeca> *_Estado);									// Faz com que cada peca marque sua posicao no tabuleiro
+		// Lista movimentos possiveis
+		virtual std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);
+		// Verifica se a peca esta ameacando o rei inimigo
+		bool ameacando_rei(std::map<short int, s_idpeca> _Estado);
+		// Realiza a atualizacao da posicao apos realizar o movimento
+		virtual bool atualizar_posicao(c_posicao _Posicao);
+		// Faz com que cada peca marque sua posicao no tabuleiro
+		void marcar_posicao(std::map<short int, s_idpeca> *_Estado);
 		e_cor get_cor();
 		e_peca get_peca();
 		c_posicao get_posicao();
-		unsigned get_NumJogadas(){return IDPeca.NumJogadas;} //tirar daqui depois
+		unsigned get_num_jogadas();
 
 };
 
@@ -188,7 +199,8 @@ class c_rei : public c_peca {
 
 class c_peao : public c_peca {
 	private:
-		std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) {return std::list<c_movimento*>();}				// Calcula movimentos especiais
+		// Calcula movimentos especiais
+		std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) {return std::list<c_movimento*>();}
 
 	public:
 	    c_peao(e_cor _Cor, c_posicao _Posicao);

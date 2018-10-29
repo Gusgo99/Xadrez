@@ -581,7 +581,14 @@ void c_interfaceJogo::executar_movimentos() {
 			}
 			
 			if(JogoMostrado -> get_promocao()) {
-				CorPromocao.store(JogoMostrado -> get_turno());
+				if(JogoMostrado -> get_turno() == BRANCO) {
+					CorPromocao.store(PRETO);
+					
+				}
+				else {
+					CorPromocao.store(BRANCO);
+					
+				}
 				TipoPromocao.store(VAZIO);
 				PosicaoPromocao = MovimentoEscolhido -> get_fim();
 				JanelaPromocao = new std::thread(c_interfaceJogo::escolher_promocao, this);
