@@ -1,4 +1,4 @@
-
+﻿
 *.bat
 *.o
 *.exe
@@ -9,6 +9,4 @@ modificações.txt
 *.dll
 *.depend
 *.layout
-Xadrez.depend
-*.depend
-*.layout
+*.bak

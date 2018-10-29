@@ -6,14 +6,14 @@
 
 // Constantes com posicoes relativas do movimento do cavalo
 const std::array<c_posicao, 8> MOVIMENTOSCAVALO = {
-c_posicao(2, 1),
-c_posicao(2, -1),
-c_posicao(1, 2),
-c_posicao(1, -2),
-c_posicao(-2, 1),
-c_posicao(-2, -1),
-c_posicao(-1, 2),
-c_posicao(-1, -2)};
+	c_posicao(2, 1),
+	c_posicao(2, -1),
+	c_posicao(1, 2),
+	c_posicao(1, -2),
+	c_posicao(-2, 1),
+	c_posicao(-2, -1),
+	c_posicao(-1, 2),
+	c_posicao(-1, -2)};
 
 c_posicao::c_posicao(short int _ID) {
 	x = _ID / 10;
@@ -132,66 +132,23 @@ short int c_posicao::operator!() {
 }
 
 c_movimento c_posicao::operator>>(c_posicao &_temp) {
-	return c_movimento(c_posicao(x, y), _temp, SIMPLES);
+	return c_movimento(c_posicao(x, y), _temp);
 }
 
 c_movimento c_posicao::operator<<(c_posicao &_temp) {
-	return c_movimento(_temp, c_posicao(x, y), SIMPLES);
+	return c_movimento(_temp, c_posicao(x, y));
 }
 
 c_movimento::c_movimento(c_posicao _PosInicial, c_posicao _PosFinal) {
 	if(_PosInicial.validar() && _PosFinal.validar()) {
 		PosInicial = _PosInicial;
 		PosFinal = _PosFinal;
-		TipoMovimento = SIMPLES;
 
 	}
 	else {
 		//Verificar o que fazer em caso de movimento invalido
 
 	}
-
-	return;
-}
-
-c_movimento::c_movimento(c_posicao _PosInicial, c_posicao _PosFinal, e_movimento _TipoMovimento) {
-	if(_PosInicial.validar() && _PosFinal.validar()) {
-		PosInicial = _PosInicial;
-		PosFinal = _PosFinal;
-		TipoMovimento = _TipoMovimento;
-
-	}
-	else {
-		//Verificar o que fazer em caso de movimento invalido
-
-	}
-
-	return;
-}
-
-c_roque::c_roque(e_cor _Cor, bool _Tipo) {
-    Cor = _Cor;
-	Tipo = _Tipo;
-
-    return;
-}
-
-e_cor c_roque::get_cor() {
-	return Cor;
-}
-
-bool c_roque::get_tipo() {
-	return Tipo;
-}
-
-void c_roque::set_cor(e_cor _Cor) {
-	Cor = _Cor;
-
-	return;
-}
-
-void c_roque::set_tipo(bool _Tipo) {
-	Tipo = _Tipo;
 
 	return;
 }
@@ -204,15 +161,75 @@ c_posicao c_movimento::get_fim() {
 	return PosFinal;
 }
 
-void c_movimento::set_tipo(e_movimento _TipoMovimento) {
-	TipoMovimento = _TipoMovimento;
+void c_movimento::set_inicio(c_posicao _PosInicial) {
+	if(_PosInicial.validar()) {
+		PosInicial = _PosInicial;
+
+	}
 
 	return;
 }
 
-e_movimento c_movimento::get_tipo() {
-	return TipoMovimento;
+void c_movimento::set_fim(c_posicao _PosFinal) {
+	if(_PosFinal.validar()) {
+		PosFinal = _PosFinal;
 
+	}
+
+	return;
+}
+
+c_roque::c_roque(c_posicao _PosInicial, c_posicao _PosFinal, c_posicao _PosInicialTorre, c_posicao _PosFinalTorre) : c_movimento(_PosInicial, _PosFinal) {
+	if(_PosInicialTorre.validar() && _PosFinalTorre.validar()) {
+		PosInicialTorre = _PosInicialTorre;
+		PosFinalTorre = _PosFinalTorre;
+
+	}
+
+	return;
+}
+
+
+void c_roque::set_inicio_torre(c_posicao _PosInicial) {
+	if(_PosInicial.validar()) {
+		PosInicialTorre = _PosInicial;
+
+	}
+
+	return;
+}
+
+void c_roque::set_fim_torre(c_posicao _PosFinal) {
+	if(_PosFinal.validar()) {
+		PosFinalTorre = _PosFinal;
+
+	}
+
+	return;
+}
+
+c_posicao c_roque::get_inicio_torre() {
+	return PosInicialTorre;
+}
+
+c_posicao c_roque::get_fim_torre() {
+	return PosFinalTorre;
+}
+
+c_promocao::c_promocao(c_posicao _PosInicial, e_peca _NovaPeca) : c_movimento(_PosInicial, _PosInicial) {
+	NovaPeca = _NovaPeca;
+
+	return;
+}
+
+void c_promocao::set_nova_peca(e_peca _NovaPeca) {
+	NovaPeca = _NovaPeca;
+
+	return;
+}
+
+e_peca c_promocao::get_nova_peca() {
+	return NovaPeca;
 }
 
 c_peca::c_peca(e_cor _Cor, c_posicao _Posicao) {
@@ -250,13 +267,14 @@ void c_peca::marcar_posicao(std::map<short int, s_idpeca> *_Estado) {
 	return;
 }
 
-void c_peca::atualizar_posicao(c_posicao _Posicao) {
+bool c_peca::atualizar_posicao(c_posicao _Posicao) {
 	if(_Posicao.validar()) {
 		Posicao = _Posicao;
 
 	}
+	IDPeca.NumJogadas++;
 
-	return;
+	return false;
 }
 
 std::list<c_movimento*> c_peca::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
@@ -279,8 +297,7 @@ std::list<c_movimento*> c_peca::encontrar_movimentos(std::map<short int, s_idpec
 			_NovaPosicao += Posicao;
 			if(!_NovaPosicao.validar()) break;
 			if(_Estado[!_NovaPosicao].Peca != VAZIO) break;
-
-			_Movimentos.push_back(new c_movimento(Posicao, _NovaPosicao, SIMPLES));
+			_Movimentos.push_back(new c_movimento(Posicao, _NovaPosicao));
 
 		}
 	}
@@ -299,8 +316,7 @@ std::list<c_movimento*> c_peca::encontrar_capturas(std::map<short int, s_idpeca>
 
 			if(_Estado[!_NovaPosicao].Peca != VAZIO) {
 				if(_Estado[!_NovaPosicao].Cor == IDPeca.Cor) break;
-
-				_Movimentos.push_back(new c_movimento(Posicao, _NovaPosicao, CAPTURA));
+				_Movimentos.push_back(new c_captura(Posicao, _NovaPosicao));
 				break;
 
 			}
@@ -332,7 +348,7 @@ std::map<short int , bool> c_peca::encontrar_ameacas(std::map<short int, s_idpec
 
 //#####################################################
             // Sub classes das pecas
-//#####################################################
+// #####################################################
 
 // Construtor bispo
 c_bispo::c_bispo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
@@ -382,6 +398,7 @@ c_rei::c_rei(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     return;
 }
 
+
 // Verifica se alguma peca ameaca o rei
 bool c_peca::ameacando_rei(std::map<short int, s_idpeca> _Estado) {
 	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
@@ -418,44 +435,56 @@ std::list<c_movimento*> c_rei::encontrar_especiais(std::map<short int, s_idpeca>
     c_movimento *_aux;
     std::list<c_movimento*> _Movimento;
 
-    /*if(IDPeca.NumJogadas != 0)//o rei moveu?
+    if(IDPeca.NumJogadas != 0)//o rei moveu?
         return _Movimento;
 
     if(IDPeca.Cor == BRANCO){//REI BRANCO
 
-        if(_Estado[!c_posicao(1, 1)].Cor == BRANCO && _Estado[!c_posicao(1, 1)].Peca == TORRE){//roque grande?
-            if((_Estado[!c_posicao(2, 1)].Peca == VAZIO) && (_Estado[!c_posicao(3, 1)].Peca == VAZIO) && (_Estado[!c_posicao(4, 1)].Peca == VAZIO)) {//tem peca no caminho?
-                _aux = new c_roque(BRANCO, ROQUEMAIOR);
-                (*_aux).set_tipo(ESPECIAL);
-                _Movimento.push_back(*_aux);}
+        if(_Estado[!c_posicao(1, 1)].Cor == BRANCO && _Estado[!c_posicao(1, 1)].Peca == TORRE) { // Roque grande?
+            if((_Estado[!c_posicao(2, 1)].Peca == VAZIO) && (_Estado[!c_posicao(3, 1)].Peca == VAZIO) && (_Estado[!c_posicao(4, 1)].Peca == VAZIO)) { // Tem peca no caminho?
+				if(_Estado[!c_posicao(1, 1)].NumJogadas == 0) {
+					_aux = new c_roque(c_posicao(5, 1), c_posicao(3, 1), c_posicao(1, 1), c_posicao(4, 1));
+					_Movimento.push_back(_aux);
+
+				}
+			}
         }
 
-        if((_Estado[!c_posicao(8, 1)].Cor == BRANCO) && (_Estado[!c_posicao(8, 1)].Peca == TORRE)) {//roque pequeno?
-            if(_Estado[!c_posicao(6, 1)].Peca == VAZIO && _Estado[!c_posicao(7, 1)].Peca == VAZIO){//tem peca no caminho?
-                _aux = new c_roque(BRANCO, ROQUEMENOR);
-                (*_aux).set_tipo(ESPECIAL);
-                _Movimento.push_back(*_aux);}
+        if((_Estado[!c_posicao(8, 1)].Cor == BRANCO) && (_Estado[!c_posicao(8, 1)].Peca == TORRE)) { // Roque pequeno?
+            if(_Estado[!c_posicao(6, 1)].Peca == VAZIO && _Estado[!c_posicao(7, 1)].Peca == VAZIO) { // Tem peca no caminho?
+				if(_Estado[!c_posicao(8, 1)].NumJogadas == 0) {
+					_aux = new c_roque(c_posicao(5, 1), c_posicao(7, 1), c_posicao(8, 1), c_posicao(6, 1));
+					_Movimento.push_back(_aux);
+
+				}
+			}
         }
 
 
-    }else{//REI PRETO
+    }
+	else { // REI PRETO
 
-        if((_Estado[!c_posicao(1, 8)].Cor == PRETO) && (_Estado[!c_posicao(1, 8)].Peca == TORRE)) {//roque grande?
-            if((_Estado[!c_posicao(2, 8)].Peca == VAZIO) && (_Estado[!c_posicao(3, 8)].Peca == VAZIO) && (_Estado[!c_posicao(4, 8)].Peca == VAZIO)) {//tem peca no caminho?
-                _aux = new c_roque(PRETO, ROQUEMAIOR);
-                (*_aux).set_tipo(ESPECIAL);
-                _Movimento.push_back(*_aux);}
+        if((_Estado[!c_posicao(1, 8)].Cor == PRETO) && (_Estado[!c_posicao(1, 8)].Peca == TORRE)) { // Roque grande?
+            if((_Estado[!c_posicao(2, 8)].Peca == VAZIO) && (_Estado[!c_posicao(3, 8)].Peca == VAZIO) && (_Estado[!c_posicao(4, 8)].Peca == VAZIO)) { // Tem peca no caminho?
+				if(_Estado[!c_posicao(1, 8)].NumJogadas == 0) {
+					_aux = new c_roque(c_posicao(5, 8), c_posicao(3, 8), c_posicao(1, 8), c_posicao(4, 8));
+					_Movimento.push_back(_aux);
 
+				}
+			}
         }
 
-        if((_Estado[!c_posicao(8, 8)].Cor == PRETO) && (_Estado[!c_posicao(8, 8)].Peca == TORRE)) {//roque pequeno?
-            if((_Estado[!c_posicao(6, 8)].Peca == VAZIO) && (_Estado[!c_posicao(7, 8)].Peca == VAZIO)) {//tem peca no caminho?
-                _aux = new c_roque(PRETO, ROQUEMENOR);
-                (*_aux).set_tipo(ESPECIAL);
-                _Movimento.push_back(*_aux);}
+        if((_Estado[!c_posicao(8, 8)].Cor == PRETO) && (_Estado[!c_posicao(8, 8)].Peca == TORRE)) { // Roque pequeno?
+            if((_Estado[!c_posicao(6, 8)].Peca == VAZIO) && (_Estado[!c_posicao(7, 8)].Peca == VAZIO)) { // Tem peca no caminho?
+				if(_Estado[!c_posicao(8, 8)].NumJogadas == 0) {
+					_aux = new c_roque(c_posicao(5, 8), c_posicao(7, 8), c_posicao(8, 8), c_posicao(6, 8));
+					_Movimento.push_back(_aux);
+
+				}
+			}
         }
 
-    }*/
+    }
 
     return _Movimento;
 }
@@ -493,35 +522,24 @@ c_peao::c_peao(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     return;
 }
 
-std::list<c_movimento*> c_peao::encontrar_movimentos(std::map<short int, s_idpeca> _Estado){
-	std::list<c_movimento*> _Movimentos;
+bool c_peao::atualizar_posicao(c_posicao _Posicao) {
+	c_peca::atualizar_posicao(_Posicao);
 
-    if(IDPeca.NumJogadas!=1){
-        if(IDPeca.Cor == BRANCO){
-            DistMov[N] = 1;
-        }
-        else {
-            DistMov[S] = 1;
-        }
-    }
+	if(DistMov[N] == 2) {
+		DistMov[N] = 1;
 
-	for(auto i: Direcoes) {
-		for(auto j = 1; j <= DistMov[i]; j++) {
-			c_posicao _NovaPosicao(i, j);
-			_NovaPosicao += Posicao;
-			if(!_NovaPosicao.validar()) break;
-			if(_Estado[!_NovaPosicao].Peca != VAZIO) break;
+	}
+	else  if(DistMov[S] == 2) {
+		DistMov[S] = 1;
 
-			_Movimentos.push_back(new c_movimento(Posicao, _NovaPosicao, SIMPLES));
-
-		}
 	}
 
-	return _Movimentos;
-}
+	if((Posicao.get_y() == 8) || (Posicao.get_y() == 1)) {
+		return true;
 
-std::list<c_movimento*> c_peao::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {
-    return std::list<c_movimento*>();
+	}
+
+	return false;
 }
 
 // Construtor cavalo
@@ -538,8 +556,7 @@ std::list<c_movimento*> c_cavalo::encontrar_movimentos(std::map<short int, s_idp
 		c_posicao _NovaPosicao = Posicao + i;
 		if(!_NovaPosicao.validar()) continue;
 		if(_Estado[!_NovaPosicao].Peca == VAZIO) {
-			_Movimentos.push_back(new c_movimento(Posicao, _NovaPosicao, SIMPLES));
-
+            _Movimentos.push_back(new c_movimento(Posicao, _NovaPosicao));
 		}
 	}
 
@@ -555,8 +572,7 @@ std::list<c_movimento*> c_cavalo::encontrar_capturas(std::map<short int, s_idpec
 		if(!_NovaPosicao.validar()) continue;
 		if(_Estado[!_NovaPosicao].Peca != VAZIO) {
 			if(_Estado[!_NovaPosicao].Cor != IDPeca.Cor) {
-			_Movimentos.push_back(new c_movimento(Posicao, _NovaPosicao, CAPTURA));
-
+                _Movimentos.push_back(new c_captura(Posicao, _NovaPosicao));
 			}
 		}
 	}
