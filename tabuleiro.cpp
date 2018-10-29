@@ -122,8 +122,6 @@ void c_jogo::operator+=(c_roque &_Movimento) {
 }
 
 void c_jogo::operator+=(c_promocao &_Movimento) {
-	Turno++;
-	
 	c_peca *_Temp = nullptr;
 	
 	Promocao = false;
