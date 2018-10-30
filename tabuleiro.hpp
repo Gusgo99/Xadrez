@@ -11,38 +11,66 @@ class c_movimento;
 
 class c_jogo {
 	private:
+		// Aponta para cada instancia das pecas
 		std::map<short int, c_peca*> Tabuleiro;
+		// Ponteiro para o rei branco
 		c_peca *ReiBranco;
+		// Ponteiro para o rei preto
 		c_peca *ReiPreto;
+		// Indica turno atual
 		unsigned Turno;
-		unsigned JogadasRestantes;
+		// Indica se um peao pode realizar uma promocao
 		bool Promocao;
+		// Indica que uma peca esta em xeque
 		bool Xeque;
+		// Indica que o jogo terminou
+		bool Mate;
+		// Insere peca no tabuleiro
 		template<typename T>
 		void inserir_peca(c_posicao _Posicao, e_cor _Cor);
+		// Executa verificacao do estado atual para encontrar xeque
 		void verificar_xeque();
+		// Executa verificacao do estado do argumento para encontrar xeque
 		void verificar_xeque(std::map<short int, s_idpeca> _Estado);
+		// Verifica se o jogo terminou
+		void verificar_mate();
+		// Posicao onde esta a peca que ameaca o rei
 		c_posicao *PosicaoAmeaca;
+		// Posicao do rei ameacado
 		c_posicao *PosicaoAmeacado;
 
 	public:
+		// Contrutor do jogo
 		c_jogo();
+		// Construtor de copia do jogo
 		c_jogo(c_jogo *_original);
+		// Destrutor
+		~c_jogo();
+		// Verificar se precisa implementar:
 		salvar_jogo();
+		// Verificar se precisa implementar:
 		carregar_jogo();
+		// Funcoes para executar movimentos
 		void operator+=(c_movimento &_Movimento);
 		void operator+=(c_captura &_Movimento);
 		void operator+=(c_roque &_Movimento);
 		void operator+=(c_promocao &_Movimento);
+		// Retorna estado atual do jogo
 		std::map<short int, s_idpeca> get_estado();
-		bool get_xeque();
+		// Retorna movimentos disponiveis a serem realizados em dada posicao
 		std::list<c_movimento*> get_movimentos(c_posicao _Posicao);
-		std::map<short int,bool> get_ameacas(e_cor _Cor);
+		// Verifica se o jogo esta em xeque
+		bool get_xeque();
+		// Verifica se o jogo terminou
+		bool get_mate();
+		// Verifica se um peao pode realizar uma promocao
 		bool get_promocao();
+		// Retorna o turno atual (BRANCO ou PRETO)
 		e_cor get_turno();
+		// Retorna posicao da peca que esta ameacando um dos reis
 		c_posicao get_posicao_ameaca();
+		// Retorna posicao do rei ameacado
 		c_posicao get_posicao_ameacado();
-		bool verificar_mate();
 
 };
 

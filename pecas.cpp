@@ -19,6 +19,7 @@ c_posicao::c_posicao(short int _ID) {
 	x = _ID / 10;
 	y = _ID % 10;
 
+	return;
 }
 
 c_posicao::c_posicao(short int _x, short int _y) {

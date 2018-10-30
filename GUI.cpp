@@ -584,7 +584,7 @@ void c_interfaceJogo::executar_movimentos() {
 			
 			PosicaoSelecionada = c_posicao();
 			
-			if(JogoMostrado -> verificar_mate()) {
+			if(JogoMostrado -> get_mate()) {
 				std::cout << "Xeque mate!\n";
 				
 			}

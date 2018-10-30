@@ -80,15 +80,22 @@ class c_jogo;
 // Classe responsavel por guardar posicao inicial e final de um movimento e executar o movimento
 class c_movimento {
 	protected:
+		// Posicao de onde a peca saira
 		c_posicao PosInicial;
+		// Posicao para onde a peca ira
 		c_posicao PosFinal;
 
 	public:
+		// Construtor
 		c_movimento(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0));
 		virtual ~c_movimento() {}
+		// Retorna posicao de saida da peca
 		c_posicao get_inicio();
+		// Retorna posicao onde a peca ira
 		c_posicao get_fim();
+		// Altera posicao de saida
 		void set_inicio(c_posicao _PosInicial);
+		// Altera posicao de entrada
 		void set_fim(c_posicao _PosFinal);
 
 };
@@ -96,19 +103,26 @@ class c_movimento {
 class c_captura : public c_movimento {
 	private:
 	public:
+		// Construtor da captura
 		c_captura(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0)) : c_movimento(_PosInicial, _PosFinal) {};
 
 };
 
 class c_roque : public c_movimento {
 	protected:
+		// Posicao de onde a torre saira
 		c_posicao PosInicialTorre;
+		// Posicao para onde a torre ira
 		c_posicao PosFinalTorre;
 
 	public:
+		// Construtor
 		c_roque(c_posicao _PosInicial, c_posicao _PosFinal, c_posicao _PosInicialTorre, c_posicao _PosFinalTorre);
+		// Altera posicao de saida da torre
 		void set_inicio_torre(c_posicao _PosInicial);
+		// Altera posicao de chegada da torre
 		void set_fim_torre(c_posicao _PosFinal);
+		// 
 		c_posicao get_inicio_torre();
 		c_posicao get_fim_torre();
 
@@ -116,11 +130,15 @@ class c_roque : public c_movimento {
 
 class c_promocao : public c_movimento {
 	protected:
+		// Tipo da nova peca (BISPO, TORRE, RAINHA, CAVALO)
 		e_peca NovaPeca;
 
 	public:
-	c_promocao(c_posicao _PosInicial, e_peca _NovaPeca);
+		// Construtor
+		c_promocao(c_posicao _PosInicial, e_peca _NovaPeca);
+		// Altera tipo da nova peca
 		void set_nova_peca(e_peca _NovaPeca);
+		// Retorna tipo da nova peca
 		e_peca get_nova_peca();
 
 };
@@ -193,7 +211,7 @@ class c_rainha : public c_peca {
 class c_rei : public c_peca {
 	private:
         bool Ameacado;
-	    std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
+		std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
 
 	public:
 	    c_rei(e_cor _Cor, c_posicao _Posicao);
