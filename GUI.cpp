@@ -590,15 +590,6 @@ void c_interfaceJogo::executar_movimentos() {
 			}
 
 			if(JogoMostrado -> get_promocao()) {
-				if(JogoMostrado -> get_turno() == BRANCO) {
-					CorPromocao.store(PRETO);
-					
-				}
-				else {
-					CorPromocao.store(BRANCO);
-					
-				}
-				TipoPromocao.store(VAZIO);
 				PosicaoPromocao = MovimentoEscolhido -> get_fim();
 				JanelaPromocao = new std::thread(c_interfaceJogo::escolher_promocao, this);
 
@@ -769,7 +760,6 @@ c_interfacePromocao::c_interfacePromocao(std::atomic<e_peca> *_Selecionado, std:
 
 	Janela = new sf::RenderWindow(sf::VideoMode(540, 135), "Promocao");
 	Janela -> setVerticalSyncEnabled(true);
-	//Janela -> setVisible(false);
 
 	carregar_texturas();
 
@@ -908,6 +898,16 @@ void c_interfacePromocao::localizar_clique(unsigned _x, unsigned _y) {
 }
 
 void c_interfaceJogo::escolher_promocao() {
+	if(JogoMostrado -> get_turno() == BRANCO) {
+		CorPromocao.store(PRETO);
+		
+	}
+	else {
+		CorPromocao.store(BRANCO);
+		
+	}
+	TipoPromocao.store(VAZIO);
+	
 	c_interfacePromocao tela(&TipoPromocao, &CorPromocao);
 
 	tela.mostrar_janela();
