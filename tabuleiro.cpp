@@ -4,15 +4,21 @@
 #include "utilidades.hpp"
 #include "pecas.hpp"
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Construtores e destrutores da classe c_jogo
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 c_jogo::c_jogo() {
 	Promocao = false;
 	Xeque = false;
 	Mate = false;
 	Turno = 1;
-	PosicaoAmeaca = new c_posicao;
-	PosicaoAmeacado = new c_posicao;
-	
-	Tabuleiro[!c_posicao()] = nullptr;
+	PosicaoAmeaca = c_posicao();
+	PosicaoAmeacado = c_posicao();
+	//PosicaoAmeaca = new c_posicao;
+	//PosicaoAmeacado = new c_posicao;
 
 	for(auto &i: Tabuleiro) {
 		i.second = nullptr;
@@ -70,69 +76,17 @@ c_jogo::~c_jogo() {
 		
 	}
 	
-	delete PosicaoAmeaca;
-	delete PosicaoAmeacado;
+	//delete PosicaoAmeaca;
+	//delete PosicaoAmeacado;
 	
 	return;
 }
 
-bool c_jogo::get_xeque() {
-	return Xeque;
-}
-
-std::map<short int, s_idpeca> c_jogo::get_estado() {
-	std::map<short int, s_idpeca> _Estado;
-
-	for(auto i: Tabuleiro) {
-		if(i.second != nullptr) {
-			i.second -> marcar_posicao(&_Estado);
-
-		}
-	}
-
-	return _Estado;
-}
-
-std::list<c_movimento*> c_jogo::get_movimentos(c_posicao _Posicao) {
-	std::list<c_movimento*> _Movimentos;
-	std::map<short int, s_idpeca> _Estado = get_estado();
-	
-	_Estado[!_Posicao].Cor = SEMCOR;
-	_Estado[!_Posicao].Peca = VAZIO;
-
-	if(_Posicao.validar()) {
-		if(Tabuleiro[!_Posicao] != nullptr) {
-			_Movimentos = Tabuleiro[!_Posicao] -> listar_movimentos(get_estado());
-			
-			for(auto i: _Movimentos) {
-				_Estado[!(i -> get_fim())] = Tabuleiro[!_Posicao] -> get_ID();
-				
-				verificar_xeque(_Estado);
-				
-				if(Xeque) {
-					if(i -> get_fim() != *PosicaoAmeaca) {
-						_Movimentos.remove(i);
-						
-					}
-					Xeque = false;
-					
-				}
-				
-				_Estado[!(i -> get_fim())].Peca = VAZIO;
-				_Estado[!(i -> get_fim())].Cor = SEMCOR;
-			}
-		}
-	}
-
-	return _Movimentos;
-}
-
-template<typename _Peca>
-void c_jogo::inserir_peca(c_posicao _Posicao, e_cor _Cor) {
-	Tabuleiro[!_Posicao] = new _Peca(_Cor, _Posicao);
-
-	return;
-}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Metodos publicos da classe c_jogo
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 void c_jogo::operator+=(c_movimento &_Movimento) {
 	Turno++;
@@ -201,7 +155,6 @@ void c_jogo::operator+=(c_promocao &_Movimento) {
 			break;
 
 		default:
-			throw 20;
 			break;
 
 	}
@@ -213,6 +166,61 @@ void c_jogo::operator+=(c_promocao &_Movimento) {
 	verificar_xeque();
 
 	return;
+}
+
+std::map<short int, s_idpeca> c_jogo::get_estado() {
+	std::map<short int, s_idpeca> _Estado;
+
+	for(auto i: Tabuleiro) {
+		if(i.second != nullptr) {
+			i.second -> marcar_posicao(&_Estado);
+
+		}
+	}
+
+	return _Estado;
+}
+
+std::list<c_movimento*> c_jogo::get_movimentos(c_posicao _Posicao) {
+	std::list<c_movimento*> _Movimentos;
+	std::map<short int, s_idpeca> _Estado = get_estado();
+	
+	_Estado[!_Posicao].Cor = SEMCOR;
+	_Estado[!_Posicao].Peca = VAZIO;
+
+	if(_Posicao.validar()) {
+		if(Tabuleiro[!_Posicao] != nullptr) {
+			_Movimentos = Tabuleiro[!_Posicao] -> listar_movimentos(get_estado());
+			
+			for(auto i: _Movimentos) {
+				_Estado[!(i -> get_fim())] = Tabuleiro[!_Posicao] -> get_ID();
+				
+				verificar_xeque(_Estado);
+				
+				if(Xeque) {
+					if(i -> get_fim() != PosicaoAmeaca) {
+						_Movimentos.remove(i);
+						
+					}
+					Xeque = false;
+					
+				}
+				
+				_Estado[!(i -> get_fim())].Peca = VAZIO;
+				_Estado[!(i -> get_fim())].Cor = SEMCOR;
+			}
+		}
+	}
+
+	return _Movimentos;
+}
+
+bool c_jogo::get_xeque() {
+	return Xeque;
+}
+
+bool c_jogo::get_mate() {
+	return Mate;
 }
 
 bool c_jogo::get_promocao() {
@@ -228,7 +236,27 @@ e_cor c_jogo::get_turno() {
 		return PRETO;
 
 	}
+}
 
+c_posicao c_jogo::get_posicao_ameaca() {
+	return PosicaoAmeaca;
+}
+
+c_posicao c_jogo::get_posicao_ameacado() {
+	return PosicaoAmeacado;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Metodos privados da classe c_jogo
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+template<typename _Peca>
+void c_jogo::inserir_peca(c_posicao _Posicao, e_cor _Cor) {
+	Tabuleiro[!_Posicao] = new _Peca(_Cor, _Posicao);
+
+	return;
 }
 
 void c_jogo::verificar_xeque() {
@@ -246,13 +274,13 @@ void c_jogo::verificar_xeque(std::map<short int, s_idpeca> _Estado) {
 		if(i.second != nullptr) {
 			if(i.second -> ameacando_rei(_Estado)) {
 				Xeque = true;
-				*PosicaoAmeaca = i.second -> get_posicao();
+				PosicaoAmeaca = i.second -> get_posicao();
 				if(i.second -> get_cor() == BRANCO) {
-					*PosicaoAmeacado = ReiPreto -> get_posicao();
+					PosicaoAmeacado = ReiPreto -> get_posicao();
 
 				}
 				else {
-					*PosicaoAmeacado = ReiBranco -> get_posicao();
+					PosicaoAmeacado = ReiBranco -> get_posicao();
 
 				}
 				break;
@@ -262,14 +290,6 @@ void c_jogo::verificar_xeque(std::map<short int, s_idpeca> _Estado) {
 	}
 
 	return;
-}
-
-c_posicao c_jogo::get_posicao_ameaca() {
-	return *PosicaoAmeaca;
-}
-
-c_posicao c_jogo::get_posicao_ameacado() {
-	return *PosicaoAmeacado;
 }
 
 void c_jogo::verificar_mate() {
@@ -295,8 +315,4 @@ void c_jogo::verificar_mate() {
 	}
 	
 	return;
-}
-
-bool c_jogo::get_mate() {
-	return Mate;
 }

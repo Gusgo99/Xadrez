@@ -28,7 +28,10 @@ enum e_dir {
 	NO = N | O,
 	SO = S | O};
 
+// Define tipo e constantes para cores das pecas
 enum e_cor {SEMCOR, BRANCO, PRETO};
+
+// Define tipo e constantes para pecas do jogo
 enum e_peca {VAZIO, PEAO, CAVALO, BISPO, TORRE, RAINHA, REI};
 
 // Armazena cor e tipo da peca
@@ -43,7 +46,21 @@ struct s_idpeca {
 // Maneira simples de iterar por todas as direcoes
 const std::array<e_dir, 8> Direcoes = {N, S, E, O, NE, SE, NO, SO};
 
-// Classe responsavel por guardar a posicao de cada peca
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe c_posicao:
+ *
+ * Responsavel por:
+ *
+ * - Armazenar posicao de cada peca;
+ * - Verificar se a posicao e valida;
+ * - Gerar chave para encontrar a peca em determinada posicao
+ * dentro dos mapas;
+ * - Compor movimentos;
+ * - Gerar novas posicoes a partir de posicoes relativas;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
 class c_posicao {
 	private:
 		short int x;
@@ -53,29 +70,40 @@ class c_posicao {
 		c_posicao(short int _ID = 0);
 		c_posicao(short int _x, short int _y);
 		c_posicao(e_dir _Direcao, short int _Distancia);
+		// Geram uma nova posicao a partir de uma segunda posicao relativa
 		c_posicao operator+(c_posicao &_temp);
 		void operator+=(c_posicao &_temp);
-		short int operator-(c_posicao &_temp);										// Retorna a distancia entre duas posicoes(Retorna 0 se nao houver alinhamento vertical, horizontal ou diagonal entre as posicoes)
-		bool operator==(c_posicao &_temp);											// Verifica se duas posicoes sao iguais
-		bool operator!=(c_posicao &_temp);											// Verifica se duas posicoes nao sao iguais
-		short int operator!();														// Retorna uma chave para mapear o tabuleiro
-		c_movimento operator>>(c_posicao &_temp);									// Compoem um movimento com os dois argumentos
-		c_movimento operator<<(c_posicao &_temp);									// Compoem um movimento com os dois argumentos
+		
+		// Verifica se as posicoes sao as mesmas
+		bool operator==(c_posicao &_temp);
+		// Verifica se as posicoes sao diferentes
+		bool operator!=(c_posicao &_temp);
+		// Retorna uma chave para facilitar o mapeamento do tabuleiro
+		short int operator!();
+		// Compoem movimentos
+		c_movimento operator>>(c_posicao &_temp);
+		c_movimento operator<<(c_posicao &_temp);
+		
+		short int get_x();
+		short int get_y();
 		void set_x(short int _x);
 		void set_y(short int _y);
 		void set_xy(short int _x, short int _y);
-		short int get_x();
-		short int get_y();
-		bool validar();																// Verifica se a posicao e valida (Dentro da grade 8x8)
+		// Verifica se a posicao esta dentro do tabuleiro
+		bool validar();
 
 };
 
-class c_jogo;
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe c_movimento:
+ *
+ * Responsavel por:
+ *
+ * - Armazenar posicao de saida e destino da peca;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// #####################################################
-            // Classe movimento
-// #####################################################
-// Classe responsavel por guardar posicao inicial e final de um movimento e executar o movimento
 class c_movimento {
 	protected:
 		// Posicao de onde a peca saira
@@ -98,6 +126,16 @@ class c_movimento {
 
 };
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe c_captura:
+ *
+ * Responsavel por:
+ *
+ * - Armazenar posicao de saida e destino da peca;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 class c_captura : public c_movimento {
 	private:
 	public:
@@ -105,6 +143,16 @@ class c_captura : public c_movimento {
 		c_captura(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0)) : c_movimento(_PosInicial, _PosFinal) {};
 
 };
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe c_roque:
+ *
+ * Responsavel por:
+ *
+ * - Armazenar posicao de saida e destino do rei e da torre;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 class c_roque : public c_movimento {
 	protected:
@@ -116,15 +164,24 @@ class c_roque : public c_movimento {
 	public:
 		// Construtor
 		c_roque(c_posicao _PosInicial, c_posicao _PosFinal, c_posicao _PosInicialTorre, c_posicao _PosFinalTorre);
-		// Altera posicao de saida da torre
-		void set_inicio_torre(c_posicao _PosInicial);
-		// Altera posicao de chegada da torre
-		void set_fim_torre(c_posicao _PosFinal);
-		// 
+		
 		c_posicao get_inicio_torre();
 		c_posicao get_fim_torre();
+		void set_inicio_torre(c_posicao _PosInicial);
+		void set_fim_torre(c_posicao _PosFinal);
 
 };
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe c_promocao:
+ *
+ * Responsavel por:
+ *
+ * - Armazenar posicao de saida e destino da peca;
+ * - Armazenar novo tipo do peao apos a promocao;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 class c_promocao : public c_movimento {
 	protected:
@@ -134,17 +191,25 @@ class c_promocao : public c_movimento {
 	public:
 		// Construtor
 		c_promocao(c_posicao _PosInicial, e_peca _NovaPeca);
-		// Altera tipo da nova peca
-		void set_nova_peca(e_peca _NovaPeca);
-		// Retorna tipo da nova peca
 		e_peca get_nova_peca();
+		void set_nova_peca(e_peca _NovaPeca);
 
 };
 
-// #####################################################
-            // Classe peca
-// #####################################################
-
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe abstrata c_peca:
+ *
+ * Responsavel por:
+ *
+ * - Listar possiveis movimentos da peca;
+ * - Armazenar posicao atual da peca;
+ * - Armazenar numero de movimentos realizados;
+ * - Verificar se a peca ameaca o rei inimigo;
+ * - Marcar posicao da peca no estado;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
 class c_peca {
 	protected:
 		// Distancia maxima que a peca pode se mover em cada direcao
@@ -167,68 +232,81 @@ class c_peca {
 		virtual std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);
 		// Verifica se a peca esta ameacando o rei inimigo
 		bool ameacando_rei(std::map<short int, s_idpeca> _Estado);
-		// Verifica se a peca esta ameacando o rei inimigo
-		bool ameacando_posicao(std::map<short int, s_idpeca> _Estado, c_posicao _posicao);
 		// Realiza a atualizacao da posicao apos realizar o movimento
 		virtual bool atualizar_posicao(c_posicao _Posicao);
 		// Faz com que cada peca marque sua posicao no tabuleiro
 		void marcar_posicao(std::map<short int, s_idpeca> *_Estado);
+		
 		s_idpeca get_ID();
 		e_cor get_cor();
 		e_peca get_peca();
 		c_posicao get_posicao();
 		unsigned get_num_jogadas();
-        std::map<short int , bool> encontrar_ameacas(std::map<short int, s_idpeca> _Estado);
 };
 
-// #####################################################
-            // Sub classes peca
-// #####################################################
-
-class c_bispo : public c_peca {
-	private:
-
-	public:
-		c_bispo(e_cor _Cor, c_posicao _Posicao);
-
-
-};
-
-class c_rainha : public c_peca {
-	private:
-
-	public:
-		c_rainha(e_cor _Cor, c_posicao _Posicao);
-
-};
-
-class c_rei : public c_peca {
-	private:
-        bool Ameacado;
-		std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
-
-	public:
-		std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);
-	    c_rei(e_cor _Cor, c_posicao _Posicao);
-        bool get_ameacado(){return Ameacado;};
-};
-
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Especializacoes da classe peca:
+ *
+ * Classes implementadas:
+ *
+ * - c_peao;
+ * - c_torre;
+ * - c_cavalo;
+ * - c_bispo;
+ * - c_rainha;
+ * - c_rei;
+ *
+ * Funcoes das classes:
+ * - Ajustar atributos de acordo com o tipo da peca;
+ * - Adicionar movimentos especiais a lista de movimentos
+ * disponiveis;
+ * - Alterar movimentos retornados(c_cavalo);
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe derivada c_peca:
+ *
+ * Responsavel por:
+ *
+ * - Atributos alterados de acordo com o movimento do peao;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
 class c_peao : public c_peca {
-	private:
-
 	public:
 	    c_peao(e_cor _Cor, c_posicao _Posicao);
 		bool atualizar_posicao(c_posicao _Posicao);
 
 };
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe derivada c_torre:
+ *
+ * Responsavel por:
+ *
+ * - Atributos alterados de acordo com o movimento da torre;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
 class c_torre : public c_peca {
-	private:
-
 	public:
 	    c_torre(e_cor _Cor, c_posicao _Posicao);
 
 };
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe derivada c_cavalo:
+ *
+ * Responsavel por:
+ *
+ * - Funcoes de movimentos redefinidas de acordo com os
+ * movimentos do cavalo;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 class c_cavalo : public c_peca {
 	private:
@@ -239,6 +317,59 @@ class c_cavalo : public c_peca {
 		std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);
 	    c_cavalo(e_cor _Cor, c_posicao _Posicao);
 
+};
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe derivada c_bispo:
+ *
+ * Responsavel por:
+ *
+ * - Atributos alterados de acordo com o movimento do bispo;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+class c_bispo : public c_peca {
+	public:
+		c_bispo(e_cor _Cor, c_posicao _Posicao);
+
+
+};
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe derivada c_rainha:
+ *
+ * Responsavel por:
+ *
+ * - Atributos alterados de acordo com o movimento da rainha;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+class c_rainha : public c_peca {
+	public:
+		c_rainha(e_cor _Cor, c_posicao _Posicao);
+
+};
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe derivada c_rei:
+ *
+ * Responsavel por:
+ *
+ * - Atributos alterados de acordo com o movimento do rei;
+ * - Roque adicionado a lista de movimentos retornados;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+class c_rei : public c_peca {
+	private:
+		std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
+
+	public:
+	    c_rei(e_cor _Cor, c_posicao _Posicao);
+		std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);
 };
 
 #endif

@@ -60,8 +60,6 @@ void testar_posicao() {
 		
 	}
 	
-	std::cout << "Distancia entre pontos: " << (b - a) << std::endl;
-	
 	std::cout << "Composicao de movimento a >> b" << std::endl;
 	
 	c_movimento mov = a >> b;

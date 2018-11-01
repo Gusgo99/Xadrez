@@ -9,6 +9,19 @@ class c_movimento;
 
 #include "pecas.hpp"
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe c_jogo:
+ *
+ * Responsavel por:
+ *
+ * - Armazenar ponteiros para cada peca no jogo;
+ * - Verificar condicao do jogo(Xeque, promocao, mate);
+ * - Executar movimentos;
+ * - Disponibilizar informacoes sobre o estado atual do jogo;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 class c_jogo {
 	private:
 		// Aponta para cada instancia das pecas
@@ -35,9 +48,9 @@ class c_jogo {
 		// Verifica se o jogo terminou
 		void verificar_mate();
 		// Posicao onde esta a peca que ameaca o rei
-		c_posicao *PosicaoAmeaca;
+		c_posicao PosicaoAmeaca;
 		// Posicao do rei ameacado
-		c_posicao *PosicaoAmeacado;
+		c_posicao PosicaoAmeacado;
 
 	public:
 		// Contrutor do jogo

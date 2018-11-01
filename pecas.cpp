@@ -4,16 +4,11 @@
 #include "pecas.hpp"
 #include "tabuleiro.hpp"
 
-// Constantes com posicoes relativas do movimento do cavalo
-const std::array<c_posicao, 8> MOVIMENTOSCAVALO = {
-	c_posicao(2, 1),
-	c_posicao(2, -1),
-	c_posicao(1, 2),
-	c_posicao(1, -2),
-	c_posicao(-2, 1),
-	c_posicao(-2, -1),
-	c_posicao(-1, 2),
-	c_posicao(-1, -2)};
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Construtores e destrutores da classe c_posicao
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 c_posicao::c_posicao(short int _ID) {
 	x = _ID / 10;
@@ -27,10 +22,6 @@ c_posicao::c_posicao(short int _x, short int _y) {
 	y = _y;
 
 	return;
-}
-
-s_idpeca c_peca::get_ID() {
-	return IDPeca;
 }
 
 c_posicao::c_posicao(e_dir _Direcao, short int _Distancia) {
@@ -56,6 +47,50 @@ c_posicao::c_posicao(e_dir _Direcao, short int _Distancia) {
 	}
 
 	return;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Metodos publicos da classe c_posicao
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+c_posicao c_posicao::operator+(c_posicao &_temp) {
+	return c_posicao(_temp.get_x() + x, _temp.get_y() + y);
+}
+
+void c_posicao::operator+=(c_posicao &_temp) {
+	x += _temp.get_x();
+	y += _temp.get_y();
+
+	return;
+}
+
+bool c_posicao::operator==(c_posicao &_temp) {
+	return ((x == _temp.get_x()) && (y == _temp.get_y()));
+}
+
+bool c_posicao::operator!=(c_posicao &_temp) {
+	return ((x != _temp.get_x()) || (y != _temp.get_y()));
+}
+
+short int c_posicao::operator!() {
+	if(validar()) {
+		return (10 * x) + y;
+
+	}
+	else {
+		return 0;
+
+	}
+}
+
+c_movimento c_posicao::operator>>(c_posicao &_temp) {
+	return c_movimento(c_posicao(x, y), _temp);
+}
+
+c_movimento c_posicao::operator<<(c_posicao &_temp) {
+	return c_movimento(_temp, c_posicao(x, y));
 }
 
 void c_posicao::set_x(short int _x) {
@@ -89,60 +124,11 @@ bool c_posicao::validar() {
 	return ((x > 0) && (x <= 8) && (y > 0) && (y <= 8));
 }
 
-c_posicao c_posicao::operator+(c_posicao &_temp) {
-	return c_posicao(_temp.get_x() + x, _temp.get_y() + y);
-}
-
-void c_posicao::operator+=(c_posicao &_temp) {
-	x += _temp.get_x();
-	y += _temp.get_y();
-
-	return;
-}
-
-short int c_posicao::operator-(c_posicao &_temp) {
-	if(_temp.get_x() == x) {
-		return abs(_temp.get_y() - y);
-
-	}
-	else if(_temp.get_y() == y) {
-		return abs(_temp.get_x() - x);
-
-	}
-	else if(abs(_temp.get_x() - x) == abs(_temp.get_y() - y)) {
-		return abs(_temp.get_x() - x);
-
-	}
-
-	return 0;
-}
-
-bool c_posicao::operator==(c_posicao &_temp) {
-	return ((x == _temp.get_x()) && (y == _temp.get_y()));
-}
-
-bool c_posicao::operator!=(c_posicao &_temp) {
-	return ((x != _temp.get_x()) || (y != _temp.get_y()));
-}
-
-short int c_posicao::operator!() {
-	if(validar()) {
-		return (10 * x) + y;
-
-	}
-	else {
-		return 0;
-
-	}
-}
-
-c_movimento c_posicao::operator>>(c_posicao &_temp) {
-	return c_movimento(c_posicao(x, y), _temp);
-}
-
-c_movimento c_posicao::operator<<(c_posicao &_temp) {
-	return c_movimento(_temp, c_posicao(x, y));
-}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Construtores e destrutores da classe c_movimento
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 c_movimento::c_movimento(c_posicao _PosInicial, c_posicao _PosFinal) {
 	if(_PosInicial.validar() && _PosFinal.validar()) {
@@ -150,13 +136,15 @@ c_movimento::c_movimento(c_posicao _PosInicial, c_posicao _PosFinal) {
 		PosFinal = _PosFinal;
 
 	}
-	else {
-		//Verificar o que fazer em caso de movimento invalido
-
-	}
 
 	return;
 }
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Metodos publicos da classe c_posicao
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 c_posicao c_movimento::get_inicio() {
 	return PosInicial;
@@ -184,6 +172,12 @@ void c_movimento::set_fim(c_posicao _PosFinal) {
 	return;
 }
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Construtores e destrutores da classe c_roque
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 c_roque::c_roque(c_posicao _PosInicial, c_posicao _PosFinal, c_posicao _PosInicialTorre, c_posicao _PosFinalTorre) : c_movimento(_PosInicial, _PosFinal) {
 	if(_PosInicialTorre.validar() && _PosFinalTorre.validar()) {
 		PosInicialTorre = _PosInicialTorre;
@@ -194,6 +188,19 @@ c_roque::c_roque(c_posicao _PosInicial, c_posicao _PosFinal, c_posicao _PosInici
 	return;
 }
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Metodos publicos da classe c_roque
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+c_posicao c_roque::get_inicio_torre() {
+	return PosInicialTorre;
+}
+
+c_posicao c_roque::get_fim_torre() {
+	return PosFinalTorre;
+}
 
 void c_roque::set_inicio_torre(c_posicao _PosInicial) {
 	if(_PosInicial.validar()) {
@@ -213,19 +220,23 @@ void c_roque::set_fim_torre(c_posicao _PosFinal) {
 	return;
 }
 
-c_posicao c_roque::get_inicio_torre() {
-	return PosInicialTorre;
-}
-
-c_posicao c_roque::get_fim_torre() {
-	return PosFinalTorre;
-}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Construtores e destrutores da classe c_roque
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 c_promocao::c_promocao(c_posicao _PosInicial, e_peca _NovaPeca) : c_movimento(_PosInicial, _PosInicial) {
 	NovaPeca = _NovaPeca;
 
 	return;
 }
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Metodos publicos da classe c_promocao
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 void c_promocao::set_nova_peca(e_peca _NovaPeca) {
 	NovaPeca = _NovaPeca;
@@ -236,6 +247,12 @@ void c_promocao::set_nova_peca(e_peca _NovaPeca) {
 e_peca c_promocao::get_nova_peca() {
 	return NovaPeca;
 }
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Construtores e destrutores da classe c_peca
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 c_peca::c_peca(e_cor _Cor, c_posicao _Posicao) {
 	IDPeca.Cor = _Cor;
@@ -255,21 +272,32 @@ c_peca::~c_peca() {
 	return;
 }
 
-e_cor c_peca::get_cor() {
-	return IDPeca.Cor;
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Metodos publicos da classe c_peca
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+std::list<c_movimento*> c_peca::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
+	std::list<c_movimento*> _Movimentos = encontrar_movimentos(_Estado);
+	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
+
+	_Movimentos.splice(_Movimentos.end(), _Capturas);
+
+	return _Movimentos;
 }
 
-e_peca c_peca::get_peca(){
-    return IDPeca.Peca;
-}
+bool c_peca::ameacando_rei(std::map<short int, s_idpeca> _Estado) {
+	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
 
-void c_peca::marcar_posicao(std::map<short int, s_idpeca> *_Estado) {
-	if(_Estado != nullptr) {
-		(*_Estado)[!Posicao] = IDPeca;
+	for(auto i: _Capturas) {
+		if(_Estado[!(i -> get_fim())].Peca == REI) {
+			return true;
 
+		}
 	}
 
-	return;
+	return false;
 }
 
 bool c_peca::atualizar_posicao(c_posicao _Posicao) {
@@ -282,14 +310,40 @@ bool c_peca::atualizar_posicao(c_posicao _Posicao) {
 	return false;
 }
 
-std::list<c_movimento*> c_peca::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
-	std::list<c_movimento*> _Movimentos = encontrar_movimentos(_Estado);
-	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
+void c_peca::marcar_posicao(std::map<short int, s_idpeca> *_Estado) {
+	if(_Estado != nullptr) {
+		(*_Estado)[!Posicao] = IDPeca;
 
-	_Movimentos.splice(_Movimentos.end(), _Capturas);
+	}
 
-	return _Movimentos;
+	return;
 }
+
+s_idpeca c_peca::get_ID() {
+	return IDPeca;
+}
+
+e_cor c_peca::get_cor() {
+	return IDPeca.Cor;
+}
+
+e_peca c_peca::get_peca(){
+    return IDPeca.Peca;
+}
+
+c_posicao c_peca::get_posicao() {
+	return Posicao;
+}
+
+unsigned c_peca::get_num_jogadas() {
+	return IDPeca.NumJogadas;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Metodos protegidos da classe c_peca
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::list<c_movimento*> c_peca::encontrar_movimentos(std::map<short int, s_idpeca> _Estado) {
 	std::list<c_movimento*> _Movimentos;
@@ -329,31 +383,157 @@ std::list<c_movimento*> c_peca::encontrar_capturas(std::map<short int, s_idpeca>
 	return _Movimentos;
 }
 
-std::map<short int , bool> c_peca::encontrar_ameacas(std::map<short int, s_idpeca> _Estado){
-    std::map<short int , bool> _Ameacados;
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Construtores e destrutores da classe c_peao
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    for(auto i: Direcoes) {
-		for(auto j = 1; j <= DistCome[i]; j++) {
-			c_posicao _NovaPosicao(i, j);
-			_NovaPosicao += Posicao;
-			if(!_NovaPosicao.validar()) break;
+c_peao::c_peao(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 
-			_Ameacados[!_NovaPosicao]=true;
+    IDPeca.Peca = PEAO;								//eh um enum
 
-			if(_Estado[!_NovaPosicao].Peca != VAZIO) break;
+    if(_Cor == BRANCO) {
+        DistMov[N] = 2;
+        DistCome[NE] = 1;
+        DistCome[NO] = 1;
+    }
+	else {
+        DistMov[S] = 2;
+        DistCome[SE] = 1;
+        DistCome[SO] = 1;
+    }
+
+    return;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Metodos publicos da classe c_peao
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+bool c_peao::atualizar_posicao(c_posicao _Posicao) {
+	c_peca::atualizar_posicao(_Posicao);
+
+	if(DistMov[N] == 2) {
+		DistMov[N] = 1;
+
+	}
+	else  if(DistMov[S] == 2) {
+		DistMov[S] = 1;
+
+	}
+
+	if((Posicao.get_y() == 8) || (Posicao.get_y() == 1)) {
+		return true;
+
+	}
+
+	return false;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Construtores e destrutores da classe c_torre
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+c_torre::c_torre(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
+    DistMov[N]  = 8;
+    DistMov[E]  = 8;
+    DistMov[S]  = 8;
+    DistMov[O]  = 8;
+
+    DistCome = DistMov;
+    IDPeca.Peca = TORRE;//eh um enum
+    IDPeca.NumJogadas = 0;
+
+    return;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Construtores e destrutores da classe c_cavalo
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+c_cavalo::c_cavalo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
+    IDPeca.Peca = CAVALO;//eh um enum
+
+    return;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Metodos publicos da classe c_cavalo
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+// Constantes com posicoes relativas do movimento do cavalo
+const std::array<c_posicao, 8> MOVIMENTOSCAVALO = {
+	c_posicao(2, 1),
+	c_posicao(2, -1),
+	c_posicao(1, 2),
+	c_posicao(1, -2),
+	c_posicao(-2, 1),
+	c_posicao(-2, -1),
+	c_posicao(-1, 2),
+	c_posicao(-1, -2)};
+
+std::list<c_movimento*> c_cavalo::encontrar_movimentos(std::map<short int, s_idpeca> _Estado) {
+	std::list<c_movimento*> _Movimentos;
+
+	for(auto i: MOVIMENTOSCAVALO) {
+		c_posicao _NovaPosicao = Posicao + i;
+		if(!_NovaPosicao.validar()) continue;
+		if(_Estado[!_NovaPosicao].Peca == VAZIO) {
+            _Movimentos.push_back(new c_movimento(Posicao, _NovaPosicao));
 		}
 	}
 
 
-
-    return _Ameacados;
+    return _Movimentos;
 }
 
-//#####################################################
-            // Sub classes das pecas
-// #####################################################
+std::list<c_movimento*> c_cavalo::encontrar_capturas(std::map<short int, s_idpeca> _Estado) {
+	std::list<c_movimento*> _Movimentos;
 
-// Construtor bispo
+	for(auto i: MOVIMENTOSCAVALO) {
+		c_posicao _NovaPosicao = Posicao + i;
+		if(!_NovaPosicao.validar()) continue;
+		if(_Estado[!_NovaPosicao].Peca != VAZIO) {
+			if(_Estado[!_NovaPosicao].Cor != IDPeca.Cor) {
+                _Movimentos.push_back(new c_captura(Posicao, _NovaPosicao));
+				
+			}
+		}
+	}
+
+    return _Movimentos;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Metodos privados da classe c_cavalo
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+std::list<c_movimento*> c_cavalo::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
+	std::list<c_movimento*> _Movimentos = encontrar_movimentos(_Estado);
+	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
+
+	_Movimentos.splice(_Movimentos.end(), _Capturas);
+
+	return _Movimentos;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Construtores e destrutores da classe c_bispo
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 c_bispo::c_bispo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     DistMov[NE] = 8;
     DistMov[SE] = 8;
@@ -366,7 +546,12 @@ c_bispo::c_bispo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     return;
 }
 
-// Construtor rainha
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Construtores e destrutores da classe c_rainha
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 c_rainha::c_rainha(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     DistMov[N]  = 8;
     DistMov[NE] = 8;
@@ -383,7 +568,12 @@ c_rainha::c_rainha(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     return;
 }
 
-// Construtor rei
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Construtores e destrutores da classe c_rei
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 c_rei::c_rei(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
     DistMov[N]  = 1;
     DistMov[NE] = 1;
@@ -396,41 +586,29 @@ c_rei::c_rei(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
 
     DistCome = DistMov;
     IDPeca.Peca = REI;//eh um enum
-    Ameacado = false;
 
     return;
 }
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Metodos publicos da classe c_rei
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// Verifica se alguma peca ameaca o rei
-bool c_peca::ameacando_rei(std::map<short int, s_idpeca> _Estado) {
-	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
+std::list<c_movimento*> c_rei::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
+	std::list<c_movimento*> _Movimentos = c_peca::listar_movimentos(_Estado);
+	
+	_Movimentos.splice(_Movimentos.end(), encontrar_especiais(_Estado));
+	
+	return _Movimentos;
+} 
 
-	for(auto i: _Capturas) {
-		if(_Estado[!(i -> get_fim())].Peca == REI) {
-			return true;
-
-		}
-	}
-
-	return false;
-}
-
-bool c_peca::ameacando_posicao(std::map<short int, s_idpeca> _Estado ,c_posicao _posicao) {
-	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
-
-	for(auto i: _Capturas) {
-		if(i -> get_fim() == _posicao) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-c_posicao c_peca::get_posicao() {
-	return Posicao;
-}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 
+ * Metodos privados da classe c_rei
+ * 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 std::list<c_movimento*> c_rei::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {
 //encontra o roque do rei
@@ -490,117 +668,4 @@ std::list<c_movimento*> c_rei::encontrar_especiais(std::map<short int, s_idpeca>
     }
 
     return _Movimento;
-}
-
-// Construtor da torre
-c_torre::c_torre(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
-    DistMov[N]  = 8;
-    DistMov[E]  = 8;
-    DistMov[S]  = 8;
-    DistMov[O]  = 8;
-
-    DistCome = DistMov;
-    IDPeca.Peca = TORRE;//eh um enum
-    IDPeca.NumJogadas = 0;
-
-    return;
-}
-
-// Construtor do peao
-c_peao::c_peao(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
-
-    IDPeca.Peca = PEAO;								//eh um enum
-
-    if(_Cor == BRANCO) {
-        DistMov[N] = 2;
-        DistCome[NE] = 1;
-        DistCome[NO] = 1;
-    }
-	else {
-        DistMov[S] = 2;
-        DistCome[SE] = 1;
-        DistCome[SO] = 1;
-    }
-
-    return;
-}
-
-bool c_peao::atualizar_posicao(c_posicao _Posicao) {
-	c_peca::atualizar_posicao(_Posicao);
-
-	if(DistMov[N] == 2) {
-		DistMov[N] = 1;
-
-	}
-	else  if(DistMov[S] == 2) {
-		DistMov[S] = 1;
-
-	}
-
-	if((Posicao.get_y() == 8) || (Posicao.get_y() == 1)) {
-		return true;
-
-	}
-
-	return false;
-}
-
-// Construtor cavalo
-c_cavalo::c_cavalo(e_cor _Cor, c_posicao _Posicao) : c_peca(_Cor, _Posicao) {
-    IDPeca.Peca = CAVALO;//eh um enum
-
-    return;
-}
-
-std::list<c_movimento*> c_cavalo::encontrar_movimentos(std::map<short int, s_idpeca> _Estado) {
-	std::list<c_movimento*> _Movimentos;
-
-	for(auto i: MOVIMENTOSCAVALO) {
-		c_posicao _NovaPosicao = Posicao + i;
-		if(!_NovaPosicao.validar()) continue;
-		if(_Estado[!_NovaPosicao].Peca == VAZIO) {
-            _Movimentos.push_back(new c_movimento(Posicao, _NovaPosicao));
-		}
-	}
-
-
-    return _Movimentos;
-}
-
-std::list<c_movimento*> c_cavalo::encontrar_capturas(std::map<short int, s_idpeca> _Estado) {
-	std::list<c_movimento*> _Movimentos;
-
-	for(auto i: MOVIMENTOSCAVALO) {
-		c_posicao _NovaPosicao = Posicao + i;
-		if(!_NovaPosicao.validar()) continue;
-		if(_Estado[!_NovaPosicao].Peca != VAZIO) {
-			if(_Estado[!_NovaPosicao].Cor != IDPeca.Cor) {
-                _Movimentos.push_back(new c_captura(Posicao, _NovaPosicao));
-				
-			}
-		}
-	}
-
-    return _Movimentos;
-}
-
-std::list<c_movimento*> c_cavalo::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
-	std::list<c_movimento*> _Movimentos = encontrar_movimentos(_Estado);
-	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
-
-	_Movimentos.splice(_Movimentos.end(), _Capturas);
-
-	return _Movimentos;
-}
-
-unsigned c_peca::get_num_jogadas() {
-	return IDPeca.NumJogadas;
-}
-
-std::list<c_movimento*> c_rei::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
-	std::list<c_movimento*> _Movimentos = c_peca::listar_movimentos(_Estado);
-	
-	_Movimentos.splice(_Movimentos.end(), encontrar_especiais(_Estado));
-	
-	return _Movimentos;
 }
