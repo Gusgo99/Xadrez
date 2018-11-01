@@ -334,10 +334,13 @@ void c_interfaceJogo::posicionar_pecas(std::map<short int, s_idpeca> _Estado) {
 					_Temp.Cor = BRANCO;
 					SpritesBrancas.push_back(_Temp);
 					break;
+					
+				default:
+					break;
 
 			}
 			SpritesBrancas.back().Sprite.setColor(sf::Color(0xE0, 0xE0, 0xE0, 0xFF));
-			if(!PosicaoSelecionada == i.first) {
+			if((!PosicaoSelecionada) == i.first) {
 				SpritesBrancas.back().Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
 
 			}
@@ -391,9 +394,12 @@ void c_interfaceJogo::posicionar_pecas(std::map<short int, s_idpeca> _Estado) {
 					_Temp.Cor = PRETO;
 					SpritesPretas.push_back(_Temp);
 					break;
+					
+				default:
+					break;
 
 			}
-			if(!PosicaoSelecionada == i.first) {
+			if((!PosicaoSelecionada) == i.first) {
 				SpritesPretas.back().Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
 
 			}

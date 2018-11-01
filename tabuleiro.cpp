@@ -11,8 +11,10 @@ c_jogo::c_jogo() {
 	Turno = 1;
 	PosicaoAmeaca = new c_posicao;
 	PosicaoAmeacado = new c_posicao;
+	
+	Tabuleiro[!c_posicao()] = nullptr;
 
-	for(auto i: Tabuleiro) {
+	for(auto &i: Tabuleiro) {
 		i.second = nullptr;
 
 	}

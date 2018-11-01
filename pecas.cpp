@@ -285,10 +285,8 @@ bool c_peca::atualizar_posicao(c_posicao _Posicao) {
 std::list<c_movimento*> c_peca::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
 	std::list<c_movimento*> _Movimentos = encontrar_movimentos(_Estado);
 	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
-	std::list<c_movimento*> _Especiais = encontrar_especiais(_Estado);
 
 	_Movimentos.splice(_Movimentos.end(), _Capturas);
-	_Movimentos.splice(_Movimentos.end(), _Especiais);
 
 	return _Movimentos;
 }
@@ -578,6 +576,7 @@ std::list<c_movimento*> c_cavalo::encontrar_capturas(std::map<short int, s_idpec
 		if(_Estado[!_NovaPosicao].Peca != VAZIO) {
 			if(_Estado[!_NovaPosicao].Cor != IDPeca.Cor) {
                 _Movimentos.push_back(new c_captura(Posicao, _NovaPosicao));
+				
 			}
 		}
 	}
@@ -588,14 +587,20 @@ std::list<c_movimento*> c_cavalo::encontrar_capturas(std::map<short int, s_idpec
 std::list<c_movimento*> c_cavalo::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
 	std::list<c_movimento*> _Movimentos = encontrar_movimentos(_Estado);
 	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
-	std::list<c_movimento*> _Especiais = encontrar_especiais(_Estado);
 
 	_Movimentos.splice(_Movimentos.end(), _Capturas);
-	_Movimentos.splice(_Movimentos.end(), _Especiais);
 
 	return _Movimentos;
 }
 
 unsigned c_peca::get_num_jogadas() {
 	return IDPeca.NumJogadas;
+}
+
+std::list<c_movimento*> c_rei::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
+	std::list<c_movimento*> _Movimentos = c_peca::listar_movimentos(_Estado);
+	
+	_Movimentos.splice(_Movimentos.end(), encontrar_especiais(_Estado));
+	
+	return _Movimentos;
 }

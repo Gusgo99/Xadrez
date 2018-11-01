@@ -3,12 +3,12 @@
 
 #include <array>
 #include <list>
+#include <map>
 
 class c_movimento;
 class c_captura;
 class c_roque;
 class c_promocao;
-class c_roque;
 class c_posicao;
 
 class c_peca;
@@ -39,8 +39,6 @@ struct s_idpeca {
     unsigned NumJogadas;
 
 };
-
-#include "tabuleiro.hpp"
 
 // Maneira simples de iterar por todas as direcoes
 const std::array<e_dir, 8> Direcoes = {N, S, E, O, NE, SE, NO, SO};
@@ -161,12 +159,10 @@ class c_peca {
 		virtual std::list<c_movimento*> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);
 		// Calcula possiveis capturas
 		virtual std::list<c_movimento*> encontrar_capturas(std::map<short int, s_idpeca> _Estado);
-		// Calcula movimentos especiais
-		virtual std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) = 0;
 		
 	public:
 		c_peca(e_cor _Cor = SEMCOR, c_posicao _Posicao = c_posicao(0, 0));
-		~c_peca();
+		virtual ~c_peca();
 		// Lista movimentos possiveis
 		virtual std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);
 		// Verifica se a peca esta ameacando o rei inimigo
@@ -191,7 +187,6 @@ class c_peca {
 
 class c_bispo : public c_peca {
 	private:
-		std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) {return std::list<c_movimento*>();};
 
 	public:
 		c_bispo(e_cor _Cor, c_posicao _Posicao);
@@ -201,7 +196,6 @@ class c_bispo : public c_peca {
 
 class c_rainha : public c_peca {
 	private:
-		std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) {return std::list<c_movimento*>();};
 
 	public:
 		c_rainha(e_cor _Cor, c_posicao _Posicao);
@@ -214,14 +208,13 @@ class c_rei : public c_peca {
 		std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado);
 
 	public:
+		std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);
 	    c_rei(e_cor _Cor, c_posicao _Posicao);
         bool get_ameacado(){return Ameacado;};
 };
 
 class c_peao : public c_peca {
 	private:
-		// Calcula movimentos especiais
-		std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) {return std::list<c_movimento*>();}
 
 	public:
 	    c_peao(e_cor _Cor, c_posicao _Posicao);
@@ -231,7 +224,6 @@ class c_peao : public c_peca {
 
 class c_torre : public c_peca {
 	private:
-		std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) {return std::list<c_movimento*>();};
 
 	public:
 	    c_torre(e_cor _Cor, c_posicao _Posicao);
@@ -240,7 +232,6 @@ class c_torre : public c_peca {
 
 class c_cavalo : public c_peca {
 	private:
-		std::list<c_movimento*> encontrar_especiais(std::map<short int, s_idpeca> _Estado) {return std::list<c_movimento*>();};
 		std::list<c_movimento*> encontrar_movimentos(std::map<short int, s_idpeca> _Estado);
 	    std::list<c_movimento*> encontrar_capturas(std::map<short int, s_idpeca> _Estado);
 
