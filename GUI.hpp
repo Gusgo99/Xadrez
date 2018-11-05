@@ -45,6 +45,7 @@ class c_interface {
 
 class c_interfaceJogo {
 	private:
+		bool desenhar;
 		// Ponteiro para o jogo que deverá ser mostrado
 		c_jogo *JogoMostrado;
 		std::thread *JanelaPromocao;

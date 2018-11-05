@@ -38,6 +38,10 @@ class c_jogo {
 		bool Xeque;
 		// Indica que o jogo terminou
 		bool Mate;
+		// Posicao onde esta a peca que ameaca o rei
+		c_posicao PosicaoAmeaca;
+		// Posicao do rei ameacado
+		c_posicao PosicaoAmeacado;
 		// Insere peca no tabuleiro
 		template<typename T>
 		void inserir_peca(c_posicao _Posicao, e_cor _Cor);
@@ -47,12 +51,8 @@ class c_jogo {
 		void verificar_xeque(std::map<short int, s_idpeca> _Estado);
 		// Verifica se o jogo terminou
 		void verificar_mate();
-		// Posicao onde esta a peca que ameaca o rei
-		c_posicao PosicaoAmeaca;
-		// Posicao do rei ameacado
-		c_posicao PosicaoAmeacado;
 
-	public:
+	public: a += b;
 		// Contrutor do jogo
 		c_jogo();
 		// Construtor de copia do jogo
