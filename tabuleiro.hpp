@@ -52,7 +52,7 @@ class c_jogo {
 		// Verifica se o jogo terminou
 		void verificar_mate();
 
-	public: a += b;
+	public:
 		// Contrutor do jogo
 		c_jogo();
 		// Construtor de copia do jogo
