@@ -17,8 +17,6 @@ c_jogo::c_jogo() {
 	Turno = 1;
 	PosicaoAmeaca = c_posicao();
 	PosicaoAmeacado = c_posicao();
-	//PosicaoAmeaca = new c_posicao;
-	//PosicaoAmeacado = new c_posicao;
 
 	for(auto &i: Tabuleiro) {
 		i.second = nullptr;
@@ -71,13 +69,11 @@ c_jogo::c_jogo() {
 }
 
 c_jogo::~c_jogo() {
-	for(auto i: Tabuleiro) {
+	for(auto &i: Tabuleiro) {
 		delete i.second;
+		i.second = nullptr;
 		
 	}
-	
-	//delete PosicaoAmeaca;
-	//delete PosicaoAmeacado;
 	
 	return;
 }
