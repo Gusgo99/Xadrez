@@ -42,8 +42,6 @@ c_interface::c_interface(std::string _Titulo, unsigned _Altura, unsigned _Largur
 	Janela = new sf::RenderWindow(sf::VideoMode(_Largura, _Altura), _Titulo);
 	Janela -> setVerticalSyncEnabled(Vsync);
 
-	Desenhar = true;
-
 	return;
 }
 
@@ -76,7 +74,7 @@ void c_interface::desenhar_janela() {
 }
 
 void c_interface::ajustar_sprites() {
-
+	
 
 }
 
@@ -98,8 +96,6 @@ void c_interface::carregar_texturas(std::vector<std::string> _Imagens) {
 c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor _Lado, int _Altura, int _Largura) {
 	JogoMostrado = _JogoMostrado;
 	Lado = _Lado;
-	
-	desenhar = true;
 
 	MovimentoEscolhido = nullptr;
 
@@ -123,8 +119,6 @@ c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_c
 c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor _Lado) {
 	JogoMostrado = _JogoMostrado;
 	Lado = _Lado;
-	
-	desenhar = true;
 
 	MovimentoEscolhido = nullptr;
 
@@ -635,7 +629,6 @@ void c_interfaceJogo::desenhar_janela() {
 						localizar_clique(_Event.mouseButton.x, _Event.mouseButton.y);
 
 					}
-					desenhar = true;
 					break;
 
 				case sf::Event::Resized:
@@ -646,7 +639,6 @@ void c_interfaceJogo::desenhar_janela() {
 
 					ajustar_sprites();
 					atualizar_posicao();
-					desenhar = true;
 					break;
 
 				default:
@@ -656,40 +648,35 @@ void c_interfaceJogo::desenhar_janela() {
 			}
         }
 
-		if(desenhar) {
-			desenhar = false;
+		executar_movimentos();
+		atualizar_posicao();
+		
+		Janela -> clear();
 
-			executar_movimentos();
-			atualizar_posicao();
-			
-			Janela -> clear();
+		Janela -> draw(SpriteTabuleiro);
 
-			Janela -> draw(SpriteTabuleiro);
+		for(auto i: SpritesBrancas) {
+			Janela -> draw(i.Sprite);
 
-			for(auto i: SpritesBrancas) {
-				Janela -> draw(i.Sprite);
-
-			}
-
-			for(auto i: SpritesPretas) {
-				Janela -> draw(i.Sprite);
-
-			}
-
-			for(auto i: SpritesXeque) {
-				Janela -> draw(i);
-
-			}
-
-			for(auto i: SpritesMovimentos) {
-				Janela -> draw(i.Sprite);
-
-			}
-
-
-			Janela -> display();
-			
 		}
+
+		for(auto i: SpritesPretas) {
+			Janela -> draw(i.Sprite);
+
+		}
+
+		for(auto i: SpritesXeque) {
+			Janela -> draw(i);
+
+		}
+
+		for(auto i: SpritesMovimentos) {
+			Janela -> draw(i.Sprite);
+
+		}
+
+
+		Janela -> display();
 
 	}
 

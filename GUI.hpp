@@ -45,9 +45,9 @@ class c_interface {
 
 class c_interfaceJogo {
 	private:
-		bool desenhar;
 		// Ponteiro para o jogo que deverá ser mostrado
 		c_jogo *JogoMostrado;
+		// Thread que roda a janela de promocao
 		std::thread *JanelaPromocao;
 		// Define lado que o tabuleiro será visto
 		e_cor Lado;

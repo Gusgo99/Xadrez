@@ -142,7 +142,7 @@ c_movimento::c_movimento(c_posicao _PosInicial, c_posicao _PosFinal) {
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
- * Metodos publicos da classe c_posicao
+ * Metodos publicos da classe c_movimento
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -152,6 +152,14 @@ c_posicao c_movimento::get_inicio() {
 
 c_posicao c_movimento::get_fim() {
 	return PosFinal;
+}
+
+c_posicao c_movimento::get_inicio_torre() {
+	return PosInicialTorre;
+}
+
+c_posicao c_movimento::get_fim_torre() {
+	return PosFinalTorre;
 }
 
 void c_movimento::set_inicio(c_posicao _PosInicial) {
@@ -166,6 +174,24 @@ void c_movimento::set_inicio(c_posicao _PosInicial) {
 void c_movimento::set_fim(c_posicao _PosFinal) {
 	if(_PosFinal.validar()) {
 		PosFinal = _PosFinal;
+
+	}
+
+	return;
+}
+
+void c_movimento::set_inicio_torre(c_posicao _PosInicial) {
+	if(_PosInicial.validar()) {
+		PosInicialTorre = _PosInicial;
+
+	}
+
+	return;
+}
+
+void c_movimento::set_fim_torre(c_posicao _PosFinal) {
+	if(_PosFinal.validar()) {
+		PosFinalTorre = _PosFinal;
 
 	}
 
@@ -190,39 +216,7 @@ c_roque::c_roque(c_posicao _PosInicial, c_posicao _PosFinal, c_posicao _PosInici
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
- * Metodos publicos da classe c_roque
- * 
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-c_posicao c_roque::get_inicio_torre() {
-	return PosInicialTorre;
-}
-
-c_posicao c_roque::get_fim_torre() {
-	return PosFinalTorre;
-}
-
-void c_roque::set_inicio_torre(c_posicao _PosInicial) {
-	if(_PosInicial.validar()) {
-		PosInicialTorre = _PosInicial;
-
-	}
-
-	return;
-}
-
-void c_roque::set_fim_torre(c_posicao _PosFinal) {
-	if(_PosFinal.validar()) {
-		PosFinalTorre = _PosFinal;
-
-	}
-
-	return;
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * 
- * Construtores e destrutores da classe c_roque
+ * Construtores e destrutores da classe c_promocao
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 

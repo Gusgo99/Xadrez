@@ -110,19 +110,23 @@ class c_movimento {
 		c_posicao PosInicial;
 		// Posicao para onde a peca ira
 		c_posicao PosFinal;
+		// Posicao de onde a torre saira
+		c_posicao PosInicialTorre;
+		// Posicao para onde a torre ira
+		c_posicao PosFinalTorre;
 
 	public:
 		// Construtor
 		c_movimento(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0));
 		virtual ~c_movimento() {}
-		// Retorna posicao de saida da peca
 		c_posicao get_inicio();
-		// Retorna posicao onde a peca ira
 		c_posicao get_fim();
-		// Altera posicao de saida
+		c_posicao get_inicio_torre();
+		c_posicao get_fim_torre();
 		void set_inicio(c_posicao _PosInicial);
-		// Altera posicao de entrada
 		void set_fim(c_posicao _PosFinal);
+		void set_inicio_torre(c_posicao _PosInicial);
+		void set_fim_torre(c_posicao _PosFinal);
 
 };
 
@@ -155,20 +159,9 @@ class c_captura : public c_movimento {
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 class c_roque : public c_movimento {
-	protected:
-		// Posicao de onde a torre saira
-		c_posicao PosInicialTorre;
-		// Posicao para onde a torre ira
-		c_posicao PosFinalTorre;
-
 	public:
 		// Construtor
 		c_roque(c_posicao _PosInicial, c_posicao _PosFinal, c_posicao _PosInicialTorre, c_posicao _PosFinalTorre);
-		
-		c_posicao get_inicio_torre();
-		c_posicao get_fim_torre();
-		void set_inicio_torre(c_posicao _PosInicial);
-		void set_fim_torre(c_posicao _PosFinal);
 
 };
 
