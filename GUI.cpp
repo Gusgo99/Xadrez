@@ -615,7 +615,7 @@ void c_interfaceJogo::desenhar_janela() {
 	atualizar_posicao();
 
 	while(Janela -> isOpen()) {
-		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		
 		sf::Event _Event;
         while(Janela -> pollEvent(_Event)) {

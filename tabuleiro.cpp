@@ -180,6 +180,7 @@ std::map<short int, s_idpeca> c_jogo::get_estado() {
 std::list<c_movimento*> c_jogo::get_movimentos(c_posicao _Posicao) {
 	std::list<c_movimento*> _Movimentos;
 	std::map<short int, s_idpeca> _Estado = get_estado();
+	bool _Xeque = Xeque;
 	
 	_Estado[!_Posicao].Cor = SEMCOR;
 	_Estado[!_Posicao].Peca = VAZIO;
@@ -207,6 +208,8 @@ std::list<c_movimento*> c_jogo::get_movimentos(c_posicao _Posicao) {
 			}
 		}
 	}
+	
+	Xeque = _Xeque;
 
 	return _Movimentos;
 }
