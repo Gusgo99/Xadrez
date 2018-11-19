@@ -1,19 +1,17 @@
 #include <iostream>
 #include <thread>
 
-#include "testes.hpp"
-#include "GUI.hpp"
-#include "IA.hpp"
-#include "pecas.hpp"
-#include "tabuleiro.hpp"
+//#include "testes.hpp"
+
 #include "principal.h"
 
+
 principal::principal(){;
-    c_jogo jogo;
+    jogo = new c_jogo;
 
-	c_interfaceJogo janela("Chess", &jogo, BRANCO);
+	janela = new c_interfaceJogo("Chess", jogo, BRANCO);
 
-	janela.desenhar_janela();
+	janela->desenhar_janela();
     return;
 }
 
