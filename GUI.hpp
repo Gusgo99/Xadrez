@@ -6,23 +6,25 @@
 
 #include "tabuleiro.hpp"
 
+class c_interfacePromocao;
+
 struct s_imgpeca {
 	sf::Sprite Sprite;
 	e_cor Cor;
 	c_posicao Posicao;
-	
+
 };
 
 struct s_imgmov {
 	sf::Sprite Sprite;
 	c_movimento *Movimento;
-	
+
 };
 
 struct s_sprites {
 	sf::Sprite Sprite;
 	unsigned IDSprite;
-	
+
 };
 
 #warning Verificar o que e usado em todas as interfaces e usar heranca
@@ -35,12 +37,12 @@ class c_interface {
 		void carregar_texturas(std::vector<std::string> _Imagens);
 		void ajustar_sprites();
 		virtual void posicionar_sprites() = 0;
-		
+
 	public:
 		c_interface(std::string _Titulo = "", unsigned _Altura = 0, unsigned _Largura = 0, bool Vsync = false);
 		virtual void event_handler(sf::Event _Event) = 0;
 		void desenhar_janela();
-	
+
 };
 
 class c_interfaceJogo {
@@ -87,15 +89,16 @@ class c_interfaceJogo {
 		c_posicao PosicaoPromocao;
 		void posicionar_indicador_xeque();
 		void verificar_mate();
-		
+		c_interfacePromocao *tela;
+
 	public:
 		// Construtor com tamanho de tela relativo
-		c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor Lado);
+		c_interfaceJogo(std::string _Titulo="", c_jogo *_JogoMostrado=nullptr, e_cor Lado=BRANCO);
 		// Construtor com tamanho de tela absoluto
 		c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor Lado, int _Altura, int _Largura);
 		~c_interfaceJogo();
 		void desenhar_janela();
-	
+
 };
 
 class c_interfacePromocao {
@@ -109,11 +112,11 @@ class c_interfacePromocao {
 		void posicionar_pecas();
 		void ajustar_sprites();
 		void localizar_clique(unsigned _x, unsigned _y);
-		
+
 	public:
 		c_interfacePromocao(std::atomic<e_peca> *_Selecionado, std::atomic<e_cor> *_Cor);
 		void mostrar_janela();
-	
+
 };
 
 #endif

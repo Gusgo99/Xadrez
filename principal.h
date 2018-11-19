@@ -14,7 +14,8 @@ class principal{
         c_interfaceJogo *janela;
 
     public:
-        principal();;
+        principal();
+        ~principal();
 };
 
 

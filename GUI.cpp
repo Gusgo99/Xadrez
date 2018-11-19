@@ -74,7 +74,7 @@ void c_interface::desenhar_janela() {
 }
 
 void c_interface::ajustar_sprites() {
-	
+
 
 }
 
@@ -194,7 +194,7 @@ void c_interfaceJogo::ajustar_sprites() {
 
 void c_interfaceJogo::posicionar_movimentos() { // Ainda não desenha
 	SpritesMovimentos.clear();
-	
+
 	for(auto i: MovimentosDisponiveis) { // Vai correr na lista de movimentos
 		int _PosX, _PosY;
 		if(Lado == PRETO) {
@@ -331,7 +331,7 @@ void c_interfaceJogo::posicionar_pecas(std::map<short int, s_idpeca> _Estado) {
 					_Temp.Cor = BRANCO;
 					SpritesBrancas.push_back(_Temp);
 					break;
-					
+
 				default:
 					break;
 
@@ -391,7 +391,7 @@ void c_interfaceJogo::posicionar_pecas(std::map<short int, s_idpeca> _Estado) {
 					_Temp.Cor = PRETO;
 					SpritesPretas.push_back(_Temp);
 					break;
-					
+
 				default:
 					break;
 
@@ -584,12 +584,12 @@ void c_interfaceJogo::executar_movimentos() {
 				*JogoMostrado += *MovimentoEscolhido;
 
 			}
-			
+
 			PosicaoSelecionada = c_posicao();
-			
+
 			if(JogoMostrado -> get_mate()) {
 				std::cout << "Xeque mate!\n";
-				
+
 			}
 
 			if(JogoMostrado -> get_promocao()) {
@@ -616,7 +616,7 @@ void c_interfaceJogo::desenhar_janela() {
 
 	while(Janela -> isOpen()) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
-		
+
 		sf::Event _Event;
         while(Janela -> pollEvent(_Event)) {
             switch(_Event.type) {
@@ -650,7 +650,7 @@ void c_interfaceJogo::desenhar_janela() {
 
 		executar_movimentos();
 		atualizar_posicao();
-		
+
 		Janela -> clear();
 
 		Janela -> draw(SpriteTabuleiro);
@@ -905,17 +905,17 @@ void c_interfacePromocao::localizar_clique(unsigned _x, unsigned _y) {
 void c_interfaceJogo::escolher_promocao() {
 	if(JogoMostrado -> get_turno() == BRANCO) {
 		CorPromocao.store(PRETO);
-		
+
 	}
 	else {
 		CorPromocao.store(BRANCO);
-		
+
 	}
 	TipoPromocao.store(VAZIO);
-	
-	c_interfacePromocao tela(&TipoPromocao, &CorPromocao);
 
-	tela.mostrar_janela();
+	tela = new c_interfacePromocao(&TipoPromocao, &CorPromocao);
+
+	tela->mostrar_janela();
 
 	MovimentoEscolhido = new c_promocao(PosicaoPromocao, TipoPromocao.load());
 
