@@ -38,7 +38,7 @@ const std::array<std::string, NUMSPRITES> IMAGENS = {
 	"./resources/torre_preto.png", "./resources/torre_branco.png",
 	"./resources/cavalo_preto.png", "./resources/cavalo_branco.png"};
 
-c_interface::c_interface(std::string _Titulo, unsigned _Altura, unsigned _Largura, bool Vsync) {
+/*c_interface::c_interface(std::string _Titulo, unsigned _Altura, unsigned _Largura, bool Vsync) {
 	Janela = new sf::RenderWindow(sf::VideoMode(_Largura, _Altura), _Titulo);
 	Janela -> setVerticalSyncEnabled(Vsync);
 
@@ -92,6 +92,7 @@ void c_interface::carregar_texturas(std::vector<std::string> _Imagens) {
 
 	return;
 }
+*/
 
 c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor _Lado, int _Altura, int _Largura) {
 	JogoMostrado = _JogoMostrado;
@@ -888,7 +889,7 @@ void c_interfacePromocao::ajustar_sprites() {
 	return;
 }
 
-void c_interfacePromocao::localizar_clique(unsigned _x, unsigned _y) {
+void c_interfacePromocao::localizar_clique(const unsigned _x, const unsigned _y) {
 	for(auto &i: Sprites) {
 		if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
 			Selecionado -> store((e_peca)i.IDSprite);
