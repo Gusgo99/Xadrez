@@ -43,9 +43,6 @@ struct s_idpeca {
 
 };
 
-// Maneira simples de iterar por todas as direcoes
-const std::array<e_dir, 8> Direcoes = {N, S, E, O, NE, SE, NO, SO};
-
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
  * Classe c_posicao:

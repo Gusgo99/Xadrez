@@ -23,12 +23,14 @@ c_jogo::c_jogo() {
 
 	}
 
+	// Insere peoes
 	for(auto i = 1; i <= 8; i++) {
 		inserir_peca<c_peao>(c_posicao(i, 2), BRANCO);
 		inserir_peca<c_peao>(c_posicao(i, 7), PRETO);
 
 	}
 
+	// Coloca peças no tabuleiro
 	inserir_peca<c_torre>(c_posicao(1, 1), BRANCO);
 	inserir_peca<c_torre>(c_posicao(8, 1), BRANCO);
 	inserir_peca<c_torre>(c_posicao(1, 8), PRETO);

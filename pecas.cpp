@@ -4,6 +4,9 @@
 #include "pecas.hpp"
 #include "tabuleiro.hpp"
 
+// Maneira simples de iterar por todas as direcoes
+const std::array<e_dir, 8> DIRECOES = {N, S, E, O, NE, SE, NO, SO};
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
  * Construtores e destrutores da classe c_posicao
@@ -342,7 +345,7 @@ unsigned c_peca::get_num_jogadas() {
 std::list<c_movimento*> c_peca::encontrar_movimentos(std::map<short int, s_idpeca> _Estado) {
 	std::list<c_movimento*> _Movimentos;
 
-	for(auto i: Direcoes) {
+	for(auto i: DIRECOES) {
 		for(auto j = 1; j <= DistMov[i]; j++) {
 			c_posicao _NovaPosicao(i, j);
 			_NovaPosicao += Posicao;
@@ -359,7 +362,7 @@ std::list<c_movimento*> c_peca::encontrar_movimentos(std::map<short int, s_idpec
 std::list<c_movimento*> c_peca::encontrar_capturas(std::map<short int, s_idpeca> _Estado) {
 	std::list<c_movimento*> _Movimentos;
 
-	for(auto i: Direcoes) {
+	for(auto i: DIRECOES) {
 		for(auto j = 1; j <= DistCome[i]; j++) {
 			c_posicao _NovaPosicao(i, j);
 			_NovaPosicao += Posicao;
