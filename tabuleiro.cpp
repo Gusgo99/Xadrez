@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iostream>
 
 #include "tabuleiro.hpp"
@@ -22,34 +23,8 @@ c_jogo::c_jogo() {
 		i.second = nullptr;
 
 	}
-
-	// Insere peoes
-	for(auto i = 1; i <= 8; i++) {
-		inserir_peca<c_peao>(c_posicao(i, 2), BRANCO);
-		inserir_peca<c_peao>(c_posicao(i, 7), PRETO);
-
-	}
-
-	// Coloca peças no tabuleiro
-	inserir_peca<c_torre>(c_posicao(1, 1), BRANCO);
-	inserir_peca<c_torre>(c_posicao(8, 1), BRANCO);
-	inserir_peca<c_torre>(c_posicao(1, 8), PRETO);
-	inserir_peca<c_torre>(c_posicao(8, 8), PRETO);
-
-	inserir_peca<c_cavalo>(c_posicao(2, 1), BRANCO);
-	inserir_peca<c_cavalo>(c_posicao(7, 1), BRANCO);
-	inserir_peca<c_cavalo>(c_posicao(2, 8), PRETO);
-	inserir_peca<c_cavalo>(c_posicao(7, 8), PRETO);
-
-	inserir_peca<c_bispo>(c_posicao(3, 1), BRANCO);
-	inserir_peca<c_bispo>(c_posicao(6, 1), BRANCO);
-	inserir_peca<c_bispo>(c_posicao(3, 8), PRETO);
-	inserir_peca<c_bispo>(c_posicao(6, 8), PRETO);
-
-	inserir_peca<c_rainha>(c_posicao(4, 8), PRETO);
-	inserir_peca<c_rainha>(c_posicao(4, 1), BRANCO);
-	inserir_peca<c_rei>(c_posicao(5, 1), BRANCO);
-	inserir_peca<c_rei>(c_posicao(5, 8), PRETO);
+	
+	carregar_pecas("resources/pecas.dat");
 	
 	for(auto i: Tabuleiro) {
 		if(i.second != nullptr) {
@@ -311,6 +286,50 @@ void c_jogo::verificar_mate() {
 					Mate = false;
 					
 				}
+			}
+		}
+	}
+	
+	return;
+}
+
+void c_jogo::carregar_pecas(std::string _nomeArquivo) {
+	std::ifstream _arquivo(_nomeArquivo);
+	
+	if(_arquivo.is_open()) {
+		int _NumPecas, _X, _Y, _Peca, _Cor;
+		_arquivo >> _NumPecas;
+		for(auto i = 0; i != _NumPecas; i++) {
+			_arquivo >> _X >> _Y >> _Peca >> _Cor;
+			switch(_Peca) {
+				case PEAO:
+					inserir_peca<c_peao>(c_posicao(_X, _Y), e_cor(_Cor));
+					break;
+					
+				case TORRE:
+					inserir_peca<c_torre>(c_posicao(_X, _Y), e_cor(_Cor));
+					break;
+					
+				case CAVALO:
+					inserir_peca<c_cavalo>(c_posicao(_X, _Y), e_cor(_Cor));
+					break;
+					
+				case BISPO:
+					inserir_peca<c_bispo>(c_posicao(_X, _Y), e_cor(_Cor));
+					break;
+					
+				case RAINHA:
+					inserir_peca<c_rainha>(c_posicao(_X, _Y), e_cor(_Cor));
+					break;
+					
+				case REI:
+					inserir_peca<c_rei>(c_posicao(_X, _Y), e_cor(_Cor));
+					break;
+					
+				default:
+					throw(15);
+					break;
+				
 			}
 		}
 	}

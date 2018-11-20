@@ -51,6 +51,8 @@ class c_jogo {
 		void verificar_xeque(std::map<short int, s_idpeca> _Estado);
 		// Verifica se o jogo terminou
 		void verificar_mate();
+		// Carrega posicao das pecas de um arquivo
+		void carregar_pecas(std::string _nomeArquivo);
 
 	public:
 		// Contrutor do jogo

@@ -38,62 +38,6 @@ const std::array<std::string, NUMSPRITES> IMAGENS = {
 	"./resources/torre_preto.png", "./resources/torre_branco.png",
 	"./resources/cavalo_preto.png", "./resources/cavalo_branco.png"};
 
-/*c_interface::c_interface(std::string _Titulo, unsigned _Altura, unsigned _Largura, bool Vsync) {
-	Janela = new sf::RenderWindow(sf::VideoMode(_Largura, _Altura), _Titulo);
-	Janela -> setVerticalSyncEnabled(Vsync);
-
-	return;
-}
-
-void c_interface::desenhar_janela() {
-	while(Janela -> isOpen()) {
-		sf::Event _Event;
-        while(Janela -> pollEvent(_Event)) {
-			event_handler(_Event);
-
-		}
-	}
-
-	posicionar_sprites();
-
-	if(Desenhar) {
-		Janela -> clear();
-
-		for(auto i: Sprites) {
-			Janela -> draw(i);
-
-		}
-
-		Janela -> display();
-
-		Desenhar = false;
-
-	}
-
-	return;
-}
-
-void c_interface::ajustar_sprites() {
-	
-
-}
-
-void c_interface::carregar_texturas(std::vector<std::string> _Imagens) {
-	for(auto i: _Imagens) {
-		sf::Texture _Textura;
-		if(!_Textura.loadFromFile(i)) {
-			std::clog << "log: Erro ao carregar arquivo " << i << std::endl;
-			continue;
-
-		}
-		Texturas.push_back(_Textura);
-
-	}
-
-	return;
-}
-*/
-
 c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor _Lado, int _Altura, int _Largura) {
 	JogoMostrado = _JogoMostrado;
 	Lado = _Lado;
