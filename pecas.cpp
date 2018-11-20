@@ -607,62 +607,41 @@ std::list<c_movimento*> c_rei::listar_movimentos(std::map<short int, s_idpeca> _
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-std::list<c_movimento*> c_rei::encontrar_especiais(std::map<short int, s_idpeca> _Estado) {
-//encontra o roque do rei
-
+std::list<c_movimento*> c_rei::encontrar_especiais(std::map<short int, s_idpeca> _Estado) { //encontra o roque do rei
     c_movimento *_aux;
     std::list<c_movimento*> _Movimento;
+	c_posicao _PosTorreE;
+	c_posicao _PosTorreD;
+	
+	_PosTorreE = c_posicao(O, 4) + Posicao;
+	_PosTorreD = c_posicao(E, 3) + Posicao;
 
-    if(IDPeca.NumJogadas != 0)//o rei moveu?
-        return _Movimento;
-
-    if(IDPeca.Cor == BRANCO){//REI BRANCO
-
-        if(_Estado[!c_posicao(1, 1)].Cor == BRANCO && _Estado[!c_posicao(1, 1)].Peca == TORRE) { // Roque grande?
-            if((_Estado[!c_posicao(2, 1)].Peca == VAZIO) && (_Estado[!c_posicao(3, 1)].Peca == VAZIO) && (_Estado[!c_posicao(4, 1)].Peca == VAZIO)) { // Tem peca no caminho?
-				if(_Estado[!c_posicao(1, 1)].NumJogadas == 0) {
-					_aux = new c_roque(c_posicao(5, 1), c_posicao(3, 1), c_posicao(1, 1), c_posicao(4, 1));
-					_Movimento.push_back(_aux);
-
+    if(IDPeca.NumJogadas == 0) {//o rei moveu?
+		if((_Estado[!_PosTorreE].Peca == TORRE) && (_Estado[!_PosTorreE].NumJogadas == 0)) { // Roque grande?
+			for(auto i = 1; i != 4; i++) {
+				if(_Estado[!(c_posicao(O, i) + Posicao)].Peca != VAZIO) {
+					break;
+					
+				}
+				if(i == 3) {
+					_Movimento.push_back(new c_roque(Posicao, c_posicao(O, 2) + Posicao, _PosTorreE, c_posicao(E, 3) + _PosTorreE));
+					
 				}
 			}
-        }
-
-        if((_Estado[!c_posicao(8, 1)].Cor == BRANCO) && (_Estado[!c_posicao(8, 1)].Peca == TORRE)) { // Roque pequeno?
-            if(_Estado[!c_posicao(6, 1)].Peca == VAZIO && _Estado[!c_posicao(7, 1)].Peca == VAZIO) { // Tem peca no caminho?
-				if(_Estado[!c_posicao(8, 1)].NumJogadas == 0) {
-					_aux = new c_roque(c_posicao(5, 1), c_posicao(7, 1), c_posicao(8, 1), c_posicao(6, 1));
-					_Movimento.push_back(_aux);
-
+		}
+		if((_Estado[!_PosTorreE].Peca == TORRE) && (_Estado[!_PosTorreE].NumJogadas == 0)) { // Roque pequeno?
+			for(auto i = 1; i != 3; i++) {
+				if(_Estado[!(c_posicao(E, i) + Posicao)].Peca != VAZIO) {
+					break;
+					
+				}
+				if(i == 2) {
+					_Movimento.push_back(new c_roque(Posicao, c_posicao(E, 2) + Posicao, _PosTorreD, c_posicao(O, 2) + _PosTorreD));
+					
 				}
 			}
-        }
-
-
-    }
-	else { // REI PRETO
-
-        if((_Estado[!c_posicao(1, 8)].Cor == PRETO) && (_Estado[!c_posicao(1, 8)].Peca == TORRE)) { // Roque grande?
-            if((_Estado[!c_posicao(2, 8)].Peca == VAZIO) && (_Estado[!c_posicao(3, 8)].Peca == VAZIO) && (_Estado[!c_posicao(4, 8)].Peca == VAZIO)) { // Tem peca no caminho?
-				if(_Estado[!c_posicao(1, 8)].NumJogadas == 0) {
-					_aux = new c_roque(c_posicao(5, 8), c_posicao(3, 8), c_posicao(1, 8), c_posicao(4, 8));
-					_Movimento.push_back(_aux);
-
-				}
-			}
-        }
-
-        if((_Estado[!c_posicao(8, 8)].Cor == PRETO) && (_Estado[!c_posicao(8, 8)].Peca == TORRE)) { // Roque pequeno?
-            if((_Estado[!c_posicao(6, 8)].Peca == VAZIO) && (_Estado[!c_posicao(7, 8)].Peca == VAZIO)) { // Tem peca no caminho?
-				if(_Estado[!c_posicao(8, 8)].NumJogadas == 0) {
-					_aux = new c_roque(c_posicao(5, 8), c_posicao(7, 8), c_posicao(8, 8), c_posicao(6, 8));
-					_Movimento.push_back(_aux);
-
-				}
-			}
-        }
-
-    }
+		}
+	}
 
     return _Movimento;
 }

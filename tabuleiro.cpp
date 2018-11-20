@@ -168,9 +168,7 @@ std::list<c_movimento*> c_jogo::get_movimentos(c_posicao _Posicao) {
 			
 			for(auto i: _Movimentos) {
 				_Estado[!(i -> get_fim())] = Tabuleiro[!_Posicao] -> get_ID();
-				
 				verificar_xeque(_Estado);
-				
 				if(Xeque) {
 					if(i -> get_fim() != PosicaoAmeaca) {
 						_Movimentos.remove(i);

@@ -25,6 +25,18 @@ struct s_sprites {
 	
 };
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe c_interfaceJogo:
+ *
+ * Responsavel por:
+ *
+ * - Interface grafica do jogo;
+ * - Verificar objetos selecionados;
+ * - Executar movimentos selecionados;
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 class c_interfaceJogo {
 	private:
 		// Ponteiro para o jogo que deverá ser mostrado
@@ -53,6 +65,9 @@ class c_interfaceJogo {
 		int PosXTabuleiro;
 		// Posição em Y do tabuleiro dentro da janela
 		int PosYTabuleiro;
+		std::atomic<e_cor> CorPromocao;
+		std::atomic<e_peca> TipoPromocao;
+		c_posicao PosicaoPromocao;
 		// Carrega cada sprite a partir das imagens
 		void carregar_texturas();
 		// Ajusta tamanho da tela para não distorcer imagens após redimensionar janela
@@ -64,11 +79,7 @@ class c_interfaceJogo {
 		void posicionar_pecas(std::map<short int, s_idpeca> _Estado);
 		void executar_movimentos();
 		void escolher_promocao();
-		std::atomic<e_cor> CorPromocao;
-		std::atomic<e_peca> TipoPromocao;
-		c_posicao PosicaoPromocao;
 		void posicionar_indicador_xeque();
-		void verificar_mate();
 		
 	public:
 		// Construtor com tamanho de tela relativo
@@ -79,6 +90,18 @@ class c_interfaceJogo {
 		void desenhar_janela();
 	
 };
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Classe c_interfaceJogo:
+ *
+ * Responsavel por:
+ *
+ * - Interface grafica de escolha de peca da promocao
+ * - Verificar objetos selecionados;
+ * - Informar para c_interfaceJogo qual a peca selecionada
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 class c_interfacePromocao {
 	private:
