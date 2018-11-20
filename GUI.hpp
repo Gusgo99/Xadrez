@@ -40,7 +40,7 @@ struct s_sprites {
 class c_interfaceJogo {
 	private:
 		// Ponteiro para o jogo que deverá ser mostrado
-		c_jogo *JogoMostrado;
+		c_tabuleiro *JogoMostrado;
 		// Thread que roda a janela de promocao
 		std::thread *JanelaPromocao;
 		// Define lado que o tabuleiro será visto
@@ -83,9 +83,9 @@ class c_interfaceJogo {
 		
 	public:
 		// Construtor com tamanho de tela relativo
-		c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor Lado);
+		c_interfaceJogo(std::string _Titulo, c_tabuleiro *_JogoMostrado, e_cor Lado);
 		// Construtor com tamanho de tela absoluto
-		c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor Lado, int _Altura, int _Largura);
+		c_interfaceJogo(std::string _Titulo, c_tabuleiro *_JogoMostrado, e_cor Lado, int _Altura, int _Largura);
 		~c_interfaceJogo();
 		void desenhar_janela();
 	

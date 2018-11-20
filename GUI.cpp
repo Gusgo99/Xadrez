@@ -43,7 +43,7 @@ const std::array<std::string, NUMSPRITES> IMAGENS = {
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor _Lado, int _Altura, int _Largura) {
+c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_tabuleiro *_JogoMostrado, e_cor _Lado, int _Altura, int _Largura) {
 	JogoMostrado = _JogoMostrado;
 	Lado = _Lado;
 
@@ -66,7 +66,7 @@ c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_c
 	return;
 }
 
-c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_jogo *_JogoMostrado, e_cor _Lado) {
+c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_tabuleiro *_JogoMostrado, e_cor _Lado) {
 	JogoMostrado = _JogoMostrado;
 	Lado = _Lado;
 

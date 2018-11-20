@@ -1,7 +1,7 @@
 #ifndef TABULEIRO_HPP
 #define TABULEIRO_HPP
 
-class c_jogo;
+class c_tabuleiro;
 class c_movimento;
 
 #include <array>
@@ -11,7 +11,7 @@ class c_movimento;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- * Classe c_jogo:
+ * Classe c_tabuleiro:
  *
  * Responsavel por:
  *
@@ -22,7 +22,7 @@ class c_movimento;
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-class c_jogo {
+class c_tabuleiro {
 	private:
 		// Aponta para cada instancia das pecas
 		std::map<short int, c_peca*> Tabuleiro;
@@ -56,11 +56,11 @@ class c_jogo {
 
 	public:
 		// Contrutor do jogo
-		c_jogo();
+		c_tabuleiro();
 		// Construtor de copia do jogo
-		c_jogo(c_jogo *_original);
+		c_tabuleiro(c_tabuleiro *_original);
 		// Destrutor
-		~c_jogo();
+		~c_tabuleiro();
 		// Verificar se precisa implementar:
 		salvar_jogo();
 		// Verificar se precisa implementar:

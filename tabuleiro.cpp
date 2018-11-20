@@ -7,11 +7,11 @@
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
- * Construtores e destrutores da classe c_jogo
+ * Construtores e destrutores da classe c_tabuleiro
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-c_jogo::c_jogo() {
+c_tabuleiro::c_tabuleiro() {
 	Promocao = false;
 	Xeque = false;
 	Mate = false;
@@ -45,7 +45,7 @@ c_jogo::c_jogo() {
 	return;
 }
 
-c_jogo::~c_jogo() {
+c_tabuleiro::~c_tabuleiro() {
 	for(auto &i: Tabuleiro) {
 		delete i.second;
 		i.second = nullptr;
@@ -57,11 +57,11 @@ c_jogo::~c_jogo() {
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
- * Metodos publicos da classe c_jogo
+ * Metodos publicos da classe c_tabuleiro
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void c_jogo::operator+=(c_movimento &_Movimento) {
+void c_tabuleiro::operator+=(c_movimento &_Movimento) {
 	Turno++;
 
 	Tabuleiro[!_Movimento.get_fim()] = Tabuleiro[!_Movimento.get_inicio()];
@@ -74,7 +74,7 @@ void c_jogo::operator+=(c_movimento &_Movimento) {
 	return;
 }
 
-void c_jogo::operator+=(c_captura &_Movimento) {
+void c_tabuleiro::operator+=(c_captura &_Movimento) {
 	Turno++;
 
 	delete Tabuleiro[!_Movimento.get_fim()];
@@ -88,7 +88,7 @@ void c_jogo::operator+=(c_captura &_Movimento) {
 	return;
 }
 
-void c_jogo::operator+=(c_roque &_Movimento) {
+void c_tabuleiro::operator+=(c_roque &_Movimento) {
 	Turno++;
 
 	Tabuleiro[!_Movimento.get_fim()] = Tabuleiro[!_Movimento.get_inicio()];
@@ -105,7 +105,7 @@ void c_jogo::operator+=(c_roque &_Movimento) {
 	return;
 }
 
-void c_jogo::operator+=(c_promocao &_Movimento) {
+void c_tabuleiro::operator+=(c_promocao &_Movimento) {
 	c_peca *_Temp = nullptr;
 
 	Promocao = false;
@@ -141,7 +141,7 @@ void c_jogo::operator+=(c_promocao &_Movimento) {
 	return;
 }
 
-std::map<short int, s_idpeca> c_jogo::get_estado() {
+std::map<short int, s_idpeca> c_tabuleiro::get_estado() {
 	std::map<short int, s_idpeca> _Estado;
 
 	for(auto i: Tabuleiro) {
@@ -154,7 +154,7 @@ std::map<short int, s_idpeca> c_jogo::get_estado() {
 	return _Estado;
 }
 
-std::list<c_movimento*> c_jogo::get_movimentos(c_posicao _Posicao) {
+std::list<c_movimento*> c_tabuleiro::get_movimentos(c_posicao _Posicao) {
 	std::list<c_movimento*> _Movimentos;
 	std::map<short int, s_idpeca> _Estado = get_estado();
 	bool _Xeque = Xeque;
@@ -189,19 +189,19 @@ std::list<c_movimento*> c_jogo::get_movimentos(c_posicao _Posicao) {
 	return _Movimentos;
 }
 
-bool c_jogo::get_xeque() {
+bool c_tabuleiro::get_xeque() {
 	return Xeque;
 }
 
-bool c_jogo::get_mate() {
+bool c_tabuleiro::get_mate() {
 	return Mate;
 }
 
-bool c_jogo::get_promocao() {
+bool c_tabuleiro::get_promocao() {
 	return Promocao;
 }
 
-e_cor c_jogo::get_turno() {
+e_cor c_tabuleiro::get_turno() {
 	if((Turno % 2) == 1) {
 		return BRANCO;
 
@@ -212,28 +212,28 @@ e_cor c_jogo::get_turno() {
 	}
 }
 
-c_posicao c_jogo::get_posicao_ameaca() {
+c_posicao c_tabuleiro::get_posicao_ameaca() {
 	return PosicaoAmeaca;
 }
 
-c_posicao c_jogo::get_posicao_ameacado() {
+c_posicao c_tabuleiro::get_posicao_ameacado() {
 	return PosicaoAmeacado;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
- * Metodos privados da classe c_jogo
+ * Metodos privados da classe c_tabuleiro
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 template<typename _Peca>
-void c_jogo::inserir_peca(c_posicao _Posicao, e_cor _Cor) {
+void c_tabuleiro::inserir_peca(c_posicao _Posicao, e_cor _Cor) {
 	Tabuleiro[!_Posicao] = new _Peca(_Cor, _Posicao);
 
 	return;
 }
 
-void c_jogo::verificar_xeque() {
+void c_tabuleiro::verificar_xeque() {
 	std::map<short int, s_idpeca> _Estado = get_estado();
 
 	verificar_xeque(_Estado);
@@ -241,7 +241,7 @@ void c_jogo::verificar_xeque() {
 	return;
 }
 
-void c_jogo::verificar_xeque(std::map<short int, s_idpeca> _Estado) {
+void c_tabuleiro::verificar_xeque(std::map<short int, s_idpeca> _Estado) {
 	Xeque = false;
 
 	for(auto i: Tabuleiro) {
@@ -266,7 +266,7 @@ void c_jogo::verificar_xeque(std::map<short int, s_idpeca> _Estado) {
 	return;
 }
 
-void c_jogo::verificar_mate() {
+void c_tabuleiro::verificar_mate() {
 	Mate = true;
 	
 	for(auto i: Tabuleiro) {
@@ -291,7 +291,7 @@ void c_jogo::verificar_mate() {
 	return;
 }
 
-void c_jogo::carregar_pecas(std::string _nomeArquivo) {
+void c_tabuleiro::carregar_pecas(std::string _nomeArquivo) {
 	std::ifstream _arquivo(_nomeArquivo);
 	
 	if(_arquivo.is_open()) {
