@@ -25,24 +25,6 @@ struct s_sprites {
 	
 };
 
-#warning Verificar o que e usado em todas as interfaces e usar heranca
-class c_interface {
-	protected:
-		sf::RenderWindow *Janela;
-		std::vector<sf::Texture> Texturas;
-		std::list<sf::Sprite> Sprites;
-		bool Desenhar;
-		void carregar_texturas(std::vector<std::string> _Imagens);
-		void ajustar_sprites();
-		virtual void posicionar_sprites() = 0;
-		
-	public:
-		c_interface(std::string _Titulo = "", unsigned _Altura = 0, unsigned _Largura = 0, bool Vsync = false);
-		virtual void event_handler(sf::Event _Event) = 0;
-		void desenhar_janela();
-	
-};
-
 class c_interfaceJogo {
 	private:
 		// Ponteiro para o jogo que deverá ser mostrado
@@ -77,7 +59,7 @@ class c_interfaceJogo {
 		void ajustar_sprites();
 		// Desenha pecas na tela baseado no estado retornado por _JogoMostrado
 		void atualizar_posicao();
-		void localizar_clique(unsigned _x, unsigned _y);
+		void localizar_clique(const unsigned _x, const unsigned _y);
 		void posicionar_movimentos();
 		void posicionar_pecas(std::map<short int, s_idpeca> _Estado);
 		void executar_movimentos();
