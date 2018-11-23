@@ -77,16 +77,16 @@ class c_interfaceJogo {
 		void atualizar_posicao();
 		void localizar_clique(const unsigned _x, const unsigned _y);
 		void posicionar_movimentos();
-		void posicionar_pecas(std::map<short int, s_idpeca> _Estado);
+		void posicionar_pecas(const std::map<short int, s_idpeca> _Estado);
 		void executar_movimentos();
 		void escolher_promocao();
 		void posicionar_indicador_xeque();
 		
 	public:
 		// Construtor com tamanho de tela relativo
-		c_interfaceJogo(std::string _Titulo, c_tabuleiro *_JogoMostrado, e_cor Lado);
+		c_interfaceJogo(const std::string _Titulo = "", c_tabuleiro *_JogoMostrado = nullptr, const e_cor Lado = BRANCO);
 		// Construtor com tamanho de tela absoluto
-		c_interfaceJogo(std::string _Titulo, c_tabuleiro *_JogoMostrado, e_cor Lado, int _Altura, int _Largura);
+		c_interfaceJogo(const std::string _Titulo, c_tabuleiro *_JogoMostrado, const e_cor Lado, const int _Altura, const int _Largura);
 		~c_interfaceJogo();
 		void desenhar_janela();
 	
@@ -118,6 +118,7 @@ class c_interfacePromocao {
 		
 	public:
 		c_interfacePromocao(std::atomic<e_peca> *_Selecionado, std::atomic<e_cor> *_Cor);
+		~c_interfacePromocao() {}
 		void mostrar_janela();
 	
 };

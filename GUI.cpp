@@ -43,7 +43,7 @@ const std::array<std::string, NUMSPRITES> IMAGENS = {
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_tabuleiro *_JogoMostrado, e_cor _Lado, int _Altura, int _Largura) {
+c_interfaceJogo::c_interfaceJogo(const std::string _Titulo, c_tabuleiro *_JogoMostrado, const e_cor _Lado, const int _Altura, const int _Largura) {
 	JogoMostrado = _JogoMostrado;
 	Lado = _Lado;
 
@@ -66,7 +66,7 @@ c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_tabuleiro *_JogoMostrado
 	return;
 }
 
-c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_tabuleiro *_JogoMostrado, e_cor _Lado) {
+c_interfaceJogo::c_interfaceJogo(const std::string _Titulo, c_tabuleiro *_JogoMostrado, const e_cor _Lado) {
 	JogoMostrado = _JogoMostrado;
 	Lado = _Lado;
 
@@ -248,7 +248,7 @@ void c_interfaceJogo::atualizar_posicao() {//atualiza o mapa de s_idpeca
 	return;
 }
 
-void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
+void c_interfaceJogo::localizar_clique(const unsigned _x, const unsigned _y) {
 	PosicaoSelecionada = c_posicao();
 	atualizar_posicao();
 	
@@ -351,51 +351,158 @@ void c_interfaceJogo::posicionar_movimentos() { // Ainda não desenha
 	return;
 }
 
-void c_interfacePromocao::posicionar_pecas() {
-	Sprites.clear();
+void c_interfaceJogo::posicionar_pecas(const std::map<short int, s_idpeca> _Estado) {
+	for(auto &i: _Estado) {
+		int _PosX, _PosY;
+		if(Lado == PRETO) {
+			_PosX = (i.first - 10) / 10;
+			_PosY = (i.first -  1) % 10;
 
-	if(Cor -> load() == BRANCO) {
-		s_sprites _Temp;
-		_Temp.Sprite.setTexture(Texturas[RAINHABRANCO]);
-		_Temp.Sprite.setPosition(0, 0);
-		_Temp.IDSprite = RAINHA;
-		Sprites.push_back(_Temp);
-		_Temp.Sprite.setTexture(Texturas[BISPOBRANCO]);
-		_Temp.Sprite.setPosition(135, 0);
-		_Temp.IDSprite = BISPO;
-		Sprites.push_back(_Temp);
-		_Temp.Sprite.setTexture(Texturas[TORREBRANCO]);
-		_Temp.Sprite.setPosition(270, 0);
-		_Temp.IDSprite = TORRE;
-		Sprites.push_back(_Temp);
-		_Temp.Sprite.setTexture(Texturas[CAVALOBRANCO]);
-		_Temp.Sprite.setPosition(405, 0);
-		_Temp.IDSprite = CAVALO;
-		Sprites.push_back(_Temp);
+			_PosX = 7 - _PosX;
 
+			_PosX *= menor(Altura, Largura) / 8;
+			_PosY *= menor(Altura, Largura) / 8;
+
+			_PosX -= PosXTabuleiro;
+			_PosY -= PosYTabuleiro;
+
+		}
+		else {
+			_PosX = (i.first - 10) / 10;
+			_PosY = (i.first -  1) % 10;
+
+			_PosY = 7 - _PosY;
+
+			_PosX *= menor(Altura, Largura) / 8;
+			_PosY *= menor(Altura, Largura) / 8;
+
+			_PosX += PosXTabuleiro;
+			_PosY += PosYTabuleiro;
+
+		}
+
+		s_imgpeca _Temp;
+
+		if(i.second.Cor == BRANCO) {//procura qual peca e pra desenhar
+			switch(i.second.Peca) {
+				case PEAO:
+					_Temp.Sprite.setTexture(Texturas[PEAOBRANCO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					_Temp.Cor = BRANCO;
+					SpritesBrancas.push_back(_Temp);
+					break;
+
+				case CAVALO:
+					_Temp.Sprite.setTexture(Texturas[CAVALOBRANCO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					_Temp.Cor = BRANCO;
+					SpritesBrancas.push_back(_Temp);
+					break;
+
+				case BISPO:
+					_Temp.Sprite.setTexture(Texturas[BISPOBRANCO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					_Temp.Cor = BRANCO;
+					SpritesBrancas.push_back(_Temp);
+					break;
+
+				case TORRE:
+					_Temp.Sprite.setTexture(Texturas[TORREBRANCO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					_Temp.Cor = BRANCO;
+					SpritesBrancas.push_back(_Temp);
+					break;
+
+				case RAINHA:
+					_Temp.Sprite.setTexture(Texturas[RAINHABRANCO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					_Temp.Cor = BRANCO;
+					SpritesBrancas.push_back(_Temp);
+					break;
+
+				case REI:
+					_Temp.Sprite.setTexture(Texturas[REIBRANCO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					_Temp.Cor = BRANCO;
+					SpritesBrancas.push_back(_Temp);
+					break;
+					
+				default:
+					break;
+
+			}
+			SpritesBrancas.back().Sprite.setColor(sf::Color(0xE0, 0xE0, 0xE0, 0xFF));
+			if((!PosicaoSelecionada) == i.first) {
+				SpritesBrancas.back().Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
+
+			}
+		}
+		else if(i.second.Cor == PRETO) {
+			switch(i.second.Peca) {
+				case PEAO:
+					_Temp.Sprite.setTexture(Texturas[PEAOPRETO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					_Temp.Cor = PRETO;
+					SpritesPretas.push_back(_Temp);
+					break;
+
+				case CAVALO:
+					_Temp.Sprite.setTexture(Texturas[CAVALOPRETO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					_Temp.Cor = PRETO;
+					SpritesPretas.push_back(_Temp);
+					break;
+
+				case BISPO:
+					_Temp.Sprite.setTexture(Texturas[BISPOPRETO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					_Temp.Cor = PRETO;
+					SpritesPretas.push_back(_Temp);
+					break;
+
+				case TORRE:
+					_Temp.Sprite.setTexture(Texturas[TORREPRETO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					_Temp.Cor = PRETO;
+					SpritesPretas.push_back(_Temp);
+					break;
+
+				case RAINHA:
+					_Temp.Sprite.setTexture(Texturas[RAINHAPRETO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					_Temp.Cor = PRETO;
+					SpritesPretas.push_back(_Temp);
+					break;
+
+				case REI:
+					_Temp.Sprite.setTexture(Texturas[REIPRETO]);
+					_Temp.Sprite.setPosition(_PosX, _PosY);
+					_Temp.Posicao = c_posicao(i.first);
+					_Temp.Cor = PRETO;
+					SpritesPretas.push_back(_Temp);
+					break;
+					
+				default:
+					break;
+
+			}
+			if((!PosicaoSelecionada) == i.first) {
+				SpritesPretas.back().Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
+
+			}
+		}
 	}
-	else {
-		s_sprites _Temp;
-		_Temp.Sprite.setTexture(Texturas[RAINHAPRETO]);
-		_Temp.Sprite.setPosition(0, 0);
-		_Temp.IDSprite = RAINHA;
-		Sprites.push_back(_Temp);
-		_Temp.Sprite.setTexture(Texturas[BISPOPRETO]);
-		_Temp.Sprite.setPosition(135, 0);
-		_Temp.IDSprite = BISPO;
-		Sprites.push_back(_Temp);
-		_Temp.Sprite.setTexture(Texturas[TORREPRETO]);
-		_Temp.Sprite.setPosition(270, 0);
-		_Temp.IDSprite = TORRE;
-		Sprites.push_back(_Temp);
-		_Temp.Sprite.setTexture(Texturas[CAVALOPRETO]);
-		_Temp.Sprite.setPosition(405, 0);
-		_Temp.IDSprite = CAVALO;
-		Sprites.push_back(_Temp);
-
-	}
-
-	ajustar_sprites();
 
 	return;
 }
@@ -564,7 +671,7 @@ c_interfacePromocao::c_interfacePromocao(std::atomic<e_peca> *_Selecionado, std:
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
- * Metodos publicos da classe c_interfaceJogo
+ * Metodos publicos da classe c_interfacePromocao
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -612,7 +719,7 @@ void c_interfacePromocao::mostrar_janela() {
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
- * Metodos privados da classe c_interfaceJogo
+ * Metodos privados da classe c_interfacePromocao
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -631,158 +738,51 @@ void c_interfacePromocao::carregar_texturas() {
 	return;
 }
 
-void c_interfaceJogo::posicionar_pecas(std::map<short int, s_idpeca> _Estado) {
-	for(auto &i: _Estado) {
-		int _PosX, _PosY;
-		if(Lado == PRETO) {
-			_PosX = (i.first - 10) / 10;
-			_PosY = (i.first -  1) % 10;
+void c_interfacePromocao::posicionar_pecas() {
+	Sprites.clear();
 
-			_PosX = 7 - _PosX;
+	if(Cor -> load() == BRANCO) {
+		s_sprites _Temp;
+		_Temp.Sprite.setTexture(Texturas[RAINHABRANCO]);
+		_Temp.Sprite.setPosition(0, 0);
+		_Temp.IDSprite = RAINHA;
+		Sprites.push_back(_Temp);
+		_Temp.Sprite.setTexture(Texturas[BISPOBRANCO]);
+		_Temp.Sprite.setPosition(135, 0);
+		_Temp.IDSprite = BISPO;
+		Sprites.push_back(_Temp);
+		_Temp.Sprite.setTexture(Texturas[TORREBRANCO]);
+		_Temp.Sprite.setPosition(270, 0);
+		_Temp.IDSprite = TORRE;
+		Sprites.push_back(_Temp);
+		_Temp.Sprite.setTexture(Texturas[CAVALOBRANCO]);
+		_Temp.Sprite.setPosition(405, 0);
+		_Temp.IDSprite = CAVALO;
+		Sprites.push_back(_Temp);
 
-			_PosX *= menor(Altura, Largura) / 8;
-			_PosY *= menor(Altura, Largura) / 8;
-
-			_PosX -= PosXTabuleiro;
-			_PosY -= PosYTabuleiro;
-
-		}
-		else {
-			_PosX = (i.first - 10) / 10;
-			_PosY = (i.first -  1) % 10;
-
-			_PosY = 7 - _PosY;
-
-			_PosX *= menor(Altura, Largura) / 8;
-			_PosY *= menor(Altura, Largura) / 8;
-
-			_PosX += PosXTabuleiro;
-			_PosY += PosYTabuleiro;
-
-		}
-
-		s_imgpeca _Temp;
-
-		if(i.second.Cor == BRANCO) {//procura qual peca e pra desenhar
-			switch(i.second.Peca) {
-				case PEAO:
-					_Temp.Sprite.setTexture(Texturas[PEAOBRANCO]);
-					_Temp.Sprite.setPosition(_PosX, _PosY);
-					_Temp.Posicao = c_posicao(i.first);
-					_Temp.Cor = BRANCO;
-					SpritesBrancas.push_back(_Temp);
-					break;
-
-				case CAVALO:
-					_Temp.Sprite.setTexture(Texturas[CAVALOBRANCO]);
-					_Temp.Sprite.setPosition(_PosX, _PosY);
-					_Temp.Posicao = c_posicao(i.first);
-					_Temp.Cor = BRANCO;
-					SpritesBrancas.push_back(_Temp);
-					break;
-
-				case BISPO:
-					_Temp.Sprite.setTexture(Texturas[BISPOBRANCO]);
-					_Temp.Sprite.setPosition(_PosX, _PosY);
-					_Temp.Posicao = c_posicao(i.first);
-					_Temp.Cor = BRANCO;
-					SpritesBrancas.push_back(_Temp);
-					break;
-
-				case TORRE:
-					_Temp.Sprite.setTexture(Texturas[TORREBRANCO]);
-					_Temp.Sprite.setPosition(_PosX, _PosY);
-					_Temp.Posicao = c_posicao(i.first);
-					_Temp.Cor = BRANCO;
-					SpritesBrancas.push_back(_Temp);
-					break;
-
-				case RAINHA:
-					_Temp.Sprite.setTexture(Texturas[RAINHABRANCO]);
-					_Temp.Sprite.setPosition(_PosX, _PosY);
-					_Temp.Posicao = c_posicao(i.first);
-					_Temp.Cor = BRANCO;
-					SpritesBrancas.push_back(_Temp);
-					break;
-
-				case REI:
-					_Temp.Sprite.setTexture(Texturas[REIBRANCO]);
-					_Temp.Sprite.setPosition(_PosX, _PosY);
-					_Temp.Posicao = c_posicao(i.first);
-					_Temp.Cor = BRANCO;
-					SpritesBrancas.push_back(_Temp);
-					break;
-					
-				default:
-					break;
-
-			}
-			SpritesBrancas.back().Sprite.setColor(sf::Color(0xE0, 0xE0, 0xE0, 0xFF));
-			if((!PosicaoSelecionada) == i.first) {
-				SpritesBrancas.back().Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
-
-			}
-		}
-		else if(i.second.Cor == PRETO) {
-			switch(i.second.Peca) {
-				case PEAO:
-					_Temp.Sprite.setTexture(Texturas[PEAOPRETO]);
-					_Temp.Sprite.setPosition(_PosX, _PosY);
-					_Temp.Posicao = c_posicao(i.first);
-					_Temp.Cor = PRETO;
-					SpritesPretas.push_back(_Temp);
-					break;
-
-				case CAVALO:
-					_Temp.Sprite.setTexture(Texturas[CAVALOPRETO]);
-					_Temp.Sprite.setPosition(_PosX, _PosY);
-					_Temp.Posicao = c_posicao(i.first);
-					_Temp.Cor = PRETO;
-					SpritesPretas.push_back(_Temp);
-					break;
-
-				case BISPO:
-					_Temp.Sprite.setTexture(Texturas[BISPOPRETO]);
-					_Temp.Sprite.setPosition(_PosX, _PosY);
-					_Temp.Posicao = c_posicao(i.first);
-					_Temp.Cor = PRETO;
-					SpritesPretas.push_back(_Temp);
-					break;
-
-				case TORRE:
-					_Temp.Sprite.setTexture(Texturas[TORREPRETO]);
-					_Temp.Sprite.setPosition(_PosX, _PosY);
-					_Temp.Posicao = c_posicao(i.first);
-					_Temp.Cor = PRETO;
-					SpritesPretas.push_back(_Temp);
-					break;
-
-				case RAINHA:
-					_Temp.Sprite.setTexture(Texturas[RAINHAPRETO]);
-					_Temp.Sprite.setPosition(_PosX, _PosY);
-					_Temp.Posicao = c_posicao(i.first);
-					_Temp.Cor = PRETO;
-					SpritesPretas.push_back(_Temp);
-					break;
-
-				case REI:
-					_Temp.Sprite.setTexture(Texturas[REIPRETO]);
-					_Temp.Sprite.setPosition(_PosX, _PosY);
-					_Temp.Posicao = c_posicao(i.first);
-					_Temp.Cor = PRETO;
-					SpritesPretas.push_back(_Temp);
-					break;
-					
-				default:
-					break;
-
-			}
-			if((!PosicaoSelecionada) == i.first) {
-				SpritesPretas.back().Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
-
-			}
-		}
 	}
+	else {
+		s_sprites _Temp;
+		_Temp.Sprite.setTexture(Texturas[RAINHAPRETO]);
+		_Temp.Sprite.setPosition(0, 0);
+		_Temp.IDSprite = RAINHA;
+		Sprites.push_back(_Temp);
+		_Temp.Sprite.setTexture(Texturas[BISPOPRETO]);
+		_Temp.Sprite.setPosition(135, 0);
+		_Temp.IDSprite = BISPO;
+		Sprites.push_back(_Temp);
+		_Temp.Sprite.setTexture(Texturas[TORREPRETO]);
+		_Temp.Sprite.setPosition(270, 0);
+		_Temp.IDSprite = TORRE;
+		Sprites.push_back(_Temp);
+		_Temp.Sprite.setTexture(Texturas[CAVALOPRETO]);
+		_Temp.Sprite.setPosition(405, 0);
+		_Temp.IDSprite = CAVALO;
+		Sprites.push_back(_Temp);
+
+	}
+
+	ajustar_sprites();
 
 	return;
 }

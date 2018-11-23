@@ -323,10 +323,6 @@ void c_tabuleiro::carregar_pecas(std::string _nomeArquivo) {
 				case REI:
 					inserir_peca<c_rei>(c_posicao(_X, _Y), e_cor(_Cor));
 					break;
-					
-				default:
-					throw(15);
-					break;
 				
 			}
 		}

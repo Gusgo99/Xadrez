@@ -64,9 +64,10 @@ class c_posicao {
 		short int y;
 
 	public:
-		c_posicao(short int _ID = 0);
-		c_posicao(short int _x, short int _y);
-		c_posicao(e_dir _Direcao, short int _Distancia);
+		c_posicao(const short int _ID = 0);
+		c_posicao(const short int _x, short int _y);
+		c_posicao(const e_dir _Direcao, const short int _Distancia);
+		~c_posicao() {}
 		// Geram uma nova posicao a partir de uma segunda posicao relativa
 		c_posicao operator+(c_posicao &_temp);
 		void operator+=(c_posicao &_temp);
@@ -78,14 +79,14 @@ class c_posicao {
 		// Retorna uma chave para facilitar o mapeamento do tabuleiro
 		short int operator!();
 		// Compoem movimentos
-		c_movimento operator>>(c_posicao &_temp);
-		c_movimento operator<<(c_posicao &_temp);
+		const c_movimento operator>>(c_posicao &_temp);
+		const c_movimento operator<<(c_posicao &_temp);
 		
 		short int get_x();
 		short int get_y();
-		void set_x(short int _x);
-		void set_y(short int _y);
-		void set_xy(short int _x, short int _y);
+		void set_x(const short int _x);
+		void set_y(const short int _y);
+		void set_xy(const short int _x, short int _y);
 		// Verifica se a posicao esta dentro do tabuleiro
 		bool validar();
 
@@ -114,7 +115,7 @@ class c_movimento {
 
 	public:
 		// Construtor
-		c_movimento(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0));
+		c_movimento(const c_posicao _PosInicial = c_posicao(0, 0), const c_posicao _PosFinal = c_posicao(0, 0));
 		virtual ~c_movimento() {}
 		c_posicao get_inicio();
 		c_posicao get_fim();
@@ -142,6 +143,7 @@ class c_captura : public c_movimento {
 	public:
 		// Construtor da captura
 		c_captura(c_posicao _PosInicial = c_posicao(0, 0), c_posicao _PosFinal = c_posicao(0, 0)) : c_movimento(_PosInicial, _PosFinal) {};
+		~c_captura() {};
 
 };
 
@@ -158,7 +160,8 @@ class c_captura : public c_movimento {
 class c_roque : public c_movimento {
 	public:
 		// Construtor
-		c_roque(c_posicao _PosInicial, c_posicao _PosFinal, c_posicao _PosInicialTorre, c_posicao _PosFinalTorre);
+		c_roque(const c_posicao _PosInicial, const c_posicao _PosFinal, c_posicao _PosInicialTorre, const c_posicao _PosFinalTorre);
+		~c_roque() {};
 
 };
 
@@ -180,15 +183,16 @@ class c_promocao : public c_movimento {
 
 	public:
 		// Construtor
-		c_promocao(c_posicao _PosInicial, e_peca _NovaPeca);
+		c_promocao(const c_posicao _PosInicial, const e_peca _NovaPeca);
 		e_peca get_nova_peca();
-		void set_nova_peca(e_peca _NovaPeca);
+		void set_nova_peca(const e_peca _NovaPeca);
+		~c_promocao() {}
 
 };
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- * Classe abstrata c_peca:
+ * Classe c_peca:
  *
  * Responsavel por:
  *
@@ -216,14 +220,14 @@ class c_peca {
 		virtual std::list<c_movimento*> encontrar_capturas(std::map<short int, s_idpeca> _Estado);
 		
 	public:
-		c_peca(e_cor _Cor = SEMCOR, c_posicao _Posicao = c_posicao(0, 0));
+		c_peca(const e_cor _Cor = SEMCOR, const c_posicao _Posicao = c_posicao(0, 0));
 		virtual ~c_peca();
 		// Lista movimentos possiveis
-		virtual std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);
+		virtual std::list<c_movimento*> listar_movimentos(const std::map<short int, s_idpeca> _Estado);
 		// Verifica se a peca esta ameacando o rei inimigo
 		bool ameacando_rei(std::map<short int, s_idpeca> _Estado);
 		// Realiza a atualizacao da posicao apos realizar o movimento
-		virtual bool atualizar_posicao(c_posicao _Posicao);
+		virtual bool atualizar_posicao(const c_posicao _Posicao);
 		// Faz com que cada peca marque sua posicao no tabuleiro
 		void marcar_posicao(std::map<short int, s_idpeca> *_Estado);
 		
@@ -266,8 +270,9 @@ class c_peca {
  
 class c_peao : public c_peca {
 	public:
-	    c_peao(e_cor _Cor, c_posicao _Posicao);
-		bool atualizar_posicao(c_posicao _Posicao);
+	    c_peao(const e_cor _Cor, const c_posicao _Posicao);
+		~c_peao() {}
+		bool atualizar_posicao(const c_posicao _Posicao);
 
 };
 
@@ -283,7 +288,8 @@ class c_peao : public c_peca {
  
 class c_torre : public c_peca {
 	public:
-	    c_torre(e_cor _Cor, c_posicao _Posicao);
+	    c_torre(const e_cor _Cor, const c_posicao _Posicao);
+		~c_torre() {}
 
 };
 
@@ -304,8 +310,9 @@ class c_cavalo : public c_peca {
 	    std::list<c_movimento*> encontrar_capturas(std::map<short int, s_idpeca> _Estado);
 
 	public:
-		std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);
 	    c_cavalo(e_cor _Cor, c_posicao _Posicao);
+		~c_cavalo() {}
+		std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);
 
 };
 
@@ -322,6 +329,7 @@ class c_cavalo : public c_peca {
 class c_bispo : public c_peca {
 	public:
 		c_bispo(e_cor _Cor, c_posicao _Posicao);
+		~c_bispo() {}
 
 
 };
@@ -339,6 +347,7 @@ class c_bispo : public c_peca {
 class c_rainha : public c_peca {
 	public:
 		c_rainha(e_cor _Cor, c_posicao _Posicao);
+		~c_rainha() {}
 
 };
 
@@ -359,6 +368,7 @@ class c_rei : public c_peca {
 
 	public:
 	    c_rei(e_cor _Cor, c_posicao _Posicao);
+		~c_rei() {}
 		std::list<c_movimento*> listar_movimentos(std::map<short int, s_idpeca> _Estado);
 };
 

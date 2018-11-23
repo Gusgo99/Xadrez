@@ -88,27 +88,27 @@ short int c_posicao::operator!() {
 	}
 }
 
-c_movimento c_posicao::operator>>(c_posicao &_temp) {
+const c_movimento c_posicao::operator>>(c_posicao &_temp) {
 	return c_movimento(c_posicao(x, y), _temp);
 }
 
-c_movimento c_posicao::operator<<(c_posicao &_temp) {
+const c_movimento c_posicao::operator<<(c_posicao &_temp) {
 	return c_movimento(_temp, c_posicao(x, y));
 }
 
-void c_posicao::set_x(short int _x) {
+void c_posicao::set_x(const short int _x) {
 	x = _x;
 
 	return;
 }
 
-void c_posicao::set_y(short int _y) {
+void c_posicao::set_y(const short int _y) {
 	y = _y;
 
 	return;
 }
 
-void c_posicao::set_xy(short int _x, short int _y){
+void c_posicao::set_xy(const short int _x, const short int _y){
     x = _x;
     y = _y;
 
@@ -275,7 +275,7 @@ c_peca::~c_peca() {
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-std::list<c_movimento*> c_peca::listar_movimentos(std::map<short int, s_idpeca> _Estado) {
+std::list<c_movimento*> c_peca::listar_movimentos(const std::map<short int, s_idpeca> _Estado) {
 	std::list<c_movimento*> _Movimentos = encontrar_movimentos(_Estado);
 	std::list<c_movimento*> _Capturas = encontrar_capturas(_Estado);
 

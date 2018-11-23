@@ -57,14 +57,8 @@ class c_tabuleiro {
 	public:
 		// Contrutor do jogo
 		c_tabuleiro();
-		// Construtor de copia do jogo
-		c_tabuleiro(c_tabuleiro *_original);
 		// Destrutor
 		~c_tabuleiro();
-		// Verificar se precisa implementar:
-		salvar_jogo();
-		// Verificar se precisa implementar:
-		carregar_jogo();
 		// Funcoes para executar movimentos
 		void operator+=(c_movimento &_Movimento);
 		void operator+=(c_captura &_Movimento);
