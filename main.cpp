@@ -1,11 +1,7 @@
-#include <iostream>
-#include <thread>
-
-#include "testes.hpp"
+#include "principal.hpp"
 
 int main() {
-	std::thread teste(testar_interface_jogo);
-	teste.join();
+	c_principal *Principal = new c_principal;
 
 	return 0;
 }

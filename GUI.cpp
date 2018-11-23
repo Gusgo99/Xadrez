@@ -1,5 +1,4 @@
 #include <map>
-#include <thread>
 #include <vector>
 #include <chrono>
 
@@ -26,6 +25,7 @@ enum e_numSprite {
 	TORREPRETO, TORREBRANCO,
 	CAVALOPRETO, CAVALOBRANCO,
 	NUMSPRITES};
+	
 // Caminho ate imagens do jogo
 const std::array<std::string, NUMSPRITES> IMAGENS = {
 	"./resources/tabuleiro.png",
@@ -52,7 +52,7 @@ c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_tabuleiro *_JogoMostrado
 	Largura = _Largura;
 	Altura = _Altura;
 
-	Janela = new sf::RenderWindow(sf::VideoMode(Largura, Altura), _Titulo);
+	Janela = new sf::RenderWindow(sf::VideoMode(Largura, Altura), _Titulo, sf::Style::Close | sf::Style::Titlebar);
 
 	carregar_texturas();
 
@@ -75,7 +75,7 @@ c_interfaceJogo::c_interfaceJogo(std::string _Titulo, c_tabuleiro *_JogoMostrado
 	Largura = menor(sf::VideoMode::getDesktopMode().height, sf::VideoMode::getDesktopMode().width) * 0.75;
 	Altura = Largura;
 
-	Janela = new sf::RenderWindow(sf::VideoMode(Largura, Altura), _Titulo);
+	Janela = new sf::RenderWindow(sf::VideoMode(Largura, Altura), _Titulo, sf::Style::Close | sf::Style::Titlebar);
 
 	carregar_texturas();
 
@@ -252,19 +252,23 @@ void c_interfaceJogo::localizar_clique(unsigned _x, unsigned _y) {
 	PosicaoSelecionada = c_posicao();
 	atualizar_posicao();
 	
-	for(auto &i: SpritesBrancas) {
-		if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
-				PosicaoSelecionada = i.Posicao;
-				i.Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
-				break;
+	if(JogoMostrado -> get_turno() == BRANCO) {
+		for(auto &i: SpritesBrancas) {
+			if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
+					PosicaoSelecionada = i.Posicao;
+					i.Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
+					break;
 
+			}
 		}
 	}
-	for(auto &i: SpritesPretas) {
-		if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
-				PosicaoSelecionada = i.Posicao;
-				i.Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
-				break;
+	else {
+		for(auto &i: SpritesPretas) {
+			if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
+					PosicaoSelecionada = i.Posicao;
+					i.Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
+					break;
+			}
 		}
 	}
 
@@ -550,7 +554,7 @@ c_interfacePromocao::c_interfacePromocao(std::atomic<e_peca> *_Selecionado, std:
 	Selecionado = _Selecionado;
 	Cor = _Cor;
 
-	Janela = new sf::RenderWindow(sf::VideoMode(540, 135), "Promocao");
+	Janela = new sf::RenderWindow(sf::VideoMode(540, 135), "Promocao", sf::Style::Close | sf::Style::Titlebar);
 	Janela -> setVerticalSyncEnabled(true);
 
 	carregar_texturas();

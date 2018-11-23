@@ -2,6 +2,7 @@
 #define GUI_HPP
 
 #include <atomic>
+#include <thread>
 #include <SFML\Graphics.hpp>
 
 #include "tabuleiro.hpp"
