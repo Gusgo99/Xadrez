@@ -24,6 +24,7 @@ enum e_numSprite {
 	BISPOPRETO, BISPOBRANCO,
 	TORREPRETO, TORREBRANCO,
 	CAVALOPRETO, CAVALOBRANCO,
+	XEQUEMATE,
 	NUMSPRITES};
 	
 // Caminho ate imagens do jogo
@@ -35,7 +36,8 @@ const std::array<std::string, NUMSPRITES> IMAGENS = {
 	"./resources/rainha_preto.png", "./resources/rainha_branco.png",
 	"./resources/bispo_preto.png", "./resources/bispo_branco.png",
 	"./resources/torre_preto.png", "./resources/torre_branco.png",
-	"./resources/cavalo_preto.png", "./resources/cavalo_branco.png"};
+	"./resources/cavalo_preto.png", "./resources/cavalo_branco.png",
+	"./resources/xeque_mate.png"};
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
@@ -78,6 +80,8 @@ c_interfaceJogo::c_interfaceJogo(const std::string _Titulo, c_tabuleiro *_JogoMo
 	Janela = new sf::RenderWindow(sf::VideoMode(Largura, Altura), _Titulo, sf::Style::Close | sf::Style::Titlebar);
 
 	carregar_texturas();
+	
+	XequeMate = true;
 
 	SpriteTabuleiro.setTexture(Texturas[TABULEIRO]);
 
@@ -173,6 +177,11 @@ void c_interfaceJogo::desenhar_janela() {
 			Janela -> draw(i.Sprite);
 
 		}
+		
+		if(XequeMate) {
+			Janela -> draw(ImagemMate);
+			
+		}
 
 
 		Janela -> display();
@@ -199,6 +208,11 @@ void c_interfaceJogo::carregar_texturas() {
 		Texturas.push_back(_Textura);
 
 	}
+	
+	ImagemMate.setTexture(Texturas[XEQUEMATE]);
+	ImagemMate.setScale(0.70f, 0.70f);
+	ImagemMate.setOrigin(400, 150);
+	ImagemMate.setPosition(Largura / 2, Altura / 2);
 
 	return;
 }
@@ -252,42 +266,44 @@ void c_interfaceJogo::localizar_clique(const unsigned _x, const unsigned _y) {
 	PosicaoSelecionada = c_posicao();
 	atualizar_posicao();
 	
-	if(JogoMostrado -> get_turno() == BRANCO) {
-		for(auto &i: SpritesBrancas) {
+	if(!XequeMate) {
+		if(JogoMostrado -> get_turno() == BRANCO) {
+			for(auto &i: SpritesBrancas) {
+				if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
+						PosicaoSelecionada = i.Posicao;
+						i.Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
+						break;
+
+				}
+			}
+		}
+		else {
+			for(auto &i: SpritesPretas) {
+				if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
+						PosicaoSelecionada = i.Posicao;
+						i.Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
+						break;
+				}
+			}
+		}
+
+		MovimentoEscolhido = nullptr;
+		for(auto i: SpritesMovimentos) {
 			if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
-					PosicaoSelecionada = i.Posicao;
-					i.Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
-					break;
+				MovimentoEscolhido = i.Movimento;
+				break;
 
 			}
 		}
-	}
-	else {
-		for(auto &i: SpritesPretas) {
-			if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
-					PosicaoSelecionada = i.Posicao;
-					i.Sprite.setColor(sf::Color(0x60, 0x60, 0xFF, 0xFF));
-					break;
-			}
-		}
-	}
 
-	MovimentoEscolhido = nullptr;
-	for(auto i: SpritesMovimentos) {
-		if(i.Sprite.getGlobalBounds().contains(_x, _y)) {
-			MovimentoEscolhido = i.Movimento;
-			break;
+		if(PosicaoSelecionada.validar() && (JogoMostrado != nullptr)) {
+			MovimentosDisponiveis = JogoMostrado -> get_movimentos(!PosicaoSelecionada);
 
 		}
-	}
+		else {
+			MovimentosDisponiveis.clear();
 
-	if(PosicaoSelecionada.validar() && (JogoMostrado != nullptr)) {
-		MovimentosDisponiveis = JogoMostrado -> get_movimentos(!PosicaoSelecionada);
-
-	}
-	else {
-		MovimentosDisponiveis.clear();
-
+		}
 	}
 
 	return;
@@ -529,10 +545,7 @@ void c_interfaceJogo::executar_movimentos() {
 			
 			PosicaoSelecionada = c_posicao();
 			
-			if(JogoMostrado -> get_mate()) {
-				std::cout << "Xeque mate!\n";
-				
-			}
+			XequeMate = JogoMostrado -> get_mate();
 
 			if(JogoMostrado -> get_promocao()) {
 				PosicaoPromocao = MovimentoEscolhido -> get_fim();

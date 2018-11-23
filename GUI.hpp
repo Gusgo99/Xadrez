@@ -55,6 +55,7 @@ class c_interfaceJogo {
 		std::list<s_imgpeca> SpritesPretas;
 		std::list<s_imgmov> SpritesMovimentos;
 		std::list<sf::Sprite> SpritesXeque;
+		sf::Sprite ImagemMate;
 		c_posicao PosicaoSelecionada;
 		std::list<c_movimento*> MovimentosDisponiveis;
 		c_movimento *MovimentoEscolhido;
@@ -69,6 +70,7 @@ class c_interfaceJogo {
 		std::atomic<e_cor> CorPromocao;
 		std::atomic<e_peca> TipoPromocao;
 		c_posicao PosicaoPromocao;
+		bool XequeMate;
 		// Carrega cada sprite a partir das imagens
 		void carregar_texturas();
 		// Ajusta tamanho da tela para não distorcer imagens após redimensionar janela
