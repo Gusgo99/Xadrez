@@ -1,7 +1,6 @@
 #ifndef PECAS_HPP
 #define PECAS_HPP
 
-#include <array>
 #include <list>
 #include <map>
 

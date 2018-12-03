@@ -4,7 +4,6 @@
 class c_tabuleiro;
 class c_movimento;
 
-#include <array>
 #include <map>
 
 #include "pecas.hpp"

@@ -57,6 +57,8 @@ c_interfaceJogo::c_interfaceJogo(const std::string _Titulo, c_tabuleiro *_JogoMo
 	Janela = new sf::RenderWindow(sf::VideoMode(Largura, Altura), _Titulo, sf::Style::Close | sf::Style::Titlebar);
 
 	carregar_texturas();
+	
+	XequeMate = false;
 
 	SpriteTabuleiro.setTexture(Texturas[TABULEIRO]);
 
@@ -81,7 +83,7 @@ c_interfaceJogo::c_interfaceJogo(const std::string _Titulo, c_tabuleiro *_JogoMo
 
 	carregar_texturas();
 	
-	XequeMate = true;
+	XequeMate = false;
 
 	SpriteTabuleiro.setTexture(Texturas[TABULEIRO]);
 
